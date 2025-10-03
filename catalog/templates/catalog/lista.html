@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid py-4">
+    <h1 class="text-center mb-4">{{ titulo }}</h1>
+    
+    {% if total_juegos > 0 %}
+        <p class="text-center text-muted mb-4">Mostrando {{ juegos|length }} de {{ total_juegos }} juegos</p>
+    {% endif %}
+    
+    <div class="juegos-container">
+        {% for juego in juegos %}
+            <a href="{% url 'catalogo:detalle' slug=juego.get_slug %}" style="text-decoration: none; color: inherit;">
+                <div class="juego-card {% if juego.destacado %}destacado{% endif %}">
+                    {% if juego.destacado %}
+                        <span class="badge-destacado">★ DESTACADO</span>
+                    {% endif %}
+                    
+                    <div class="juego-imagen-wrapper">
+                        <img src="{% static juego.imagen %}" 
+                             alt="{{ juego.nombre }}" 
+                             class="juego-imagen"
+                             onerror="this.onerror=null; this.src='/static/img/default.png'">
+                    </div>
+                    
+                    <div class="juego-info">
+                        <h5 class="juego-nombre">{{ juego.nombre }}</h5>
+                        <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
+                        <p class="juego-recargo">${{ juego.recargo|floatformat:0 }}</p>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    No se encontraron juegos.
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Paginación (igual que antes) -->
+    {% if juegos.has_other_pages %}
+    <!-- ... tu código de paginación ... -->
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -8,10 +8,12 @@
     <title>ProshopGames</title>
     <link rel="icon" type="image/png" sizes="64x32" href="{% static 'img/proshop_logo.png' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{% static 'img/proshop_logo.png' %}" alt="Logo" width="64" height="40" class="me-2">
@@ -22,19 +24,19 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/featured">Destacados</a>
+                        <a class="nav-link active" href="{% url 'catalogo:destacados' %}">Destacados</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/ps4">PS4</a>
+                        <a class="nav-link active" href="{% url 'catalogo:ps4' %}">PS4</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/ps5">PS5</a>
+                        <a class="nav-link active" href="{% url 'catalogo:ps5' %}">PS5</a>
                     </li class="nav-item">
                     <li class="nav-item">
-                        <a class="nav-link" href="/questions/">Preguntas</a>
+                        <a class="nav-link active" href="/questions/">Preguntas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/about/">Sobre nosotros</a>
+                        <a class="nav-link active" href="/about/">Sobre nosotros</a>
                     </li>
                 </ul>
             </div>

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Columna de imagen -->
+        <div class="col-md-5">
+            <div class="detalle-imagen-container">
+                {% if juego.destacado %}
+                    <span class="badge-destacado-detalle">★ DESTACADO</span>
+                {% endif %}
+                <img src="{% static juego.imagen %}" 
+                     alt="{{ juego.nombre }}" 
+                     class="img-fluid detalle-imagen"
+                     onerror="this.onerror=null; this.src='/static/img/default.png'">
+            </div>
+        </div>
+        
+        <!-- Columna de información -->
+        <div class="col-md-7">
+            <h1 class="detalle-titulo">{{ juego.nombre }}</h1>
+            
+            <div class="detalle-consola-badge">
+                {{ juego.get_consola_display }}
+            </div>
+            
+            {% if juego.genero %}
+            <p class="text-muted mb-3">
+                <strong>Género:</strong> {{ juego.genero }}
+            </p>
+            {% endif %}
+            
+            {% if juego.descripcion %}
+            <div class="detalle-descripcion">
+                <h5>Descripción</h5>
+                <p>{{ juego.descripcion }}</p>
+            </div>
+            {% endif %}
+            
+            <!-- Precios -->
+            <div class="detalle-precios">
+                <div class="precio-actual">
+                    ${{ juego.precio|floatformat:0 }}
+                </div>
+                {% if juego.recargo > 0 %}
+                <div class="precio-recargo">
+                    ${{ juego.recargo|floatformat:0 }}
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Stock -->
+            {% if juego.stock > 0 %}
+            <div class="alert alert-success">
+                <strong>✓ Disponible</strong> ({{ juego.stock }} unidades en stock)
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <strong>⚠ Sin stock</strong> - Consultá disponibilidad
+            </div>
+            {% endif %}
+            
+            <!-- Métodos de pago -->
+            <div class="detalle-metodos-pago">
+                <h5>Métodos de pago aceptados</h5>
+                <div class="metodos-iconos">
+                    <span class="metodo-pago">💵 Efectivo</span>
+                    <span class="metodo-pago">🏦 Transferencia</span>
+                    <span class="metodo-pago">💳 Mercado Pago</span>
+                </div>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="detalle-acciones mt-4">
+                <a href="https://wa.me/5491112345678?text=Hola!%20Me%20interesa%20{{ juego.nombre|urlencode }}" 
+                   class="btn btn-success btn-lg" target="_blank">
+                    📱 Consultar por WhatsApp
+                </a>
+                <a href="{% url 'catalogo:ps4' %}" class="btn btn-outline-secondary btn-lg">
+                    ← Volver al catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
