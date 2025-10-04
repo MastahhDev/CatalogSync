@@ -37,6 +37,10 @@ class Command(BaseCommand):
                 destacado_valor = row_limpio.get('destacado', '').lower()
                 destacado = destacado_valor in ['1', 'destacado', 'si', 'yes', 'true']
                 
+                descripcion = row_limpio.get('descripcion', '')
+                genero = row_limpio.get('genero', '')
+                stock = int(row_limpio.get('stock', '0')) if row_limpio.get('stock', '').isdigit() else 0
+                
                 # Buscar imagen
                 nombre_archivo = nombre.lower().replace(' ', '_')
                 imagen_path = f'img/{nombre_archivo}.png'
@@ -56,7 +60,10 @@ class Command(BaseCommand):
                     recargo=recargo,
                     consola=consola,
                     destacado=destacado,
-                    imagen=imagen_path
+                    imagen=imagen_path,
+                    descripcion=descripcion,
+                    genero=genero,
+                    stock=stock,
                 )
                 
                 juegos_creados += 1
