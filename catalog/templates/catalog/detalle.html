@@ -35,6 +35,11 @@
             <div class="detalle-descripcion">
                 <h5>Descripción</h5>
                 <p>{{ juego.descripcion }}</p>
+                <p>Este juego esta disponible en:</p>
+                <p>Metodo PRIMARIO: Jugas en tu usuario personal, una vez instalado no necesita WiFi</p>
+                <p>Metodo SECUNDARIO: Jugas desde el usuario entregado, siempre conectado a WiFi</p>
+                <p>Contas con 1 año de garantía con todos los juegos</p>
+                <p>Descuento exclusivo únicamente en transferencia!</p>
             </div>
             {% endif %}
             
@@ -45,7 +50,7 @@
                 </div>
                 {% if juego.recargo > 0 %}
                 <div class="precio-recargo">
-                    ${{ juego.recargo|floatformat:0 }}
+                    ${{ juego.recargo|floatformat:0 }} 
                 </div>
                 {% endif %}
             </div>
@@ -67,15 +72,15 @@
                 <div class="metodos-iconos">
                     <span class="metodo-pago">💵 Efectivo</span>
                     <span class="metodo-pago">🏦 Transferencia</span>
-                    <span class="metodo-pago">💳 Mercado Pago</span>
+                    <span class="metodo-pago">💳 Tarjeta de Credito/Debito</span>
                 </div>
             </div>
             
             <!-- Botones de acción -->
             <div class="detalle-acciones mt-4">
-                <a href="https://wa.me/5491112345678?text=Hola!%20Me%20interesa%20{{ juego.nombre|urlencode }}" 
+                <a href="https://wa.me/5491151594477?text=Hola!%20Me%20interesa%20el%20{{ juego.nombre|urlencode }}" 
                    class="btn btn-success btn-lg" target="_blank">
-                    📱 Consultar por WhatsApp
+                    <i class="fa-brands fa-whatsapp"> </i> Consultar por WhatsApp
                 </a>
                 <a href="{% url 'catalogo:ps4' %}" class="btn btn-outline-secondary btn-lg">
                     ← Volver al catálogo
@@ -84,5 +89,14 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.precio-actual, .precio-recargo').forEach(function(el) {
+        let precio = el.textContent.replace('$', '').trim();
+        el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
+    });
+});
+</script>
 
 {% endblock %}

@@ -46,4 +46,13 @@
     {% endif %}
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.juego-precio, .juego-recargo').forEach(function(el) {
+        let precio = el.textContent.replace('$', '').trim();
+        el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
+    });
+});
+</script>
+
 {% endblock %}
