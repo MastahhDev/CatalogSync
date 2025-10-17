@@ -46,25 +46,12 @@
             <!-- Precios -->
             <div class="detalle-precios">
                 <div class="precio-actual">
-                    ${{ juego.precio|floatformat:0 }}
+                    <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
                 </div>
                 {% if juego.recargo > 0 %}
-                <div class="precio-recargo">
-                    ${{ juego.recargo|floatformat:0 }} 
-                </div>
+                    <p class="juego-recargo">+${{ juego.recargo|floatformat:0 }}</p>
                 {% endif %}
             </div>
-            
-            <!-- Stock -->
-            {% if juego.stock > 0 %}
-            <div class="alert alert-success">
-                <strong>✓ Disponible</strong> ({{ juego.stock }} unidades en stock)
-            </div>
-            {% else %}
-            <div class="alert alert-warning">
-                <strong>⚠ Sin stock</strong> - Consultá disponibilidad
-            </div>
-            {% endif %}
             
             <!-- Métodos de pago -->
             <div class="detalle-metodos-pago">

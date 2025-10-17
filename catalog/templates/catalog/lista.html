@@ -27,7 +27,9 @@
                     <div class="juego-info">
                         <h5 class="juego-nombre">{{ juego.nombre }}</h5>
                         <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
-                        <p class="juego-recargo">${{ juego.recargo|floatformat:0 }}</p>
+                        {% if juego.recargo > 0 %}
+                            <p class="juego-recargo">+${{ juego.recargo|floatformat:0 }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </a>
@@ -40,17 +42,83 @@
         {% endfor %}
     </div>
     
-    <!-- Paginación (igual que antes) -->
+    <!-- Paginación -->
     {% if juegos.has_other_pages %}
-    <!-- ... tu código de paginación ... -->
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if juegos.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ juegos.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;&laquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&laquo;</span>
+                </li>
+            {% endif %}
+
+            {% for num in juegos.paginator.page_range %}
+                {% if juegos.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > juegos.number|add:'-3' and num < juegos.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if juegos.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ juegos.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ juegos.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">&raquo;&raquo;</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+    <p class="text-center text-muted mt-2">
+        Página {{ juegos.number }} de {{ juegos.paginator.num_pages }}
+    </p>
     {% endif %}
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Formatear precios con separadores de miles
     document.querySelectorAll('.juego-precio, .juego-recargo').forEach(function(el) {
-        let precio = el.textContent.replace('$', '').trim();
-        el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
+        let precio = el.textContent.replace('$', '').replace('+', '').trim();
+        if (precio) {
+            let precioFormateado = parseInt(precio).toLocaleString('es-AR');
+            if (el.classList.contains('juego-recargo')) {
+                el.textContent = '+$' + precioFormateado;
+            } else {
+                el.textContent = '$' + precioFormateado;
+            }
+        }
     });
 });
 </script>

@@ -1,5 +1,564 @@
-﻿nombre,precio,recargo,consola,destacado,descripcion,genero,stock
-FC25 PS4,26500,50000,ps4,1,"El juego de fútbol más realista",Deportes,10
-FC25 PS5,22500,40000,ps5,0,"El juego de fútbol más realista",Deportes,10
-GTA V PS4,15500,20000,ps4,1,"Acción en mundo abierto",Acción,5
-God of War Ragnarok PS4,20500,50000,ps4,0,"Mundo abierto del gordo guar",Accion,5
+﻿nombre,descripcion,genero,destacado
+A Way Out PS4, "Aventura cooperativa de escape de prisión donde dos jugadores deben trabajar juntos", Acción, 0
+A Way Out PS5, "Aventura cooperativa de escape de prisión donde dos jugadores deben trabajar juntos", Acción, 0
+Alien Isolation THE COLLECTION PS4, "Survival horror ambientado en el universo de Alien con contenido adicional", Terror, 0
+Alien Isolation THE COLLECTION PS5, "Survival horror ambientado en el universo de Alien con contenido adicional", Terror, 0
+ARK Survival Evolved PS4, "Supervivencia en mundo abierto con dinosaurios y crafting", Supervivencia, 0
+ARK Survival Evolved PS5, "Supervivencia en mundo abierto con dinosaurios y crafting", Supervivencia, 0
+Assassin's Creed Rogue Remastered PS4, "Aventura de asesinos en la era colonial con mecánicas navales", Aventura, 0
+Assassin's Creed Rogue Remastered PS5, "Aventura de asesinos en la era colonial con mecánicas navales", Aventura, 0
+Assassin's Creed Triple Pack PS4, "Tres entregas de Assassin's Creed en un solo paquete", Aventura, 0
+Assassin's Creed Triple Pack PS5, "Tres entregas de Assassin's Creed en un solo paquete", Aventura, 0
+Assassin's Creed The Ezio Collection PS4, "Trilogía completa de Ezio Auditore remasterizada", Aventura, 0
+Assassin's Creed The Ezio Collection PS5, "Trilogía completa de Ezio Auditore remasterizada", Aventura, 0
+Assassin's Creed Valhalla PS4, "Aventura vikinga en la Inglaterra medieval", RPG, 0
+Assassin's Creed Valhalla PS5, "Aventura vikinga en la Inglaterra medieval", RPG, 0
+Assassin's Creed Mirage PS4, "Regreso a las raíces de sigilo en Bagdad", Aventura, 0
+Assassin's Creed Mirage PS5, "Regreso a las raíces de sigilo en Bagdad", Aventura, 0
+Assassin's Creed Odyssey PS4, "Épica aventura en la antigua Grecia", RPG, 0
+Assassin's Creed Odyssey PS5, "Épica aventura en la antigua Grecia", RPG, 0
+Assassins Creed Odyssey PS4, "Épica aventura en la antigua Grecia con contenido extra", RPG, 0
+Assassins Creed Odyssey PS5, "Épica aventura en la antigua Grecia con contenido extra", RPG, 0
+Assassin's Creed Origins PS4, "Explora el antiguo Egipto en los orígenes de la hermandad", RPG, 0
+Assassin's Creed Origins PS5, "Explora el antiguo Egipto en los orígenes de la hermandad", RPG, 0
+Assassin's Creed Syndicate PS4, "Aventura de asesinos en el Londres victoriano", Aventura, 0
+Assassin's Creed III Remastered PS4, "La revolución americana con gráficos mejorados", Aventura, 0
+Assassin's Creed III Remastered PS5, "La revolución americana con gráficos mejorados", Aventura, 0
+Assassin's Creed Unity PS4, "Revolución francesa con sigilo y parkour mejorado", Aventura, 0
+Assassin's Creed Unity PS5, "Revolución francesa con sigilo y parkour mejorado", Aventura, 0
+Assassin's Creed IV Black Flag PS4, "Piratas del Caribe con batallas navales épicas", Aventura, 0
+Assassin's Creed IV Black Flag PS5, "Piratas del Caribe con batallas navales épicas", Aventura, 0
+Asseto Corsa Competizione PS4, "Simulador de carreras GT enfocado en realismo", Racing, 0
+Asseto Corsa Competizione PS5, "Simulador de carreras GT enfocado en realismo", Racing, 0
+Assetto Corsa PS4, "Simulador de conducción con física realista", Racing, 0
+Assetto Corsa PS5, "Simulador de conducción con física realista", Racing, 0
+ACE COMBAT 7 SKIES UNKNOWN PS4, "Combate aéreo arcade con jets modernos", Arcade, 0
+ACE COMBAT 7 SKIES UNKNOWN PS5, "Combate aéreo arcade con jets modernos", Arcade, 0
+Avatar Frontiers of Pandora PS5, "Exploración del mundo de Pandora en primera persona", Aventura, 0
+Bus Simulator 21 Next Stop PS4, "Simulador de conduccion de autobuses urbanos", Simulacion, 0
+Bus Simulator 21 Next Stop PS5, "Simulador de conducción de autobuses urbanos", Simulación, 0
+Borderlands 3 PS4, "Shooter looter con millones de armas y humor", Shooter, 0
+Borderlands 3 PS5, "Shooter looter con millones de armas y humor", Shooter, 0
+Batman Arkham Collection PS4, "Trilogía completa de Batman Arkham", Acción, 0
+Batman Arkham Collection PS5, "Trilogía completa de Batman Arkham", Acción, 0
+Batman Arkham Knight PS4, "Aventura final de Batman con Batimóvil jugable", Acción, 0
+Batman Arkham Knight PS5, "Aventura final de Batman con Batimóvil jugable", Acción, 0
+Batman Return to Arkham PS4, "Remasterización de Arkham Asylum y City", Acción, 0
+Batman Return to Arkham PS5, "Remasterización de Arkham Asylum y City", Acción, 0
+Battlefield Hardline PS4, "Battlefield enfocado en policías vs criminales", Shooter, 0
+Battlefield Hardline PS5, "Battlefield enfocado en policías vs criminales", Shooter, 0
+Battlefield 1 PS4, "Shooter de la Primera Guerra Mundial", Shooter, 0
+Battlefield 1 PS5, "Shooter de la Primera Guerra Mundial", Shooter, 0
+Battlefield 4 PS4, "Shooter militar moderno multijugador", Shooter, 0
+Battlefield 4 PS5, "Shooter militar moderno multijugador", Shooter, 0
+Battlefield 2042 PS4, "Shooter futurista con mapas masivos", Shooter, 0
+Battlefield V PS4, "Segunda Guerra Mundial con todas las expansiones", Shooter, 0
+Battlefield V PS5, "Segunda Guerra Mundial con todas las expansiones", Shooter, 0
+BioShock The Collection PS4, "Trilogía completa de BioShock remasterizada", Shooter, 0
+BioShock The Collection PS5, "Trilogía completa de BioShock remasterizada", Shooter, 0
+Back 4 Blood PS4, "Shooter cooperativo de zombies estilo Left 4 Dead", Shooter, 0
+Back 4 Blood PS5, "Shooter cooperativo de zombies estilo Left 4 Dead", Shooter, 0
+Bloodborne PS4, "Souls-like gótico con combate rápido y agresivo", RPG, 0
+Bloodborne PS5, "Souls-like gótico con combate rápido y agresivo", RPG, 0
+Bully PS4, "Aventura escolar de Rockstar con humor y travesuras", Aventura, 0
+Bully PS5, "Aventura escolar de Rockstar con humor y travesuras", Aventura, 0
+Black Myth Wukong PS5, "RPG de acción basado en la mitología china", RPG, 0
+Call of duty Black Ops 3 PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
+Call of duty Black Ops 3 PS5, "Shooter futurista enfocado en modo zombies", Shooter, 0
+Call Of Duty Black Ops 4 PS4, "Shooter multijugador sin campaña individual", Shooter, 0
+Call Of Duty Black Ops 4 PS5, "Shooter multijugador sin campaña individual", Shooter, 0
+Call Of Duty Modern Warfare Remasterd PS4, "Remasterización del clásico Modern Warfare", Shooter, 0
+Call Of Duty Modern Warfare Remasterd PS5, "Remasterización del clásico Modern Warfare", Shooter, 0
+Call of Duty Modern Warfare 2 Campaign Remastered PS4, "Campaña remasterizada de MW2", Shooter, 0
+Call of Duty Modern Warfare 2 Campaign Remastered PS5, "Campaña remasterizada de MW2", Shooter, 0
+Call Of Duty WWII PS4, "Shooter de la Segunda Guerra Mundial", Shooter, 0
+Call Of Duty WWII PS5, "Shooter de la Segunda Guerra Mundial", Shooter, 0
+Call of Duty Advanced Warfare PS4, "Shooter futurista con exoesqueletos", Shooter, 0
+Call of Duty Advanced Warfare PS5, "Shooter futurista con exoesqueletos", Shooter, 0
+Call of Duty Black Ops Cold War PS4, "Shooter ambientado en la Guerra Fría", Shooter, 0
+Call of Duty Black Ops Cold War PS5, "Shooter ambientado en la Guerra Fría", Shooter, 0
+Call of Duty Infinite Warfare PS4, "Shooter con combate espacial y terrestre", Shooter, 0
+Call of Duty Infinite Warfare PS5, "Shooter con combate espacial y terrestre", Shooter, 0
+Call of Duty Modern Warfare II PS4, "Reinicio de la saga Modern Warfare", Shooter, 0
+Call of Duty Modern Warfare II PS5, "Reinicio de la saga Modern Warfare", Shooter, 0
+Call of Duty Modern Warfare III PS4, "Última entrega de la trilogía Modern Warfare", Shooter, 0
+Call of Duty Modern Warfare III PS5, "Última entrega de la trilogía Modern Warfare", Shooter, 0
+Call of Duty Modern Warfare PS4, "Reinicio de Modern Warfare en inglés", Shooter, 0
+Call of Duty Modern Warfare PS5, "Reinicio de Modern Warfare en inglés", Shooter, 0
+Call of Duty Vanguard PS4, "Shooter de la Segunda Guerra Mundial", Shooter, 0
+Call of Duty Vanguard PS5, "Shooter de la Segunda Guerra Mundial", Shooter, 0
+Call of Duty Black Ops 6 PS4, "Nueva entrega de la saga Black Ops", Shooter, 0
+Call of Duty Black Ops 6 PS5, "Nueva entrega de la saga Black Ops", Shooter, 0
+Car Mechanic Simulator PS4, "Simulador de reparación de automóviles", Simulación, 0
+Car Mechanic Simulator PS5, "Simulador de reparación de automóviles", Simulación, 0
+Car Mechanic Simulator 2021 PS4, "Simulador detallado de mecánica automotriz", Simulación, 0
+Car Mechanic Simulator 2021 PS5, "Simulador detallado de mecánica automotriz", Simulación, 0
+CARS 3 PS4, "Juego de carreras basado en la película Cars 3", Racing, 0
+CARS 3 PS5, "Juego de carreras basado en la película Cars 3", Racing, 0
+Crash Bandicoot Bundle N. Sane Trilogy + CTR Nitro Fueled PS4, "Remakes de Crash Bandicoot clásicos y carreras", Plataformas, 0
+Crash Bandicoot Bundle N. Sane Trilogy + CTR Nitro Fueled PS5, "Remakes de Crash Bandicoot clásicos y carreras", Plataformas, 0
+Crash Bandicoot Quadrilogy Bundle PS4, "Cuatro juegos de Crash Bandicoot", Plataformas, 0
+Crash Bandicoot Quadrilogy Bundle PS5, "Cuatro juegos de Crash Bandicoot", Plataformas, 0
+Crash Bandicoot Crashiversary Bundle PS4, "Bundle con múltiples juegos de Crash", Plataformas, 0
+Crash Bandicoot Crashiversary Bundle PS5, "Bundle con múltiples juegos de Crash", Plataformas, 0
+Crash Team Racing Nitro Fueled + Spyro Game Bundle PS4, "Carreras de Crash y aventura de Spyro", Racing, 0
+Crash Team Racing Nitro Fueled + Spyro Game Bundle PS5, "Carreras de Crash y aventura de Spyro", Racing, 0
+Crash + Spyro Triple Play Bundle PS4, "Bundle con juegos de Crash y Spyro", Plataformas, 0
+Crash + Spyro Triple Play Bundle PS5, "Bundle con juegos de Crash y Spyro", Plataformas, 0
+Cuphead PS4, "Run and gun estilo cartoon de los años 30", Plataformas, 0
+Cuphead PS5, "Run and gun estilo cartoon de los años 30", Plataformas, 0
+Cult of the Lamb PS4, "Roguelike de cultos con gestión de seguidores", Roguelike, 0
+Cult of the Lamb PS5, "Roguelike de cultos con gestión de seguidores", Roguelike, 0
+Captain Tsubasa Rise of New Champions PS4, "Juego de fútbol arcade basado en el anime", Deportes, 0
+Captain Tsubasa Rise of New Champions PS5, "Juego de fútbol arcade basado en el anime", Deportes, 0
+Cyberpunk 2077 PS4, "RPG futurista en Night City", RPG, 0
+Cyberpunk 2077 PS5, "RPG futurista en Night City", RPG, 0
+Dakar Desert Rally PS4, "Rally todoterreno en el desierto", Racing, 0
+Dakar Desert Rally PS5, "Rally todoterreno en el desierto", Racing, 0
+Dakar 18 PS4, "Simulador oficial del rally Dakar", Racing, 0
+Dakar 18 PS5, "Simulador oficial del rally Dakar", Racing, 0
+Day Z PS4, "Survival multijugador post apocalíptico con zombies", Supervivencia, 0
+Day Z PS5, "Survival multijugador post apocalíptico con zombies", Supervivencia, 0
+Dark Souls Remastered PS4, "Remasterización del clásico souls", RPG, 0
+Dark Souls Remastered PS5, "Remasterización del clásico souls", RPG, 0
+Days Gone PS4, "Aventura post apocalíptica con hordas de zombies", Aventura, 0
+Days Gone PS5, "Aventura post apocalíptica con hordas de zombies", Aventura, 0
+Devil May Cry 5 + Vergil PS4, "Hack and slash con combos estilizados", Acción, 0
+Devil May Cry 5 + Vergil PS5, "Hack and slash con combos estilizados", Acción, 0
+Devil May Cry HD Collection & 4SE Bundle PS4, "Colección de juegos clásicos de DMC", Acción, 0
+Devil May Cry HD Collection & 4SE Bundle PS5, "Colección de juegos clásicos de DMC", Acción, 0
+Diablo IV PS4, "RPG de acción con loot y mazmorras", RPG, 0
+Diablo IV PS5, "RPG de acción con loot y mazmorras", RPG, 0
+Diablo Prime Evil Collection PS4, "Diablo 2 y 3 remasterizados", RPG, 0
+Diablo Prime Evil Collection PS5, "Diablo 2 y 3 remasterizados", RPG, 0
+Diablo III PS4, "RPG hack and slash con todas las expansiones", RPG, 0
+Diablo III PS5, "RPG hack and slash con todas las expansiones", RPG, 0
+DIRT 5 PS4, "Carreras todoterreno arcade", Racing, 0
+DIRT 5 PS5, "Carreras todoterreno arcade", Racing, 0
+DiRT Rally 2.0 PS4, "Simulador de rally realista", Racing, 0
+DiRT Rally 2.0 PS5, "Simulador de rally realista", Racing, 0
+Doom Eternal PS4, "Shooter frenético de demonios", Shooter, 0
+Doom Eternal PS5, "Shooter frenético de demonios", Shooter, 0
+DOOM PS4, "Reinicio del clásico shooter de demonios", Shooter, 0
+DOOM PS5, "Reinicio del clásico shooter de demonios", Shooter, 0
+DRAGON BALL FIGHTER Z PS4, "Juego de lucha 2.5D de Dragon Ball", Lucha, 0
+DRAGON BALL FIGHTER Z PS5, "Juego de lucha 2.5D de Dragon Ball", Lucha, 0
+Dragon Ball Xenoverse PS4, "RPG de lucha de Dragon Ball con viajes en el tiempo", Lucha, 0
+Dragon Ball Xenoverse PS5, "RPG de lucha de Dragon Ball con viajes en el tiempo", Lucha, 0
+Dragon Ball Xenoverse Bundle PS4, "Dos juegos de Xenoverse en un paquete", Lucha, 0
+Dragon Ball Xenoverse Bundle PS5, "Dos juegos de Xenoverse en un paquete", Lucha, 0
+Dragon Ball Xenoverse 2 PS4, "Secuela mejorada con más personajes", Lucha, 0
+Dragon Ball Xenoverse 2 PS5, "Secuela mejorada con más personajes", Lucha, 0
+Dragon Ball Z Kakarot PS4, "RPG de acción que recrea la saga de Dragon Ball Z", RPG, 0
+Dragon Ball Z Kakarot PS5, "RPG de acción que recrea la saga de Dragon Ball Z", RPG, 0
+DRAGON BALL Sparking ZERO PS5, "Nueva generación de Budokai Tenkaichi", Lucha, 0
+Detroit Become Human PS4, "Aventura narrativa sobre androides y humanidad", Aventura, 0
+Detroit Become Human PS5, "Aventura narrativa sobre androides y humanidad", Aventura, 0
+Dying Light Enhanced Edition PS4, "Survival horror con parkour y zombies", Terror, 0
+Dying Light Enhanced Edition PS5, "Survival horror con parkour y zombies", Terror, 0
+Dying Light 2 Stay Human PS4, "Secuela con mundo abierto y parkour mejorado", Terror, 0
+Dying Light 2 Stay Human PS5, "Secuela con mundo abierto y parkour mejorado", Terror, 0
+Demon Slayer The Hinokami Chronicles PS4, "Juego de lucha basado en el anime", Lucha, 0
+Demon Slayer The Hinokami Chronicles PS5, "Juego de lucha basado en el anime", Lucha, 0
+Dead by Daylight PS4, "Survival horror multijugador asimétrico", Terror, 0
+Dead by Daylight PS5, "Survival horror multijugador asimétrico", Terror, 0
+Dead Island Riptide Edition PS4, "Acción cooperativa contra zombies en isla tropical", Acción, 0
+Dead Island Riptide Edition PS5, "Acción cooperativa contra zombies en isla tropical", Acción, 0
+Descenders PS4, "Roguelike de descensos en bicicleta", Deportes, 0
+Descenders PS5, "Roguelike de descensos en bicicleta", Deportes, 0
+FC 26 PS4, "Próxima entrega de EA Sports FC", Deportes, 0
+FC 26 PS5, "Próxima entrega de EA Sports FC", Deportes, 0
+FC 25 PS4, "Simulador de fútbol de EA Sports", Deportes, 0
+FC 25 PS5, "Simulador de fútbol de EA Sports", Deportes, 0
+FC 24 PS4, "Simulador de fútbol de EA Sports", Deportes, 0
+FC 24 PS5, "Simulador de fútbol de EA Sports", Deportes, 0
+STAR WARS TRIPLE BUNDLE PS4, "Tres juegos de Star Wars de EA", Acción, 0
+STAR WARS TRIPLE BUNDLE PS5, "Tres juegos de Star Wars de EA", Acción, 0
+Elden Ring PS4, "RPG de mundo abierto de FromSoftware", RPG, 0
+Elden Ring PS5, "RPG de mundo abierto de FromSoftware", RPG, 0
+F1 24 PS4, "Simulador oficial de Fórmula 1", Racing, 0
+F1 24 PS5, "Simulador oficial de Fórmula 1", Racing, 0
+F1 23 PS4, "Simulador oficial de Fórmula 1", Racing, 0
+F1 23 PS5, "Simulador oficial de Fórmula 1", Racing, 0
+Fallout 4 PS4, "RPG post apocalíptico con todas las expansiones", RPG, 0
+Fallout 4 PS5, "RPG post apocalíptico con todas las expansiones", RPG, 0
+Far Cry Primal PS4, "Survival en la edad de piedra", Acción, 0
+Far Cry Primal PS5, "Survival en la edad de piedra", Acción, 0
+Far Cry 3 PS4, "Clásico shooter en isla tropical", Shooter, 0
+Far Cry 3 PS5, "Clásico shooter en isla tropical", Shooter, 0
+Far Cry 4 PS4, "Shooter de mundo abierto en el Himalaya", Shooter, 0
+Far Cry 4 PS5, "Shooter de mundo abierto en el Himalaya", Shooter, 0
+Far Cry 5 PS4, "Shooter en Montana contra un culto", Shooter, 0
+Far Cry 5 PS5, "Shooter en Montana contra un culto", Shooter, 0
+Farcry 5 + Farcry New Dawn PS4, "Far Cry 5 y su secuela post apocalíptica", Shooter, 0
+Farcry 5 + Farcry New Dawn PS5, "Far Cry 5 y su secuela post apocalíptica", Shooter, 0
+Far Cry New Dawn PS4, "Secuela post apocalíptica de Far Cry 5", Shooter, 0
+Far Cry New Dawn PS5, "Secuela post apocalíptica de Far Cry 5", Shooter, 0
+Far Cry 6 PS4, "Revolución en una isla caribeña ficticia", Shooter, 0
+Far Cry 6 PS5, "Revolución en una isla caribeña ficticia", Shooter, 0
+Farming Simulator 22 PS4, "Simulador de granja y agricultura", Simulación, 0
+Farming Simulator 22 PS5, "Simulador de granja y agricultura", Simulación, 0
+For Honor PS4, "Juego de lucha medieval multijugador", Acción, 0
+For Honor PS5, "Juego de lucha medieval multijugador", Acción, 0
+Five Nights at Freddy's Security Breach PS4, "Horror de supervivencia en pizzería con animatrónicos", Terror, 0
+Five Nights at Freddy's Security Breach PS5, "Horror de supervivencia en pizzería con animatrónicos", Terror, 0
+FINAL FANTASY VII REMAKE PS4, "Remake del clásico JRPG", RPG, 0
+FINAL FANTASY VII REMAKE PS5, "Remake del clásico JRPG", RPG, 0
+Grounded PS4, "Survival cooperativo donde eres del tamaño de una hormiga", Supervivencia, 0
+Grounded PS5, "Survival cooperativo donde eres del tamaño de una hormiga", Supervivencia, 0
+Gang Beasts PS4, "Juego de lucha party con física ragdoll", Party, 0
+Gang Beasts PS5, "Juego de lucha party con física ragdoll", Party, 0
+Ghost of Tsushima PS4, "Aventura samurái en Japón feudal", Aventura, 0
+Ghost of Tsushima PS5, "Aventura samurái en Japón feudal", Aventura, 0
+God of war 3 PS4, "Remasterización de la épica conclusión griega", Acción, 0
+God of war 3 PS5, "Remasterización de la épica conclusión griega", Acción, 0
+God Of War 4 PS4, "Reinicio de la saga en mitología nórdica", Acción, 0
+God Of War 4 PS5, "Reinicio de la saga en mitología nórdica", Acción, 0
+God of War Ragnarok PS4, "Secuela épica del Ragnarok nórdico", Acción, 0
+God of War Ragnarok PS5, "Secuela épica del Ragnarok nórdico", Acción, 0
+Gran turismo 7 PS4, "Simulador de conducción realista", Racing, 0
+Gran turismo 7 PS5, "Simulador de conducción realista", Racing, 0
+Goat Simulator PS4, "Simulador absurdo de cabra", Simulación, 0
+GTA V PS4, "Mundo abierto criminal en Los Santos", Acción, 0
+GTA V PS5, "Mundo abierto criminal en Los Santos", Acción, 0
+GTA Trilogy The Definitive Edition PS4, "Trilogía remasterizada de GTA", Acción, 0
+GTA Trilogy The Definitive Edition PS5, "Trilogía remasterizada de GTA", Acción, 0
+Grid Legends PS4, "Carreras arcade con historia", Racing, 0
+Grid Legends PS5, "Carreras arcade con historia", Racing, 0
+Hitman HD Enhanced Collection PS4, "Colección remasterizada de Hitman", Sigilo, 0
+Hitman HD Enhanced Collection PS5, "Colección remasterizada de Hitman", Sigilo, 0
+Hunting Simulator 2 Elite Edition PS4, "Simulador de caza realista", Simulación, 0
+Human Fall Flat PS4, "Puzzle cooperativo con física divertida", Puzzle, 0
+Human Fall Flat PS5, "Puzzle cooperativo con física divertida", Puzzle, 0
+HITMAN World of Assassination PS4, "Trilogía completa de Hitman con contenido extra", Sigilo, 0
+HITMAN World of Assassination PS5, "Trilogía completa de Hitman con contenido extra", Sigilo, 0
+HITMAN World of Assassination Part One PS4, "Primera parte de la trilogía World of Assassination", Sigilo, 0
+HITMAN World of Assassination Part One PS5, "Primera parte de la trilogía World of Assassination", Sigilo, 0
+Hogwarts Legacy PS4, "RPG en el mundo mágico de Harry Potter", RPG, 0
+Hogwarts Legacy PS5, "RPG en el mundo mágico de Harry Potter", RPG, 0
+Horizon Forbidden West PS4, "Secuela de Horizon en nuevas tierras", Aventura, 0
+Horizon Forbidden West PS5, "Secuela de Horizon en nuevas tierras", Aventura, 0
+Horizon Zero Dawn PS4, "Aventura post apocalíptica con máquinas dinosaurio", Aventura, 0
+Horizon Zero Dawn PS5, "Aventura post apocalíptica con máquinas dinosaurio", Aventura, 0
+Infamous Second Son PS4, "Superhéroes con poderes elementales en Seattle", Acción, 0
+Infamous Second Son PS5, "Superhéroes con poderes elementales en Seattle", Acción, 0
+Injustice 2 PS4, "Juego de lucha de superhéroes DC", Lucha, 0
+Injustice 2 PS5, "Juego de lucha de superhéroes DC", Lucha, 0
+insurgency sandstorm PS4, "Shooter táctico realista", Shooter, 0
+insurgency sandstorm PS5, "Shooter táctico realista", Shooter, 0
+It takes Two PS4, "Aventura cooperativa para dos jugadores", Aventura, 0
+It takes Two PS5, "Aventura cooperativa para dos jugadores", Aventura, 0
+Just Cause 4 PS4, "Acción con destrucción masiva y física", Acción, 0
+Just Cause 4 PS5, "Acción con destrucción masiva y física", Acción, 0
+Just Cause 3 PS4, "Mundo abierto con caos y explosiones", Acción, 0
+Just Cause 3 PS5, "Mundo abierto con caos y explosiones", Acción, 0
+Jurassic World Evolution PS4, "Simulador de gestión de parque de dinosaurios", Simulación, 0
+Jurassic World Evolution PS5, "Simulador de gestión de parque de dinosaurios", Simulación, 0
+Jurassic World Evolution 2 PS4, "Secuela mejorada del simulador de dinosaurios", Simulación, 0
+Jurassic World Evolution 2 PS5, "Secuela mejorada del simulador de dinosaurios", Simulación, 0
+LEGO Batman 3 Beyond Gotham PS4, "Aventura LEGO de Batman en el espacio", Aventura, 0
+LEGO Batman 3 Beyond Gotham PS5, "Aventura LEGO de Batman en el espacio", Aventura, 0
+LEGO CITY Undercover PS4, "Mundo abierto LEGO estilo GTA", Aventura, 0
+LEGO CITY Undercover PS5, "Mundo abierto LEGO estilo GTA", Aventura, 0
+Lego Marvel Collection PS4, "Colección de juegos LEGO de Marvel", Aventura, 0
+Lego Marvel Collection PS5, "Colección de juegos LEGO de Marvel", Aventura, 0
+Lego Marvels Avengers PS4, "Aventura LEGO de los Vengadores", Aventura, 0
+Lego Marvels Avengers PS5, "Aventura LEGO de los Vengadores", Aventura, 0
+LEGO Marvel Super Heroes PS4, "Superhéroes de Marvel en versión LEGO", Aventura, 0
+LEGO Marvel Super Heroes PS5, "Superhéroes de Marvel en versión LEGO", Aventura, 0
+LEGO Marvel Super Heroes 2 PS4, "Secuela con más héroes y villanos Marvel", Aventura, 0
+LEGO Marvel Super Heroes 2 PS5, "Secuela con más héroes y villanos Marvel", Aventura, 0
+LEGO Star Wars The Skywalker Saga PS4, "Las nueve películas de Star Wars en LEGO", Aventura, 0
+LEGO Star Wars The Skywalker Saga PS5, "Las nueve películas de Star Wars en LEGO", Aventura, 0
+LEGO DC Super Villains PS4, "Juega como villanos de DC en LEGO", Aventura, 0
+LEGO DC Super Villains PS5, "Juega como villanos de DC en LEGO", Aventura, 0
+LEGO The Incredibles PS4, "Los Increíbles en versión LEGO", Aventura, 0
+LEGO The Incredibles PS5, "Los Increíbles en versión LEGO", Aventura, 0
+LEGO Jurassic World PS4, "Las películas de Jurassic Park en LEGO", Aventura, 0
+Little Nightmares PS4, "Horror atmosférico de plataformas", Terror, 0
+Little Nightmares PS5, "Horror atmosférico de plataformas", Terror, 0
+Little Nightmares II PS4, "Secuela del horror de plataformas", Terror, 0
+Little Nightmares II PS5, "Secuela del horror de plataformas", Terror, 0
+Little Nightmares I y II Bundle PS4, "Dos juegos de Little Nightmares", Terror, 0
+Little Nightmares I y II Bundle PS5, "Dos juegos de Little Nightmares", Terror, 0
+LittleBigPlanet 3 PS4, "Plataformas creativo con editor de niveles", Plataformas, 0
+LittleBigPlanet 3 PS5, "Plataformas creativo con editor de niveles", Plataformas, 0
+Mad Max PS4, "Acción post apocalíptica en el desierto", Acción, 0
+Mad Max PS5, "Acción post apocalíptica en el desierto", Acción, 0
+MAFIA III PS4, "Crimen organizado en la Nueva Orleans de los 60", Acción, 0
+MAFIA III PS5, "Crimen organizado en la Nueva Orleans de los 60", Acción, 0
+Mafia II PS4, "Historia mafiosa en los años 40 y 50", Acción, 0
+Mafia II PS5, "Historia mafiosa en los años 40 y 50", Acción, 0
+Mafia Definitive Edition PS4, "Remake del primer Mafia", Acción, 0
+Mafia Definitive Edition PS5, "Remake del primer Mafia", Acción, 0
+Mafia Trilogy PS4, "Tres juegos de Mafia remasterizados", Acción, 0
+Mafia Trilogy PS5, "Tres juegos de Mafia remasterizados", Acción, 0
+Marvels Guardians of the Galaxy PS4, "Aventura de acción con los Guardianes", Aventura, 0
+Marvels Guardians of the Galaxy PS5, "Aventura de acción con los Guardianes", Aventura, 0
+Marvels Spider Man G.O.T.Y PS4, "Aventura del Hombre Araña en Nueva York", Acción, 0
+Marvels Spider Man G.O.T.Y PS5, "Aventura del Hombre Araña en Nueva York", Acción, 0
+Marvels Spider Man Miles Morales PS4, "Aventura de Miles Morales como Spider-Man", Acción, 0
+Marvels Spider Man Miles Morales PS5, "Aventura de Miles Morales como Spider-Man", Acción, 0
+Marvel's Spider Man 2 PS5, "Secuela con Peter y Miles juntos", Acción, 0
+Maneater PS4, "RPG donde juegas como un tiburón", Acción, 0
+Maneater PS5, "RPG donde juegas como un tiburón", Acción, 0
+Metro 2033 Redux PS4, "Shooter post apocalíptico en el metro de Moscú", Shooter, 0
+Metro 2033 Redux PS5, "Shooter post apocalíptico en el metro de Moscú", Shooter, 0
+Metro Exodus PS4, "Aventura post apocalíptica con mundo semiabierto", Shooter, 0
+Metro Exodus PS5, "Aventura post apocalíptica con mundo semiabierto", Shooter, 0
+Metro Last Light Redux PS4, "Continuación de Metro 2033 remasterizada", Shooter, 0
+Metro Last Light Redux PS5, "Continuación de Metro 2033 remasterizada", Shooter, 0
+Metro Saga Bundle PS4, "Trilogía completa de Metro", Shooter, 0
+Metro Saga Bundle PS5, "Trilogía completa de Metro", Shooter, 0
+Middle earth Shadow of Mordor PS4, "Acción en el mundo de El Señor de los Anillos", Acción, 0
+Middle earth Shadow of Mordor PS5, "Acción en el mundo de El Señor de los Anillos", Acción, 0
+Middle earth Shadow of War Definitive Edition PS4, "Secuela épica en la Tierra Media", Acción, 0
+Middle earth Shadow of War Definitive Edition PS5, "Secuela épica en la Tierra Media", Acción, 0
+Middle earth The Shadow Bundle PS4, "Dos juegos de Middle-earth", Acción, 0
+Middle earth The Shadow Bundle PS5, "Dos juegos de Middle-earth", Acción, 0
+Minecraft PS4, "Sandbox de construcción y supervivencia", Sandbox, 0
+Minecraft PS5, "Sandbox de construcción y supervivencia", Sandbox, 0
+MONSTER HUNTER WORLD PS4, "Caza de monstruos gigantes cooperativo", Acción, 0
+Monster Energy Supercross The Official Videogame PS4, "Simulador oficial de supercross", Racing, 0
+Monster Energy Supercross The Official Videogame PS5, "Simulador oficial de supercross", Racing, 0
+Monster Energy Supercross The Official Videogame 5 PS4, "Quinta entrega del simulador de supercross", Racing, 0
+Monster Energy Supercross The Official Videogame 5 PS5, "Quinta entrega del simulador de supercross", Racing, 0
+Monster Energy Supercross The Official Videogame 6 PS4, "Sexta entrega del simulador de supercross", Racing, 0
+Monster Energy Supercross The Official Videogame 6 PS5, "Sexta entrega del simulador de supercross", Racing, 0
+Mortal Kombat 11 Subtitulado PS4, "Juego de lucha brutal subtitulado", Lucha, 0
+Mortal Kombat 11 Subtitulado PS5, "Juego de lucha brutal subtitulado", Lucha, 0
+Mortal Kombat 11 Latino PS4, "Juego de lucha brutal en español latino", Lucha, 0
+Mortal Kombat 11 Latino PS5, "Juego de lucha brutal en español latino", Lucha, 0
+Mortal Kombat 11 Ultimate + Injustice 2 Latino PS4, "Dos juegos de lucha de NetherRealm", Lucha, 0
+Mortal Kombat 11 Ultimate + Injustice 2 Latino PS5, "Dos juegos de lucha de NetherRealm", Lucha, 0
+Mortal Kombat 11 Ultimate Latino PS4, "Edición definitiva de MK11 en español", Lucha, 0
+Mortal Kombat 11 Ultimate Latino PS5, "Edición definitiva de MK11 en español", Lucha, 0
+Mortal Kombat 11 Ultimate Subtitulado PS4, "Edición definitiva de MK11 subtitulada", Lucha, 0
+Mortal Kombat 11 Ultimate Subtitulado PS5, "Edición definitiva de MK11 subtitulada", Lucha, 0
+Mortal Kombat X PS4, "Décima entrega de la saga de lucha", Lucha, 0
+Mortal Kombat X PS5, "Décima entrega de la saga de lucha", Lucha, 0
+Mortal Kombat XL PS4, "Mortal Kombat X con todo el contenido", Lucha, 0
+Mortal Kombat XL PS5, "Mortal Kombat X con todo el contenido", Lucha, 0
+Mortal Kombat 1 PS5, "Reinicio de la saga Mortal Kombat", Lucha, 0
+Mount & blade ii bannerlord PS4, "RPG medieval de batallas masivas", RPG, 0
+Mount & blade ii bannerlord PS5, "RPG medieval de batallas masivas", RPG, 0
+MudRunner PS4, "Simulador de conducción todoterreno extremo", Simulación, 0
+MudRunner PS5, "Simulador de conducción todoterreno extremo", Simulación, 0
+Moto GP 24 PS4, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 24 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 21 PS4, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 21 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 22 PS4, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 22 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 23 PS4, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 23 PS5, "Simulador oficial de MotoGP", Racing, 0
+MXGP 2020 The Official Motocross Videogame PS4, "Simulador oficial de motocross", Racing, 0
+MXGP 2021 The Official Motocross Videogame PS4, "Simulador oficial de motocross", Racing, 0
+MX vs ATV Legends PS4, "Carreras todoterreno arcade", Racing, 0
+MX vs ATV Legends PS5, "Carreras todoterreno arcade", Racing, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM 4 Road to Boruto PS4, "Juego de lucha de Naruto con expansión Boruto", Lucha, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM 4 Road to Boruto PS5, "Juego de lucha de Naruto con expansión Boruto", Lucha, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM 4 PS4, "Cuarta entrega de Ultimate Ninja Storm", Lucha, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM 4 PS5, "Cuarta entrega de Ultimate Ninja Storm", Lucha, 0
+NARUTO Ultimate Ninja STORM PS4, "Primera entrega de Ultimate Ninja Storm", Lucha, 0
+NARUTO Ultimate Ninja STORM PS5, "Primera entrega de Ultimate Ninja Storm", Lucha, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM Trilogy PS4, "Tres juegos de Naruto Storm", Lucha, 0
+NARUTO SHIPPUDEN Ultimate Ninja STORM Trilogy PS5, "Tres juegos de Naruto Storm", Lucha, 0
+NBA 2K24 PS4, "Simulador de baloncesto NBA", Deportes, 0
+NBA 2K24 PS5, "Simulador de baloncesto NBA", Deportes, 0
+NBA 2K25 PS4, "Simulador de baloncesto NBA", Deportes, 0
+NBA 2K25 PS5, "Simulador de baloncesto NBA", Deportes, 0
+Need For Speed PS4, "Carreras ilegales urbanas", Racing, 0
+Need For Speed PS5, "Carreras ilegales urbanas", Racing, 0
+Need For Speed Heat PS4, "Carreras diurnas y nocturnas ilegales", Racing, 0
+Need For Speed Heat PS5, "Carreras diurnas y nocturnas ilegales", Racing, 0
+Need For Speed Payback PS4, "Carreras con historia de venganza", Racing, 0
+Need For Speed Payback PS5, "Carreras con historia de venganza", Racing, 0
+Need For Speed Rivals PS4, "Carreras como corredor o policía", Racing, 0
+Need For Speed Rivals PS5, "Carreras como corredor o policía", Racing, 0
+Need for Speed Hot Pursuit Remastered PS4, "Remasterización del clásico Hot Pursuit", Racing, 0
+Need for Speed Hot Pursuit Remastered PS5, "Remasterización del clásico Hot Pursuit", Racing, 0
+NieR Automata PS4, "RPG de acción filosófico con androides", RPG, 0
+NieR Automata PS5, "RPG de acción filosófico con androides", RPG, 0
+No Man's Sky PS4, "Exploración espacial procedural infinita", Aventura, 0
+No Man's Sky PS5, "Exploración espacial procedural infinita", Aventura, 0
+Outlast Bundle of Terror PS4, "Horror de supervivencia en primera persona", Terror, 0
+Outlast Bundle of Terror PS5, "Horror de supervivencia en primera persona", Terror, 0
+Outlast Trinity PS4, "Trilogía completa de Outlast", Terror, 0
+Outlast Trinity PS5, "Trilogía completa de Outlast", Terror, 0
+Outlast PS4, "Horror psicológico en un psiquiátrico", Terror, 0
+Outlast PS5, "Horror psicológico en un psiquiátrico", Terror, 0
+ONE PIECE PIRATE WARRIORS 4 Deluxe Edition PS4, "Musou de One Piece con personajes icónicos", Acción, 0
+ONE PIECE PIRATE WARRIORS 4 Deluxe Edition PS5, "Musou de One Piece con personajes icónicos", Acción, 0
+Overcooked! 2 PS4, "Juego cooperativo caótico de cocina", Party, 0
+Overcooked! 2 PS5, "Juego cooperativo caótico de cocina", Party, 0
+Overcooked! + Overcooked! 2 PS4, "Dos juegos de cocina cooperativa", Party, 0
+Overcooked! + Overcooked! 2 PS5, "Dos juegos de cocina cooperativa", Party, 0
+Overcooked! PS4, "Caos cooperativo en la cocina", Party, 0
+Overcooked! PS5, "Caos cooperativo en la cocina", Party, 0
+PAYDAY 2 PS4, "Shooter cooperativo de atracos", Shooter, 0
+PAYDAY 2 PS5, "Shooter cooperativo de atracos", Shooter, 0
+Plantas Vs Zombies Garnden Warfare PS4, "Shooter multijugador de Plants vs Zombies", Shooter, 0
+Plantas Vs Zombies Garnden Warfare PS5, "Shooter multijugador de Plants vs Zombies", Shooter, 0
+Plants vs. Zombies Garden Warfare 2 PS4, "Secuela del shooter de Plants vs Zombies", Shooter, 0
+Plants vs. Zombies Garden Warfare 2 PS5, "Secuela del shooter de Plants vs Zombies", Shooter, 0
+Plants vs Zombies Battle for Neighborville PS4, "Tercera entrega del shooter PvZ", Shooter, 0
+Plants vs Zombies Battle for Neighborville PS5, "Tercera entrega del shooter PvZ", Shooter, 0
+Rayman Legends PS4, "Plataformas 2D con niveles musicales", Plataformas, 0
+Rayman Legends PS5, "Plataformas 2D con niveles musicales", Plataformas, 0
+Red Dead Redemption 2 PS4, "Épica aventura del oeste salvaje", Aventura, 0
+Red Dead Redemption 2 PS5, "Épica aventura del oeste salvaje", Aventura, 0
+Red Dead Redemption 1 PS4, "Clásico western de Rockstar", Aventura, 0
+Red Dead Redemption 1 PS5, "Clásico western de Rockstar", Aventura, 0
+RESIDENT EVIL 2 PS4, "Remake del clásico survival horror", Terror, 0
+RESIDENT EVIL 2 PS5, "Remake del clásico survival horror", Terror, 0
+RESIDENT EVIL 3 PS4, "Remake de Resident Evil 3 Nemesis", Terror, 0
+RESIDENT EVIL 3 PS5, "Remake de Resident Evil 3 Nemesis", Terror, 0
+Resident Evil 4 2005 PS4, "Versión clásica de RE4", Terror, 0
+Resident Evil 4 2005 PS5, "Versión clásica de RE4", Terror, 0
+Resident Evil 4 Remake PS4, "Remake moderno del clásico RE4", Terror, 0
+Resident Evil 4 Remake PS5, "Remake moderno del clásico RE4", Terror, 0
+Resident Evil 5 PS4, "Acción cooperativa contra infectados", Terror, 0
+Resident Evil 5 PS5, "Acción cooperativa contra infectados", Terror, 0
+Resident Evil 6 PS4, "Acción con múltiples campañas", Terror, 0
+Resident Evil 6 PS5, "Acción con múltiples campañas", Terror, 0
+RESIDENT EVIL 7 biohazard PS4, "Horror en primera persona en Louisiana", Terror, 0
+RESIDENT EVIL 7 biohazard PS5, "Horror en primera persona en Louisiana", Terror, 0
+Resident Evil Triple Pack PS4, "Tres juegos de Resident Evil clásicos", Terror, 0
+Resident Evil Triple Pack PS5, "Tres juegos de Resident Evil clásicos", Terror, 0
+RACCOON CITY EDITION RE 2 + RE 3 PS4, "Dos remakes de Resident Evil", Terror, 0
+RACCOON CITY EDITION RE 2 + RE 3 PS5, "Dos remakes de Resident Evil", Terror, 0
+Resident Evil Village Gold Edition PS4, "Horror de supervivencia en pueblo europeo", Terror, 0
+Resident Evil Village Gold Edition PS5, "Horror de supervivencia en pueblo europeo", Terror, 0
+Riders Republic PS4, "Deportes extremos en mundo abierto", Deportes, 0
+Riders Republic PS5, "Deportes extremos en mundo abierto", Deportes, 0
+Rise of the Tomb Raider PS4, "Aventura de exploración con Lara Croft", Aventura, 0
+Rise of the Tomb Raider PS5, "Aventura de exploración con Lara Croft", Aventura, 0
+Rugby 22 PS4, "Simulador de rugby", Deportes, 0
+Street Fighter 6 PS4, "Nueva generación de juego de lucha", Lucha, 0
+Street Fighter 6 PS5, "Nueva generación de juego de lucha", Lucha, 0
+Street Fighter V PS4, "Juego de lucha competitivo", Lucha, 0
+Street Fighter V PS5, "Juego de lucha competitivo", Lucha, 0
+Slime Rancher PS4, "Aventura de granja con slimes adorables", Aventura, 0
+Slime Rancher PS5, "Aventura de granja con slimes adorables", Aventura, 0
+Sekiro Shadows Die Twice PS4, "Souls-like de samurais con sigilo", Acción, 0
+Sekiro Shadows Die Twice PS5, "Souls-like de samurais con sigilo", Acción, 0
+Sniper Elite 4 PS4, "Shooter táctico de francotiradores en Italia", Shooter, 0
+Sniper Elite 4 PS5, "Shooter táctico de francotiradores en Italia", Shooter, 0
+Sniper Elite 5 PS4, "Francotirador táctico en la Francia ocupada", Shooter, 0
+Sniper Elite 5 PS5, "Francotirador táctico en la Francia ocupada", Shooter, 0
+Sonic Mania PS4, "Sonic clásico 2D con niveles retro", Plataformas, 0
+Sonic Mania PS5, "Sonic clásico 2D con niveles retro", Plataformas, 0
+Sonic Colours Ultimate PS4, "Plataformas 3D de Sonic remasterizado", Plataformas, 0
+Sonic Colours Ultimate PS5, "Plataformas 3D de Sonic remasterizado", Plataformas, 0
+South Park The Fractured but Whole PS4, "RPG de South Park con superhéroes", RPG, 0
+South Park The Fractured but Whole PS5, "RPG de South Park con superhéroes", RPG, 0
+South Park The Stick of Truth PS4, "RPG de South Park estilo fantasía", RPG, 0
+South Park The Stick of Truth PS5, "RPG de South Park estilo fantasía", RPG, 0
+South Park The Video Game Collection PS4, "Dos juegos de South Park", RPG, 0
+South Park The Video Game Collection PS5, "Dos juegos de South Park", RPG, 0
+Shadow of the Colossus PS4, "Remake de lucha contra colosos gigantes", Aventura, 0
+Shadow of the Colossus PS5, "Remake de lucha contra colosos gigantes", Aventura, 0
+STAR WARS Battlefront II PS4, "Shooter multijugador de Star Wars", Shooter, 0
+STAR WARS Battlefront II PS5, "Shooter multijugador de Star Wars", Shooter, 0
+STAR WARS Jedi Fallen Order PS4, "Aventura de acción con Jedi", Aventura, 0
+STAR WARS Jedi Fallen Order PS5, "Aventura de acción con Jedi", Aventura, 0
+STAR WARS Jedi Survivor PS4, "Secuela de Jedi Fallen Order", Aventura, 0
+Stranded Deep PS4, "Supervivencia en isla desierta", Supervivencia, 0
+Stranded Deep PS5, "Supervivencia en isla desierta", Supervivencia, 0
+SnowRunner PS4, "Simulador todoterreno extremo", Simulación, 0
+SnowRunner PS5, "Simulador todoterreno extremo", Simulación, 0
+SIFU PS4, "Beat em up de kung fu con envejecimiento", Acción, 0
+SIFU PS5, "Beat em up de kung fu con envejecimiento", Acción, 0
+Terraria PS4, "Sandbox 2D de exploración y construcción", Sandbox, 0
+Terraria PS5, "Sandbox 2D de exploración y construcción", Sandbox, 0
+Titanfall 2 PS4, "Shooter con mechs y parkour", Shooter, 0
+Titanfall 2 PS5, "Shooter con mechs y parkour", Shooter, 0
+TEKKEN 7 PS4, "Juego de lucha 3D competitivo", Lucha, 0
+TEKKEN 7 PS5, "Juego de lucha 3D competitivo", Lucha, 0
+TEKKEN 7 Originals Edition PS4, "Edición especial de Tekken 7", Lucha, 0
+Tennis World Tour PS4, "Simulador de tenis profesional", Deportes, 0
+Tennis World Tour PS5, "Simulador de tenis profesional", Deportes, 0
+The Crew Motorfest PS4, "Carreras de mundo abierto en Hawaii", Racing, 0
+The Crew Motorfest PS5, "Carreras de mundo abierto en Hawaii", Racing, 0
+The Walking Dead The Telltale Definitive Series PS4, "Serie completa narrativa de zombies", Aventura, 0
+The Walking Dead The Telltale Definitive Series PS5, "Serie completa narrativa de zombies", Aventura, 0
+The Division 2 PS4, "Shooter looter post apocalíptico", Shooter, 0
+The Division 2 PS5, "Shooter looter post apocalíptico", Shooter, 0
+The Evil Within 2 PS4, "Survival horror psicológico en español", Terror, 0
+The Evil Within 2 PS5, "Survival horror psicológico en español", Terror, 0
+The Callisto Protocol PS4, "Horror de ciencia ficción en prisión espacial", Terror, 0
+The Callisto Protocol PS5, "Horror de ciencia ficción en prisión espacial", Terror, 0
+The Evil Within PS4, "Horror de supervivencia del creador de Resident Evil", Terror, 0
+The Evil Within PS5, "Horror de supervivencia del creador de Resident Evil", Terror, 0
+The Witcher 3 Wild Hunt PS4, "RPG épico con Geralt de Rivia", RPG, 0
+The Witcher 3 Wild Hunt PS5, "RPG épico con Geralt de Rivia", RPG, 0
+The Elder Scrolls V Skyrim PS4, "RPG de fantasía con todo el contenido", RPG, 0
+The Elder Scrolls V Skyrim PS5, "RPG de fantasía con todo el contenido", RPG, 0
+The Forest PS4, "Survival horror cooperativo con caníbales", Supervivencia, 0
+The Forest PS5, "Survival horror cooperativo con caníbales", Supervivencia, 0
+The Quarry PS4, "Horror narrativo con decisiones", Terror, 0
+The Escapists + The Escapists 2 PS4, "Simulador de escape de prisión", Estrategia, 0
+The Escapists + The Escapists 2 PS5, "Simulador de escape de prisión", Estrategia, 0
+The Last Of Us 2 PS4, "Secuela épica post apocalíptica", Aventura, 0
+The Last of Us Part II PS5, "Remasterización de la secuela con mejoras", Aventura, 0
+The Last of Us Part I PS5, "Remake completo del primer juego", Aventura, 0
+The Last Of Us Remasterd PS4, "Remasterización del clásico en español", Aventura, 0
+TheHunter Call of the Wild PS4, "Simulador de caza realista", Simulación, 0
+TheHunter Call of the Wild PS5, "Simulador de caza realista", Simulación, 0
+Tom Clancy's Ghost Recon Wildlands PS4, "Shooter táctico de mundo abierto", Shooter, 0
+Tom Clancy's Ghost Recon Wildlands PS5, "Shooter táctico de mundo abierto", Shooter, 0
+Tom Clancy's Rainbow Six Extraction PS4, "Shooter cooperativo contra alienígenas", Shooter, 0
+Tom Clancy's Rainbow Six Extraction PS5, "Shooter cooperativo contra alienígenas", Shooter, 0
+Tom Clancy's Ghost Recon Breakpoint PS4, "Shooter táctico de supervivencia en español", Shooter, 0
+Tom Clancy's Ghost Recon Breakpoint PS5, "Shooter táctico de supervivencia en español", Shooter, 0
+Tom Clancy's Rainbow Six Siege PS4, "Shooter táctico competitivo", Shooter, 0
+Tom Clancy's Rainbow Six Siege PS5, "Shooter táctico competitivo", Shooter, 0
+Tomb Raider Trilogy PS4, "Trilogía completa de Lara Croft", Aventura, 0
+Tomb Raider Trilogy PS5, "Trilogía completa de Lara Croft", Aventura, 0
+Truck Driver PS4, "Simulador de conducción de camiones", Simulación, 0
+Truck Driver PS5, "Simulador de conducción de camiones", Simulación, 0
+Tony Hawk's Pro Skater 1 + 2 PS4, "Remakes de los clásicos de skateboard", Deportes, 0
+Tony Hawk's Pro Skater 1 + 2 PS5, "Remakes de los clásicos de skateboard", Deportes, 0
+THE KING OF FIGHTERS XV PS4, "Juego de lucha en equipo", Lucha, 0
+THE KING OF FIGHTERS XV PS5, "Juego de lucha en equipo", Lucha, 0
+UNCHARTED 4 A Thiefs End y UNCHARTED The Lost Legacy PS4, "Dos aventuras de Uncharted", Aventura, 0
+UNCHARTED 4 A Thiefs End y UNCHARTED The Lost Legacy PS5, "Dos aventuras de Uncharted", Aventura, 0
+Uncharted The Nathan Drake Collection PS4, "Trilogía de Uncharted remasterizada", Aventura, 0
+Uncharted The Nathan Drake Collection PS5, "Trilogía de Uncharted remasterizada", Aventura, 0
+Unravel Two PS4, "Plataformas cooperativo con yarn", Plataformas, 0
+Unravel Two PS5, "Plataformas cooperativo con yarn", Plataformas, 0
+Unravel 1 + 2 PS4, "Dos juegos de plataformas de Unravel", Plataformas, 0
+Unravel 1 + 2 PS5, "Dos juegos de plataformas de Unravel", Plataformas, 0
+Until Dawn PS4, "Horror interactivo con elecciones", Terror, 0
+Until Dawn PS5, "Horror interactivo con elecciones", Terror, 0
+UFC 5 PS5, "Simulador de artes marciales mixtas", Deportes, 0
+Watch Dogs 1 + 2 PS4, "Dos juegos de hacking y mundo abierto", Acción, 0
+Watch Dogs 1 + 2 PS5, "Dos juegos de hacking y mundo abierto", Acción, 0
+Watch Dogs 2 PS4, "Hacking en San Francisco", Acción, 0
+Watch Dogs 2 PS5, "Hacking en San Francisco", Acción, 0
+Watch Dogs PS4, "Watch Dogs con todo el contenido", Acción, 0
+Watch Dogs PS5, "Watch Dogs con todo el contenido", Acción, 0
+Watch Dogs Legion PS4, "Hackea Londres con cualquier personaje", Acción, 0
+Watch Dogs Legion PS5, "Hackea Londres con cualquier personaje", Acción, 0
+World War Z Aftermath PS4, "Shooter cooperativo de zombies en hordas", Shooter, 0
+World War Z PS4, "Shooter cooperativo basado en la película", Shooter, 0
+WRC Generations PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC Generations PS5, "Simulador oficial de rally WRC", Racing, 0
+WRC 10 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 10 PS5, "WRC 10 con contenido adicional", Racing, 0
+WRC Collection PS4, "Colección de juegos WRC", Racing, 0
+WRC 7 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 7 PS5, "Simulador oficial de rally WRC", Racing, 0
+WRC 8 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 8 PS5, "Simulador oficial de rally WRC", Racing, 0
+WRC 9 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 9 PS5, "Simulador oficial de rally WRC", Racing, 0
+WWE 2K23 PS4, "Simulador de lucha libre profesional", Deportes, 0
+WWE 2K23 PS5, "Simulador de lucha libre profesional", Deportes, 0
+WWE 2K24 PS4, "Simulador de lucha libre profesional", Deportes, 0
+WWE 2K24 PS5, "Simulador de lucha libre profesional", Deportes, 0
+WWE 2K25 PS4, "Simulador de lucha libre WWE", Deportes, 0
+WWE 2K25 PS5, "Simulador de lucha libre WWE", Deportes, 0
+Zombie Army 4 PS4, "Shooter cooperativo contra zombies nazis", Shooter, 0
+Zombie Army 4 PS5, "Shooter cooperativo contra zombies nazis", Shooterle , 0
