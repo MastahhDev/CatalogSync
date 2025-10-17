@@ -29,3 +29,5 @@ class Juego(models.Model):
     def get_slug(self):
         # Usa slugify de Django que maneja mejor los caracteres especiales
         return slugify(self.nombre)
+    
+    

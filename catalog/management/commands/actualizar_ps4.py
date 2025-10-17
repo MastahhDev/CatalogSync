@@ -2,6 +2,7 @@
 import csv
 import os
 import re
+import difflib
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -31,6 +32,62 @@ class Command(BaseCommand):
             help='Nombre de la columna con el precio'
         )
 
+    def limpiar_nombre_avanzado(self, nombre):
+        """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
+        if not nombre:
+            return ""
+            
+        # Quitar emojis y caracteres especiales
+        nombre = re.sub(r'[^\x00-\x7F]+', '', nombre)
+        
+        # Quitar símbolos especiales
+        nombre = nombre.replace('®', '').replace('™', '').replace('©', '')
+        nombre = nombre.replace(':', '').replace('#', '').replace('-', ' ')
+        
+        # Quitar el precio del nombre si está
+        nombre = re.sub(r'\$\s*[\d.,]+', '', nombre)
+        
+        # Quitar caracteres especiales al inicio
+        nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
+        
+        # PATRONES A FILTRAR (case insensitive)
+        patrones_a_eliminar = [
+            # Idiomas y subtítulos
+            r'\bespañol\s+españa\b', r'\bespañol\s+latino\b', r'\binglés\b',
+            r'\benglish\b', r'\bsubtitulado\b', r'\bsubtitulada\b',
+            r'\bespañol\b', r'\bspanish\b',
+            
+            # Ediciones (EXCEPTO definitive edition que se mantiene)
+            r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
+            r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
+            r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
+            r'\bgoty\b', r'\bedición\s+deluxe\b', r'\bedición\s+gold\b',
+            r'\bedición\s+estándar\b', r'\bedición\s+especial\b', r'\blatino\b',
+            
+            # Palabras generales a eliminar
+            r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
+            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b'
+        ]
+        
+        # Aplicar todos los patrones
+        for patron in patrones_a_eliminar:
+            nombre = re.sub(patron, '', nombre, flags=re.IGNORECASE)
+        
+        # Quitar paréntesis vacíos y espacios extra
+        nombre = re.sub(r'\(\s*\)', '', nombre)
+        nombre = re.sub(r'\[\s*\]', '', nombre)
+        
+        # Quitar múltiples espacios
+        nombre = re.sub(r'\s+', ' ', nombre)
+        
+        # Quitar espacios al inicio y final
+        nombre = nombre.strip()
+        
+        # Quitar comas y puntos al final
+        nombre = re.sub(r'[.,;\s]+$', '', nombre)
+        
+        return nombre
+
     def buscar_juego_similar(self, nombre_limpio):
         """Busca juegos en la base de datos que coincidan aproximadamente"""
         # Primero intenta búsqueda exacta sin "PS4"
@@ -52,11 +109,23 @@ class Command(BaseCommand):
         if juegos_sin_ps4.exists():
             return juegos_sin_ps4.first()
         
+        # Limpiar también el nombre para búsqueda más flexible
+        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_ps4)
+        
+        # Buscar por nombre muy limpio
+        if nombre_muy_limpio != nombre_sin_ps4:
+            juegos_muy_limpios = Juego.objects.filter(
+                nombre__icontains=nombre_muy_limpio,
+                consola='ps4'
+            )
+            if juegos_muy_limpios.exists():
+                return juegos_muy_limpios.first()
+        
         # Buscar por palabras clave (las primeras 3-4 palabras)
-        palabras_clave = nombre_sin_ps4.split()[:4]
+        palabras_clave = nombre_muy_limpio.split()[:4]
         query = None
         for palabra in palabras_clave:
-            if len(palabra) > 3:  # Solo palabras significativas
+            if len(palabra) > 3:
                 if query is None:
                     query = models.Q(nombre__icontains=palabra)
                 else:
@@ -65,33 +134,13 @@ class Command(BaseCommand):
         if query:
             juegos_similares = Juego.objects.filter(query, consola='ps4')
             if juegos_similares.exists():
+                for juego_candidato in juegos_similares:
+                    nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
+                    if nombre_muy_limpio in nombre_juego_limpio or nombre_juego_limpio in nombre_muy_limpio:
+                        return juego_candidato
                 return juegos_similares.first()
         
         return None
-
-    def limpiar_nombre(self, nombre):
-        """Limpia el nombre para búsqueda"""
-        if not nombre:
-            return ""
-            
-        # Quitar emojis y caracteres especiales
-        nombre = re.sub(r'[^\x00-\x7F]+', '', nombre)
-        
-        # Quitar símbolos especiales
-        nombre = nombre.replace('®', '').replace('™', '').replace('©', '')
-        nombre = nombre.replace(':', '').replace('#', '').replace('-', ' ')
-        
-        # Quitar el precio del nombre si está
-        nombre = re.sub(r'\$\s*[\d.,]+', '', nombre)
-        
-        # Quitar caracteres especiales al inicio
-        nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
-        
-        # Quitar múltiples espacios
-        nombre = re.sub(r'\s+', ' ', nombre)
-        
-        # Quitar espacios al inicio y final
-        return nombre.strip()
 
     def limpiar_precio(self, precio_str):
         """Convierte string con precio a Decimal"""
@@ -112,6 +161,142 @@ class Command(BaseCommand):
         except:
             return Decimal('0.0')
 
+    def buscar_imagen_existente(self, nombre_juego):
+        """Busca la imagen correspondiente al juego"""
+        return self.buscar_imagen(nombre_juego)
+
+    def buscar_imagen(self, nombre_juego):
+        """Busca la imagen correspondiente al juego - VERSIÓN SIMPLIFICADA"""
+        self.stdout.write(f"\n🖼️  BUSCANDO IMAGEN PARA: {nombre_juego}")
+        
+        # Generar nombre base
+        nombre_base = self.generar_nombre_imagen_simple(nombre_juego)
+        
+        img_dir = os.path.join(settings.BASE_DIR, 'static', 'img')
+        
+        # Buscar archivos existentes
+        archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+        
+        self.stdout.write(f"Archivos en directorio: {len(archivos_existentes)}")
+        
+        # Buscar coincidencia exacta
+        if nombre_base in archivos_existentes:
+            self.stdout.write(self.style.SUCCESS(f"✓ IMAGEN ENCONTRADA: {nombre_base}"))
+            return f"img/{nombre_base}"
+        
+        # Buscar coincidencia insensible a mayúsculas
+        archivos_lower = [f.lower() for f in archivos_existentes]
+        if nombre_base.lower() in archivos_lower:
+            archivo_real = archivos_existentes[archivos_lower.index(nombre_base.lower())]
+            self.stdout.write(self.style.SUCCESS(f"✓ IMAGEN ENCONTRADA: {archivo_real}"))
+            return f"img/{archivo_real}"
+        
+        # Mostrar archivos relacionados para debug
+        self.mostrar_archivos_relacionados(nombre_juego, archivos_existentes)
+        
+        self.stdout.write(self.style.ERROR(f"✗ NO SE ENCONTRÓ IMAGEN: {nombre_base}"))
+        return "img/default.jpg"
+
+    def generar_nombre_imagen_simple(self, nombre_juego):
+        """Genera nombre de imagen de forma simple y directa"""
+        nombre = nombre_juego.lower()
+        
+        # Determinar consola
+        if 'ps5' in nombre:
+            consola = 'ps5'
+        else:
+            consola = 'ps4'
+        
+        # Quitar consola del nombre
+        nombre = nombre.replace(' ps4', '').replace(' ps5', '').strip()
+        
+        # Limpiar caracteres
+        nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
+        nombre = nombre.replace(" ", "_")
+        
+        # Nombre final
+        nombre_archivo = f"{nombre}_{consola}.jpg"
+        
+        self.stdout.write(f"Nombre generado: {nombre_archivo}")
+        return nombre_archivo
+
+    def mostrar_archivos_relacionados(self, nombre_juego, archivos_existentes):
+        """Muestra archivos relacionados para debug"""
+        palabras_busqueda = [p for p in nombre_juego.lower().split() if len(p) > 3]
+        
+        self.stdout.write("Archivos relacionados encontrados:")
+        relacionados = []
+        
+        for archivo in archivos_existentes:
+            archivo_lower = archivo.lower()
+            if any(palabra in archivo_lower for palabra in palabras_busqueda):
+                relacionados.append(archivo)
+        
+        for archivo in relacionados[:10]:
+            self.stdout.write(f"  - {archivo}")
+        
+        if not relacionados:
+            self.stdout.write("  (ningún archivo relacionado encontrado)")
+            
+    def generar_reporte_portadas_no_encontradas(self, juegos_actualizados):
+        """Genera un reporte de las portadas que no se encontraron"""
+        self.stdout.write(self.style.WARNING(f'\n{"🚨 REPORTE DE PORTADAS NO ENCONTRADAS 🚨":=^60}'))
+        
+        juegos_sin_portada = Juego.objects.filter(
+            consola='ps4', 
+            disponible=True,
+            imagen="img/default.jpg"
+        ) | Juego.objects.filter(
+            consola='ps4', 
+            disponible=True,
+            imagen="img/default.png"
+        ) | Juego.objects.filter(
+            consola='ps4', 
+            disponible=True,
+            imagen__isnull=True
+        )
+        
+        total_sin_portada = juegos_sin_portada.count()
+        self.stdout.write(self.style.ERROR(f'Juegos SIN portada: {total_sin_portada}'))
+        
+        if total_sin_portada > 0:
+            self.stdout.write("\n📋 Lista de juegos sin portada:")
+            for juego in juegos_sin_portada:
+                self.stdout.write(f"   • {juego.nombre}")
+                
+            # Mostrar sugerencias de nombres de archivo
+            self.stdout.write(f"\n💡 Nombres de archivo sugeridos:")
+            for juego in juegos_sin_portada[:10]:  # Mostrar solo los primeros 10
+                nombre_sugerido = self.generar_nombre_imagen_sugerido(juego.nombre)
+                self.stdout.write(f"   • {nombre_sugerido}")
+    
+        # Juegos CON portada
+        juegos_con_portada = Juego.objects.filter(
+            consola='ps4', 
+            disponible=True
+        ).exclude(imagen="img/default.jpg").exclude(imagen="img/default.png").exclude(imagen__isnull=True)
+        
+        self.stdout.write(self.style.SUCCESS(f'\n✅ Juegos CON portada: {juegos_con_portada.count()}'))
+        
+    def generar_nombre_imagen_sugerido(self, nombre_juego):
+        """Genera el nombre de archivo sugerido para la imagen"""
+        nombre = nombre_juego.lower()
+        
+        # Determinar consola
+        if 'ps5' in nombre:
+            consola = 'ps5'
+        else:
+            consola = 'ps4'
+        
+        # Quitar consola del nombre
+        nombre = nombre.replace(' ps4', '').replace(' ps5', '').strip()
+        
+        # Limpiar caracteres
+        nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
+        nombre = nombre.replace(" ", "_")
+        
+        return f"{nombre}_{consola}.jpg"
+
     def handle(self, *args, **options):
         csv_filename = options['file']
         csv_path = os.path.join(settings.BASE_DIR, csv_filename)
@@ -123,10 +308,8 @@ class Command(BaseCommand):
             return
         
         # NO marcar todos como no disponibles al inicio
-        # En su lugar, recolectar los IDs que SÍ están en stock
         juegos_en_stock_ids = []
         actualizados = 0
-        creados = 0
         errores = []
         no_encontrados = []
         
@@ -156,7 +339,8 @@ class Command(BaseCommand):
                         if not nombre_sucio:
                             continue
                         
-                        nombre_limpio = self.limpiar_nombre(nombre_sucio)
+                        # Limpiar nombre avanzado
+                        nombre_limpio = self.limpiar_nombre_avanzado(nombre_sucio)
                         
                         if not nombre_limpio or len(nombre_limpio) < 3:
                             continue
@@ -167,11 +351,13 @@ class Command(BaseCommand):
                         else:
                             nombre_busqueda = nombre_limpio
                         
+                        self.stdout.write(f"TRANSFORMACIÓN: '{nombre_sucio}' -> '{nombre_busqueda}'")
+                        
                         # Buscar juego en la base de datos
                         juego = self.buscar_juego_similar(nombre_busqueda)
                         
                         if not juego:
-                            no_encontrados.append(nombre_busqueda)
+                            no_encontrados.append(f"'{nombre_sucio}' -> '{nombre_busqueda}'")
                             self.stdout.write(self.style.WARNING(f'NO ENCONTRADO: {nombre_busqueda}'))
                             continue
                         
@@ -183,10 +369,13 @@ class Command(BaseCommand):
                         juego.precio = precio
                         juego.recargo = Decimal('0.0')
                         juego.disponible = True
+                        if not juego.imagen or "default" in juego.imagen:
+                            juego.imagen = self.buscar_imagen_existente(juego.nombre)
                         juego.save()
                         
                         juegos_en_stock_ids.append(juego.id)
                         actualizados += 1
+                        
                         self.stdout.write(self.style.SUCCESS(f'ACTUALIZADO: {juego.nombre} - ${precio}'))
                         
                     except Exception as e:
@@ -216,3 +405,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("\nJuegos no encontrados en BD:"))
             for nombre in no_encontrados[:10]:
                 self.stdout.write(f"  - {nombre}")
+        self.generar_reporte_portadas_no_encontradas(actualizados)
