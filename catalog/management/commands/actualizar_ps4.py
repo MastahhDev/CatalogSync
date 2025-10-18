@@ -160,6 +160,15 @@ class Command(BaseCommand):
             return Decimal(precio_str)
         except:
             return Decimal('0.0')
+        
+    def calcular_recargo(self, precio):
+        """Calcula el recargo como 10% del precio"""
+        if precio <= 0:
+            return Decimal('0.0')
+        
+        recargo = precio + (precio * Decimal('0.10'))
+        # Redondear a 2 decimales
+        return recargo.quantize(Decimal('0.01'))
 
     def buscar_imagen_existente(self, nombre_juego):
         """Busca la imagen correspondiente al juego"""
@@ -388,10 +397,16 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Error: {str(e)}'))
             return
         
-        # Ahora marcar como no disponibles los PS4 que NO están en el stock
+        # ✅ CORREGIDO: Ahora marcar como no disponibles SOLO los PS4 que NO están en el stock
         if juegos_en_stock_ids:
             juegos_a_desactivar = Juego.objects.filter(consola='ps4').exclude(id__in=juegos_en_stock_ids)
             desactivados_count = juegos_a_desactivar.update(disponible=False)
+            
+            # Mostrar cuántos PS4 se desactivaron
+            self.stdout.write(f"\n🔍 PS4 desactivados (fuera de stock): {desactivados_count}")
+            if desactivados_count > 0:
+                for juego in juegos_a_desactivar[:5]:
+                    self.stdout.write(f"   - {juego.nombre}")
         else:
             desactivados_count = 0
         
