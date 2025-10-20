@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db import models
 from catalog.models import Juego
+from difflib import SequenceMatcher
 
 class Command(BaseCommand):
     help = 'Actualiza stock de PS5 desde CSV'
@@ -244,7 +245,7 @@ class Command(BaseCommand):
         if precio <= 0:
             return Decimal('0.0')
         
-        recargo = precio * Decimal('0.10')
+        recargo = precio + (precio * Decimal('0.10'))
         # Redondear a 2 decimales
         return recargo.quantize(Decimal('0.01'))
 

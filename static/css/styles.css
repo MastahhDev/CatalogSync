@@ -1,5 +1,185 @@
-/* Estilos para el catálogo de juegos - Estilo carta PS4 */
+/* static/css/styles.css - COMBINADO COMPLETO CON PAGINACIÓN */
 
+:root {
+    /* Modo Claro - Paleta de Azules Celestes */
+    --primary-color: #4A90E2;
+    --secondary-color: #7FB3D5;
+    --accent-color: #98bbd3;
+    --background-color: #d3e2f0;
+    --card-background: #f1f7ff;
+    --text-color: #2C3E50;
+    --text-secondary: #566573;
+    --border-color: #D6EAF8;
+    --success-color: #27AE60;
+    --warning-color: #F39C12;
+    --shadow: 0 4px 6px rgba(74, 144, 226, 0.1);
+    --navbar-bg: #4e87c7;
+    --text-muted-mb-3: #c23434;
+}
+
+[data-theme="dark"] {
+    /* Modo Oscuro */
+    --primary-color: #3a4b6b;
+    --secondary-color: #16243b;
+    --accent-color: #19345a;
+    --background-color: #17171d;
+    --card-background: #161624;
+    --text-color: #E8F4F8;
+    --text-secondary: #e9cbcb;
+    --border-color: #4a59b9;
+    --success-color: #dcebe2;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --navbar-bg: #131414;
+}
+
+/* Estilos base */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, var(--navbar-bg) 0%, var(--secondary-color) 100%) !important;
+    color: white;
+    padding: 0.75rem 0 !important;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+    color: white !important;
+    background: none !important;
+    -webkit-text-fill-color: white !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+}
+
+.header p {
+    font-size: 0.8rem !important;
+    margin-bottom: 0 !important;
+    line-height: 1.3 !important;
+    color: white !important;
+    opacity: 0.9;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    padding-top: 5px !important;     
+    padding-bottom: 5px !important;  
+    height: 60px !important;         
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.navbar-brand {
+    font-size: 1.25rem !important;
+    padding: 0 !important;
+    color: white !important;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav a {
+    color: white !important;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav a:hover::after {
+    width: 100%;
+}
+
+.navbar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+/* Botón de cambio de tema */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0.25rem 0.75rem !important;
+    font-size: 0.9rem;
+    margin-left: 0.5rem !important;
+    border-radius: 20px !important;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px);
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+}
+
+.main-content {
+    flex: 1;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+/* Estilos para el catálogo de juegos */
 .juegos-container {
     display: flex;
     flex-wrap: wrap;
@@ -12,13 +192,14 @@
 
 .juego-card {
     width: 220px;
-    background: white;
+    background: var(--card-background);
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+    border: 1px solid var(--border-color);
 }
 
 .juego-card:hover {
@@ -46,12 +227,12 @@
 
 .badge-destacado {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #71c6db, #126291);
     color: #000;
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
     font-weight: bold;
     font-size: 0.7rem;
     z-index: 10;
@@ -60,7 +241,7 @@
 .juego-imagen-wrapper {
     width: 100%;
     height: 240px;
-    background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, var(--accent-color), var(--background-color));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,7 +258,7 @@
 
 .juego-info {
     padding: 15px;
-    background: white;
+    background: var(--card-background);
     text-align: center;
     border-radius: 0 0 12px 12px;
 }
@@ -85,7 +266,7 @@
 .juego-nombre {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #212529;
+    color: var(--text-color);
     margin: 0 0 5px 0;
     height: 40px;
     overflow: hidden;
@@ -99,7 +280,7 @@
 .juego-precio {
     font-size: 1.4rem;
     font-weight: bold;
-    color: #28a745;
+    color: var(--success-color);
     margin: 0 0 5px 0;
     text-align: center;
 }
@@ -107,22 +288,483 @@
 .juego-recargo {
     font-size: 1rem;
     font-weight: normal;
-    color: #6c757d;
+    color: var(--text-secondary);
     margin: 0;
     text-align: center;
     text-decoration: line-through;
 }
 
-/* Responsive - Móviles */
+/* Botones */
+.btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(165, 191, 219, 0.3);
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background: var(--card-background);
+    color: var(--text-color);
+    text-align: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Página de detalle del juego */
+.detalle-imagen-container {
+    position: relative;
+    background: var(--card-background);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.detalle-imagen-container:hover {
+    transform: scale(1.02);
+}
+
+.detalle-imagen {
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.badge-destacado-detalle {
+    display: inline-block;
+    background: linear-gradient(135deg, #9af3ff, #1a9fc0);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 10px rgba(134, 255, 245, 0.7);
+    animation: shine 2s infinite alternate;
+}
+
+.detalle-titulo {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.detalle-consola-badge {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.detalle-descripcion {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.detalle-descripcion p {
+    margin-bottom: 0.5rem;
+}
+
+/* SECCIÓN DE PRECIOS Y MÉTODOS DE PAGO */
+.detalle-precios {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.precio-actual {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--success-color);
+    margin-bottom: 20px;
+}
+
+.detalle-metodos-pago {
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    padding: 25px;
+    border-radius: 12px;
+    margin: 25px 0;
+    box-shadow: var(--shadow);
+}
+
+.detalle-metodos-pago h5 {
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+/* Métodos de pago con emojis y estilo blanco */
+.metodos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.metodo-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.metodo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 1);
+}
+
+.metodo-emoji {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.metodo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metodo-principal {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.metodo-secundario {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* BOTONES DE ACCIÓN */
+.detalle-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    color: white;
+}
+
+.btn-catalogo {
+    background: transparent;
+    color: var(--primary-color);
+    padding: 12px 25px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-catalogo:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* PAGINACIÓN MODERNA */
+.pagination-container {
+    padding: 2rem 0;
+}
+
+.pagination {
+    gap: 8px;
+}
+
+.page-link {
+    border: 2px solid var(--border-color);
+    background: var(--card-background);
+    color: var(--text-color);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 50px;
+    text-align: center;
+}
+
+.pagination-arrow {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white !important;
+    border-color: var(--primary-color) !important;
+}
+
+.pagination-arrow:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.pagination-number:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.pagination-current {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+.pagination-ellipsis {
+    background: transparent;
+    border: 2px solid transparent;
+    color: var(--text-secondary);
+}
+
+.page-item.disabled .page-link {
+    background: var(--background-color);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+}
+
+/* Efectos hover modernos */
+.page-link:not(.disabled):not(.pagination-current):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones */
+.page-transition {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.page-transition.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes shine {
+    from {
+        box-shadow: 0 0 10px rgba(134, 255, 245, 0.7);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(134, 255, 245, 1);
+    }
+}
+
+/* Botón volver arriba */
+#back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 99999;
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+#back-to-top:hover {
+    transform: translateY(-3px) scale(1.1);
+}
+
+/* Modo oscuro para la card del home */
+[data-theme="dark"] .card-body {
+    background-color: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .display-1 {
+    background: linear-gradient(135deg, #ffffff, #cccccc) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="dark"] .btn-dark {
+    background-color: #333333 !important;
+    border-color: #333333 !important;
+}
+
+[data-theme="dark"] .btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Color del título en modo oscuro */
+[data-theme="dark"] h1 {
+    background: linear-gradient(135deg, #4A90E2, #7FB3D5, #98bbd3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="dark"] .detalle-titulo {
+    background: linear-gradient(135deg, #4A90E2, #7FB3D5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Modo oscuro para elementos específicos */
+[data-theme="dark"] .metodo-item {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .metodo-principal {
+    color: #2C3E50;
+}
+
+[data-theme="dark"] .metodo-secundario {
+    color: #566573;
+}
+
+[data-theme="dark"] .btn-catalogo {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+[data-theme="dark"] .btn-catalogo:hover {
+    background: var(--accent-color);
+    color: var(--text-color);
+}
+
+/* 🌞 Estilo general (PC / pantallas grandes) */
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 0.5rem 0.75rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+#theme-icon {
+  font-size: 1.2rem;
+  display: inline-block;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+#theme-toggle:active #theme-icon {
+  opacity: 0.5;
+}
+
+[data-theme="dark"] #theme-icon {
+  transform: rotate(180deg);
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Móviles pequeños */
 @media (max-width: 576px) {
     .juegos-container {
         gap: 15px;
         padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        justify-content: center;
     }
     
     .juego-card {
-        width: calc(50% - 10px);
+        width: 100%;
         min-width: 150px;
+        max-width: 170px;
     }
     
     .juego-imagen-wrapper {
@@ -154,108 +796,188 @@
         top: 5px;
         right: 5px;
     }
+
+    /* Métodos de pago responsive */
+    .metodo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 15px;
+    }
+    
+    .metodo-item strong {
+        min-width: auto;
+    }
+    
+    .metodo-descripcion {
+        margin-left: 0;
+    }
+    
+    .btn-whatsapp,
+    .btn-catalogo {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    /* Paginación responsive */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .page-link {
+        padding: 10px 14px;
+        min-width: 44px;
+        font-size: 0.9rem;
+    }
+    
+    .pagination-info {
+        font-size: 0.8rem;
+    }
 }
 
-/* Página de detalle del juego */
-.detalle-imagen-container {
-    position: relative;
-    background: #f8f9fa;
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-}
+/* Tablets y móviles grandes */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .juegos-container {
+        gap: 1rem;
+    }
+    
+    .container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    /* --- Navbar --- */
+    .navbar {
+        padding: 0.5rem 1rem !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: auto !important;
+    }
 
-.detalle-imagen {
-    max-height: 500px;
-    object-fit: contain;
-    border-radius: 8px;
-}
+    .navbar-brand img {
+        max-width: 120px;
+        height: auto;
+        margin-bottom: 0.5rem;
+    }
 
-.badge-destacado-detalle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: #ffc107;
-    color: #000;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
+    .navbar-toggler {
+        border: none;
+        background: transparent;
+        margin-top: 0.25rem;
+    }
 
-.detalle-titulo {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
 
-.detalle-consola-badge {
-    display: inline-block;
-    background: #007bff;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
+    .navbar-collapse {
+        background-color: var(--navbar-bg);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        padding: 0.5rem;
+        width: 100%;
+        text-align: center;
+    }
 
-.detalle-descripcion {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
 
-.detalle-precios {
-    margin: 30px 0;
-}
+    .navbar-nav a {
+        display: block;
+        padding: 0.75rem 0;
+        text-align: center;
+    }
 
-.precio-actual {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #28a745;
-}
+    /* --- Botón tema --- */
+    #theme-toggle {
+        margin-top: 10px;
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
+    }
 
-.precio-recargo {
-    font-size: 1.5rem;
-    color: #6c757d;
-    text-decoration: line-through;
-    margin-top: 5px;
-}
+    #theme-text {
+        display: none !important;
+    }
 
-.detalle-metodos-pago {
-    background: #fff;
-    border: 2px solid #e9ecef;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-}
+    #theme-toggle {
+        padding: 0.5rem;
+        font-size: 1.3rem;
+        border-radius: 50%;
+        width: 40px;
+        margin: 10px auto 0 0;
+        height: 40px;
+        justify-content: center;
+        min-width: unset;
+    }
 
-.detalle-metodos-pago h5 {
-    margin-bottom: 15px;
-}
+    /* --- Botones en detalle --- */
+    .detalle-acciones .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
 
-.metodos-iconos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
+    .detalle-acciones .btn:last-child {
+        margin-bottom: 0;
+    }
 
-.metodo-pago {
-    background: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
-}
+    /* --- Ajustes generales --- */
+    .detalle-titulo {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 1.7rem;
+    }
 
-.detalle-acciones {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
+    .detalle-consola-badge {
+        display: block;
+        margin: 0 auto 1rem auto;
+        text-align: center;
+    }
+    
+    /* --- Ajuste tarjetas --- */
+    .juego-imagen-wrapper {
+        height: 140px;
+    }
 
-.detalle-acciones .btn {
-    flex: 1;
-    min-width: 200px;
+    .juego-nombre {
+        font-size: 0.9rem;
+    }
+
+    .juego-precio {
+        font-size: 1.2rem;
+    }
+
+    /* --- Paginación móvil --- */
+    .page-link {
+        padding: 8px 12px;
+        min-width: 40px;
+        font-size: 0.85rem;
+    }
+    
+    /* Ocultar algunos números en móviles muy pequeños */
+    .page-item:nth-child(n+4):nth-last-child(n+4) .pagination-number {
+        display: none;
+    }
+    
+    .page-item:nth-child(2) .pagination-ellipsis,
+    .page-item:nth-last-child(2) .pagination-ellipsis {
+        display: inline-block !important;
+    }
 }

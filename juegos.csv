@@ -1,4 +1,6 @@
 ﻿nombre,descripcion,genero,destacado
+A Plage Tale Innocence, "aventura narrativa en una Francia medieval asolada por la peste y la Inquisición.", Terror, 0
+AO Tennis 2, "simulador realista de tenis con modo carrera personalizable.", Deportes, 0
 Atomic Heart PS4, "Atomic Heart es un videojuego FPS de mundo semiabierto con algunos elementos de rol de acción. El combate en el juego consiste en disparar y pelear con armas de fuego o cuerpo a cuerpo", FPS, 0
 Atomic Heart PS5, "Atomic Heart es un videojuego FPS de mundo semiabierto con algunos elementos de rol de acción. El combate en el juego consiste en disparar y pelear con armas de fuego o cuerpo a cuerpo", FPS, 0
 Among Us PS4, "Juego donde debes averiguar quien es el impostor y sobrevivir. Si eres el impostor, mata a todos y gana la partida", Terror, 0
@@ -45,6 +47,7 @@ Balatro PS4, "Juego de accion en cartas", Tactico, 0
 Balatro PS5, "Juego de accion en cartas", Tactico, 0
 Ben 10 PS4, "Juego de accion de BEN 10", Accion, 0
 Ben 10 PS5, "Juego de accion de BEN 10", Accion, 0
+Bus Simulator, "Simulador de conduccion de autobuses urbanos", Simulacion, 0
 Bus Simulator 21 Next Stop PS4, "Simulador de conduccion de autobuses urbanos", Simulacion, 0
 Bus Simulator 21 Next Stop PS5, "Simulador de conducción de autobuses urbanos", Simulación, 0
 Borderlands 3 PS4, "Shooter looter con millones de armas y humor", Shooter, 0
@@ -75,10 +78,13 @@ Bloodborne PS5, "Souls-like gótico con combate rápido y agresivo", RPG, 0
 Bully PS4, "Aventura escolar de Rockstar con humor y travesuras", Aventura, 0
 Bully PS5, "Aventura escolar de Rockstar con humor y travesuras", Aventura, 0
 Black Myth Wukong PS5, "RPG de acción basado en la mitología china", RPG, 0
-Call of duty Black Ops 3 PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
+Call of duty Black Ops III Zombies Edition PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
+Call of duty Black Ops III Zombies Chronicles Edition PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
 Call of duty Black Ops 3 PS5, "Shooter futurista enfocado en modo zombies", Shooter, 0
 Call Of Duty Black Ops 4 PS4, "Shooter multijugador sin campaña individual", Shooter, 0
 Call Of Duty Black Ops 4 PS5, "Shooter multijugador sin campaña individual", Shooter, 0
+Call of Duty Black Ops 6 PS4, "Nueva entrega de la saga Black Ops", Shooter, 0
+Call of Duty Black Ops 6 PS5, "Nueva entrega de la saga Black Ops", Shooter, 0
 Call Of Duty Modern Warfare Remastered PS4, "Remasterización del clásico Modern Warfare", Shooter, 0
 Call Of Duty Modern Warfare Remastered PS5, "Remasterización del clásico Modern Warfare", Shooter, 0
 Call of Duty Modern Warfare 2 Campaign Remastered PS4, "Campaña remasterizada de MW2", Shooter, 0
@@ -99,8 +105,6 @@ Call of Duty Modern Warfare PS4, "Reinicio de Modern Warfare en inglés", Shoote
 Call of Duty Modern Warfare PS5, "Reinicio de Modern Warfare en inglés", Shooter, 0
 Call of Duty Vanguard PS4, "Shooter de la Segunda Guerra Mundial", Shooter, 0
 Call of Duty Vanguard PS5, "Shooter de la Segunda Guerra Mundial", Shooter, 0
-Call of Duty Black Ops 6 PS4, "Nueva entrega de la saga Black Ops", Shooter, 0
-Call of Duty Black Ops 6 PS5, "Nueva entrega de la saga Black Ops", Shooter, 0
 Car Mechanic Simulator PS4, "Simulador de reparación de automóviles", Simulación, 0
 Car Mechanic Simulator PS5, "Simulador de reparación de automóviles", Simulación, 0
 Car Mechanic Simulator 2021 PS4, "Simulador detallado de mecánica automotriz", Simulación, 0
@@ -599,16 +603,16 @@ Watch Dogs Legion PS4, "Hackea Londres con cualquier personaje", Acción, 0
 Watch Dogs Legion PS5, "Hackea Londres con cualquier personaje", Acción, 0
 World War Z Aftermath PS4, "Shooter cooperativo de zombies en hordas", Shooter, 0
 World War Z PS4, "Shooter cooperativo basado en la película", Shooter, 0
-WRC Generations PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC Generations The FIA WRC Official Game PS4, "Simulador oficial de rally WRC", Racing, 0
 WRC Generations PS5, "Simulador oficial de rally WRC", Racing, 0
-WRC 10 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 10 FIA World Rally Championship PS4, "Simulador oficial de rally WRC", Racing, 0
 WRC 10 PS5, "WRC 10 con contenido adicional", Racing, 0
 WRC Collection PS4, "Colección de juegos WRC", Racing, 0
-WRC 7 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 7 FIA World Rally Championship PS4, "Simulador oficial de rally WRC", Racing, 0
 WRC 7 PS5, "Simulador oficial de rally WRC", Racing, 0
-WRC 8 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 8 FIA World Rally Championship PS4, "Simulador oficial de rally WRC", Racing, 0
 WRC 8 PS5, "Simulador oficial de rally WRC", Racing, 0
-WRC 9 PS4, "Simulador oficial de rally WRC", Racing, 0
+WRC 9 FIA World Rally Championship PS4, "Simulador oficial de rally WRC", Racing, 0
 WRC 9 PS5, "Simulador oficial de rally WRC", Racing, 0
 WWE 2K23 PS4, "Simulador de lucha libre profesional", Deportes, 0
 WWE 2K23 PS5, "Simulador de lucha libre profesional", Deportes, 0

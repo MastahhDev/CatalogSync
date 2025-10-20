@@ -5,22 +5,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>ProshopGames</title>
+    {% load static %}
     <link rel="icon" type="image/png" sizes="64x32" href="{% static 'img/proshop_logo.png' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ now|date:'U' }}">
+    {% block extra_css %}{% endblock %}
 </head>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const page = document.body;
+    page.classList.add("page-transition");
+
+    // Activa la animación al cargar
+    setTimeout(() => {
+      page.classList.add("active");
+    }, 10);
+
+    // Agrega animación al cambiar de página
+    document.querySelectorAll('a').forEach(link => {
+      if (link.hostname === window.location.hostname) {
+        link.addEventListener('click', e => {
+          const target = e.currentTarget.getAttribute('href');
+          if (target && target[0] !== '#') {
+            e.preventDefault();
+            page.classList.remove("active");
+            setTimeout(() => {
+              window.location.href = target;
+            }, 300);
+          }
+        });
+      }
+    });
+  });
+
+  
+</script>
+
 <body>
-    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-2">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{% static 'img/proshop_logo.png' %}" alt="Logo" width="64" height="40" class="me-2">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <button 
+                 class="navbar-toggler" 
+                 type="button" 
+                 data-bs-toggle="collapse" 
+                 data-bs-target="#navbarNav" 
+                 aria-controls="navbarNav" 
+                 aria-expanded="false" 
+                 aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -40,10 +85,81 @@
                     </li>
                 </ul>
             </div>
+               <div class="ml-auto">
+     <button id="theme-toggle" class="btn btn-light">
+         <span id="theme-icon"></span>
+         <span id="theme-text"></span>
+         </button>
+
+
+    </div>
         </div>
     </nav>
     {% block content %}
     {% endblock %}
+
+    
+
+
+
+ <script>
+ document.addEventListener("DOMContentLoaded", () => {
+  const topBtn = document.getElementById('back-to-top');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const trigger = 50;
+    const fadeDistance = 300;
+
+    if (scrollTop > trigger) {
+      let opacity = (scrollTop - trigger) / fadeDistance;
+      if (opacity > 1) opacity = 1;
+      topBtn.classList.add('visible');
+      topBtn.style.opacity = opacity;
+    } else {
+      topBtn.classList.remove('visible');
+      topBtn.style.opacity = 0;
+    }
+  });
+
+  topBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+ });
+ </script>
+
+ <button id="back-to-top" title="Volver arriba">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
 </body>
+
+
+<footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 CatalogSync. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/theme.js' %}?v={{ now|date:'U' }}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.detalle-titulo {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+p, h5, strong {
+    font-weight: 400;
+}
+</style>
 
 </html>

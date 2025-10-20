@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.db import models
 from catalog.models import Juego
+from difflib import SequenceMatcher
 
 class Command(BaseCommand):
     help = 'Actualiza stock de PS4 desde CSV'
@@ -133,27 +134,39 @@ class Command(BaseCommand):
         
         if query:
             juegos_similares = Juego.objects.filter(query, consola='ps4')
-            if juegos_similares.exists():
-                for juego_candidato in juegos_similares:
-                    nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
-                    if nombre_muy_limpio in nombre_juego_limpio or nombre_juego_limpio in nombre_muy_limpio:
-                        return juego_candidato
-                return juegos_similares.first()
-        
-        return None
+            mejor_coincidencia = None
+            mejor_ratio = 0.0
+
+            for juego_candidato in juegos_similares:
+                nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
+                ratio = SequenceMatcher(None, nombre_muy_limpio.lower(), nombre_juego_limpio.lower()).ratio()
+
+                if ratio > mejor_ratio:
+                    mejor_ratio = ratio
+                    mejor_coincidencia = juego_candidato
+
+            # Solo aceptar coincidencias si son MUY similares (por ejemplo > 0.85)
+            if mejor_ratio > 0.85:
+                return mejor_coincidencia
 
     def limpiar_precio(self, precio_str):
-        """Convierte string con precio a Decimal"""
+        """Convierte string con precio a Decimal - FORMATO ARGENTINO"""
         if not precio_str or precio_str.strip() == '':
             return Decimal('0.0')
         
         precio_str = str(precio_str).replace('$', '').replace(' ', '').strip()
         
-        if ',' in precio_str and '.' in precio_str:
-            precio_str = precio_str.replace('.', '').replace(',', '.')
-        elif ',' in precio_str:
-            precio_str = precio_str.replace(',', '.')
+        # ✅ FORMATO ARGENTINO: punto = miles, coma = decimales
+        # Ejemplos: "12.700" = 12700, "12.700,50" = 12700.50
         
+        if ',' in precio_str:
+            # Tiene decimales: quitar puntos (miles) y cambiar coma por punto
+            precio_str = precio_str.replace('.', '').replace(',', '.')
+        else:
+            # NO tiene decimales: solo quitar puntos (son separadores de miles)
+            precio_str = precio_str.replace('.', '')
+        
+        # Limpiar cualquier otro carácter
         precio_str = re.sub(r'[^\d.]', '', precio_str)
         
         try:
@@ -373,10 +386,11 @@ class Command(BaseCommand):
                         # Obtener y limpiar precio
                         precio_str = row.get(col_precio, '').strip()
                         precio = self.limpiar_precio(precio_str)
+                        recargo = self.calcular_recargo(precio)
                         
                         # Actualizar el juego encontrado
                         juego.precio = precio
-                        juego.recargo = Decimal('0.0')
+                        juego.recargo = recargo
                         juego.disponible = True
                         if not juego.imagen or "default" in juego.imagen:
                             juego.imagen = self.buscar_imagen_existente(juego.nombre)
