@@ -64,7 +64,6 @@ body {
     color: #d9e1f1 !important;
 }
 
-
 /* HEADER */
 .header {
     background: linear-gradient(135deg, var(--navbar-bg) 0%, var(--secondary-color) 100%) !important;
@@ -197,13 +196,15 @@ h1 {
 
 /* Estilos para el catálogo de juegos */
 .juegos-container {
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     justify-content: center;
     gap: 25px;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .juego-card {
@@ -523,6 +524,7 @@ h1 {
     font-size: 1.1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    margin-bottom: 15px;
 }
 
 .btn-whatsapp:hover {
@@ -731,9 +733,6 @@ h1 {
     border-color: #8FB3E2;
 }
 
-
-
-
 /* 🌞 Estilo general (PC / pantallas grandes) */
 #theme-toggle {
   display: inline-flex;
@@ -760,53 +759,170 @@ h1 {
   transform: rotate(180deg);
 }
 
-/* ========== RESPONSIVE ========== */
+/* ========== SECCIÓN FAQS CORREGIDA ========== */
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 2rem;
+}
 
-/* Móviles pequeños */
+.faq-item {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--card-background);
+    cursor: pointer;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.faq-item summary {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: transform 0.3s ease;
+}
+
+.faq-item[open] summary::after {
+    content: '−';
+    transform: rotate(0deg);
+}
+
+.faq-item[open] summary {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.faq-item p {
+    margin-top: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.faq-item[open] p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.titulo_preguntas {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ========== RESPONSIVE ========== */
 @media (max-width: 576px) {
     .juegos-container {
-        gap: 15px;
-        padding: 10px;
-        display: grid;
+        gap: 8px; /* Reducido de 10px para pegarlas más */
+        padding: 8px;
+        display: grid !important;
         grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-        justify-content: center;
+        justify-items: center;
+        max-width: 400px; /* Limita el ancho total del contenedor */
+        margin: 0 auto; /* Centra el contenedor */
+        opacity: 1 !important;
+        visibility: visible !important;
     }
     
     .juego-card {
-        width: 45%;
-        min-width: 220px;
-        
+        width: 180px; /* Aumentado de 160px a 180px */
+        height: auto;
     }
     
     .juego-imagen-wrapper {
-        height: 180px;
-        padding: 10px;
+        height: 200px; /* Aumentado proporcionalmente */
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .juego-imagen {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
     
     .juego-info {
-        padding: 10px;
+        padding: 8px;
     }
     
     .juego-nombre {
-        font-size: 0.85rem;
-        height: 35px;
-        margin-bottom: 5px;
+        font-size: 0.75rem;
+        height: 32px;
+        margin-bottom: 4px;
+        line-height: 1.2;
+        overflow: hidden;
     }
     
     .juego-precio {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .juego-recargo {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
     
     .badge-destacado {
-        font-size: 0.6rem;
-        padding: 4px 8px;
-        top: 5px;
-        right: 5px;
+        font-size: 0.55rem;
+        padding: 3px 6px;
+        top: 4px;
+        right: 4px;
+    }
+
+    /* FAQs responsive */
+    .faq-item {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    .faq-item summary {
+        font-size: 1rem;
+        padding-right: 25px;
+    }
+    
+    .titulo_preguntas {
+        font-size: 1.8rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     /* Métodos de pago responsive */
@@ -938,6 +1054,15 @@ h1 {
         min-width: unset;
     }
 
+    /* --- FAQs responsive --- */
+    .faq-container {
+        padding: 15px;
+    }
+    
+    .faq-item {
+        max-width: 100%;
+    }
+
     /* --- Botones en detalle --- */
     .detalle-acciones .btn {
         display: block;
@@ -992,43 +1117,4 @@ h1 {
     .page-item:nth-last-child(2) .pagination-ellipsis {
         display: inline-block !important;
     }
-}
-/* Agrega un contenedor para los FAQs */
-.faq-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 20px;
-}
-
-.faq-item {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #68afdf;
-    border-radius: 8px;
-    background: var(--card-background);
-    cursor: pointer;
-    width: 100%;
-    max-width: 60%; /* Ajusta este valor según prefieras */
-}
-
-.faq-item summary {
-    list-style: revert;
-    display: list-item;
-    cursor: pointer;
-    color: #dff8ff;
-    font-weight: bold;
-}
-
-.faq-item[open] summary {
-    color: var(--primary-color);
-}
-
-.faq-item p {
-    margin-top: 10px;
-}
-
-.titulo_preguntas {
-    margin-top: 30px;
 }

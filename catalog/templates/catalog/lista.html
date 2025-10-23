@@ -108,10 +108,28 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.juego-precio, .juego-recargo').forEach(function(el) {
-        let precio = el.textContent.replace('$', '').trim();
-        el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
-    });
+    // Esperar a que todo esté cargado
+    setTimeout(function() {
+        try {
+            document.querySelectorAll('.juego-precio, .juego-recargo').forEach(function(el) {
+                if (el && el.textContent) {
+                    let precio = el.textContent.replace('$', '').trim();
+                    if (precio && !isNaN(parseInt(precio))) {
+                        el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error formateando precios:', error);
+        }
+    }, 100);
+});
+
+// Evitar cache al navegar atrás
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
 });
 </script>
 
