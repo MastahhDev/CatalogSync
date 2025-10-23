@@ -67,7 +67,7 @@ class Command(BaseCommand):
             # Ediciones (EXCEPTO definitive edition que se mantiene)
             r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
             r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
-            r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
+            r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\s+editionb',
             r'\bgoty\b', r'\bedición\s+deluxe\b', r'\bedición\s+gold\b',
             r'\bedición\s+estándar\b', r'\bedición\s+especial\b', r'\blatino\b',
             

@@ -14,7 +14,8 @@
     --warning-color: #F39C12;
     --shadow: 0 4px 6px rgba(74, 144, 226, 0.1);
     --navbar-bg: #4e87c7;
-    --text-muted-mb-3: #c23434;
+    --image-card: #8FB3E3;
+    --image-card-dark: #D9E1F1;
 }
 
 [data-theme="dark"] {
@@ -22,14 +23,16 @@
     --primary-color: #3a4b6b;
     --secondary-color: #16243b;
     --accent-color: #19345a;
-    --background-color: #17171d;
+    --background-color: #1E2E4F;
     --card-background: #161624;
     --text-color: #E8F4F8;
     --text-secondary: #e9cbcb;
     --border-color: #4a59b9;
     --success-color: #dcebe2;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --navbar-bg: #131414;
+    --navbar-bg: #192338;
+    --image-card: #0C121D;
+    --image-card-dark: #334663;
 }
 
 /* Estilos base */
@@ -48,6 +51,19 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.info-juegos {
+    color: #6c757d; /* modo claro */
+}
+
+[data-theme="dark"] .info-juegos {
+    color: #8fb3e3; /* modo oscuro */
+}
+
+[data-theme="dark"] .text-muted {
+    color: #d9e1f1 !important;
+}
+
 
 /* HEADER */
 .header {
@@ -192,7 +208,7 @@ h1 {
 
 .juego-card {
     width: 220px;
-    background: var(--card-background);
+    background: #c1d7dd;
     border-radius: 12px;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
@@ -216,13 +232,11 @@ h1 {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: #003791;
     padding: 5px 10px;
     border-radius: 6px;
     z-index: 10;
     font-size: 0.75rem;
     font-weight: bold;
-    color: white;
 }
 
 .badge-destacado {
@@ -241,7 +255,7 @@ h1 {
 .juego-imagen-wrapper {
     width: 100%;
     height: 240px;
-    background: linear-gradient(135deg, var(--accent-color), var(--background-color));
+    background: linear-gradient(135deg, var(--image-card), var(--image-card-dark));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -713,14 +727,12 @@ h1 {
 }
 
 [data-theme="dark"] .btn-catalogo {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
+    color:#8FB3E2;
+    border-color: #8FB3E2;
 }
 
-[data-theme="dark"] .btn-catalogo:hover {
-    background: var(--accent-color);
-    color: var(--text-color);
-}
+
+
 
 /* 🌞 Estilo general (PC / pantallas grandes) */
 #theme-toggle {
@@ -762,9 +774,9 @@ h1 {
     }
     
     .juego-card {
-        width: 100%;
-        min-width: 150px;
-        max-width: 170px;
+        width: 45%;
+        min-width: 220px;
+        
     }
     
     .juego-imagen-wrapper {
@@ -980,4 +992,43 @@ h1 {
     .page-item:nth-last-child(2) .pagination-ellipsis {
         display: inline-block !important;
     }
+}
+/* Agrega un contenedor para los FAQs */
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #68afdf;
+    border-radius: 8px;
+    background: var(--card-background);
+    cursor: pointer;
+    width: 100%;
+    max-width: 60%; /* Ajusta este valor según prefieras */
+}
+
+.faq-item summary {
+    list-style: revert;
+    display: list-item;
+    cursor: pointer;
+    color: #dff8ff;
+    font-weight: bold;
+}
+
+.faq-item[open] summary {
+    color: var(--primary-color);
+}
+
+.faq-item p {
+    margin-top: 10px;
+}
+
+.titulo_preguntas {
+    margin-top: 30px;
 }
