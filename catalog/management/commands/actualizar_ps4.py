@@ -63,11 +63,11 @@ class Command(BaseCommand):
             r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
             r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
             r'\bgoty\b', r'\bedición\s+deluxe\b', r'\bedición\s+gold\b',
-            r'\bedición\s+estándar\b', r'\bedición\s+especial\b', r'\blatino\b',
+            r'\bedición\s+estándar\b', r'\bedición\s+especial\b', r'\blatino\b', r'\bespaol\s+espaa\b',
             
             # Palabras generales a eliminar
             r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
-            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b'
+            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b', r'\bespaol\b', r'\bespaa\b',
         ]
         
         # Aplicar todos los patrones

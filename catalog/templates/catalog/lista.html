@@ -6,7 +6,7 @@
     <h1 class="text-center mb-4">{{ titulo }}</h1>
     
     {% if total_juegos > 0 %}
-        <p class="text-center text-muted mb-4">Mostrando {{ juegos|length }} de {{ total_juegos }} juegos</p>
+        <p class="text-center mb-4">Mostrando {{ juegos|length }} de {{ total_juegos }} juegos</p>
     {% endif %}
     
     <div class="juegos-container">
@@ -28,7 +28,7 @@
                         <h5 class="juego-nombre">{{ juego.nombre }}</h5>
                         <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
                         {% if juego.recargo > 0 %}
-                            <p class="juego-recargo text-decoration-line-through text-muted">${{ juego.recargo|floatformat:0 }}</p>
+                            <p class="juego-recargo text-decoration-line-through">${{ juego.recargo|floatformat:0 }}</p>
                         {% endif %}
                     </div>
                 </div>
