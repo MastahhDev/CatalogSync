@@ -1118,3 +1118,8 @@ h1 {
         display: inline-block !important;
     }
 }
+
+.buscador{
+    width: 40%;
+    margin: 0 auto; /* centra horizontalmente */
+}

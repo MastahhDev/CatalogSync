@@ -5,6 +5,18 @@
 <div class="container-fluid py-4">
     <h1 class="text-center mb-4">{{ titulo }}</h1>
     
+    <form method="get" class="d-flex mb-3 buscador">
+        <input 
+            type="text" 
+            name="q" 
+            class="form-control me-2" 
+            placeholder="Buscar juegos..." 
+            value="{{ query|default:'' }}"
+        >
+        <button class="btn btn-primary" type="submit">Buscar</button>
+    </form>
+
+    
     {% if total_juegos > 0 %}
         <p class="text-center mb-4">Mostrando {{ juegos|length }} de {{ total_juegos }} juegos</p>
     {% endif %}
