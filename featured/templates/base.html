@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ now|date:'U' }}">
     {% block extra_css %}{% endblock %}
 </head>
@@ -52,6 +53,9 @@
 </script>
 
 <body>
+    <!-- Token CSRF oculto para HTMX -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-2">
         <div class="container">
             <a class="navbar-brand" href="/">
@@ -87,15 +91,26 @@
                     </li>
                 </ul>
             </div>
-               <div class="ml-auto">
-     <button id="theme-toggle" class="btn btn-light">
-         <span id="theme-icon"></span>
-         <span id="theme-text"></span>
-         </button>
-
-
-    </div>
+          <div class="ml-auto">
+            <button id="theme-toggle" class="btn btn-light">
+                <span id="theme-icon"></span>
+                <span id="theme-text"></span>
+            </button>
+          </div>
+        <div class="ms-3">
+          <button id="carrito-toggle" 
+                  class="btn btn-light position-relative"
+                  hx-get="{% url 'carrito:ver' %}"
+                  hx-target="#carrito-popup-inner"
+                  hx-swap="innerHTML"
+                  onclick="abrirCarrito()">
+              <i class="fas fa-shopping-cart"></i>
+              <span id="carrito-badge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle" style="display: none;">
+                  0
+              </span>
+          </button>
         </div>
+      </div>    
     </nav>
     {% block content %}
     {% endblock %}
@@ -134,6 +149,66 @@
   <i class="fa-solid fa-arrow-up"></i>
 </button>
 
+<!-- Overlay y Popup del Carrito -->
+<div id="carrito-overlay" class="carrito-overlay" onclick="cerrarCarrito()"></div>
+<div id="carrito-popup" class="carrito-popup">
+    <div id="carrito-popup-inner">
+        <!-- Contenido cargado dinámicamente -->
+    </div>
+</div>
+
+<!-- Contenedor para notificaciones -->
+<div id="carrito-notification"></div>
+
+<script>
+function abrirCarrito() {
+    document.getElementById('carrito-popup').classList.add('show');
+    document.getElementById('carrito-overlay').classList.add('show');
+}
+
+function cerrarCarrito() {
+    document.getElementById('carrito-popup').classList.remove('show');
+    document.getElementById('carrito-overlay').classList.remove('show');
+}
+
+// CONFIGURACIÓN CSRF PARA HTMX - ¡ESTO ES LO IMPORTANTE!
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para obtener el token CSRF de las cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    // Obtener el token CSRF
+    const csrftoken = getCookie('csrftoken');
+    
+    // Configurar HTMX para incluir el token CSRF en todas las peticiones POST
+    document.body.addEventListener('htmx:configRequest', function(event) {
+        if (event.detail.verb === 'post') {
+            event.detail.headers['X-CSRFToken'] = csrftoken;
+        }
+    });
+    
+    // También configurar para peticiones que usen hx-vals
+    document.body.addEventListener('htmx:beforeRequest', function(event) {
+        if (event.detail.verb === 'POST' && csrftoken) {
+            const xhr = event.detail.xhr;
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        }
+    });
+});
+</script>
+
 </body>
 
 
@@ -147,21 +222,4 @@
 
     {% block extra_js %}{% endblock %}
 </body>
-
-
-<style>
-body {
-    font-family: 'Poppins', sans-serif;
-}
-
-.detalle-titulo {
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-p, h5, strong {
-    font-weight: 400;
-}
-</style>
-
 </html>

@@ -8,4 +8,5 @@ urlpatterns = [
     path('catalogo/', include('catalog.urls')),  # Nueva ruta
     path('questions/', views.questions, name='questions'),
     path('about/', views.about, name='about'),
+    path('carrito/', include('carrito.urls')),
 ]

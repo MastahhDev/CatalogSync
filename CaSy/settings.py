@@ -36,6 +36,7 @@ NEW_APPS = [
     'featured',
     'questions',
     'catalog',
+    'carrito',
 ]
 
 INSTALLED_APPS = BASIC_APPS + NEW_APPS

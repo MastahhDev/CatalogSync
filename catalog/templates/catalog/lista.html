@@ -42,6 +42,14 @@
                         {% if juego.recargo > 0 %}
                             <p class="juego-recargo text-decoration-line-through">${{ juego.recargo|floatformat:0 }}</p>
                         {% endif %}
+                        <!-- Después de los precios, antes del cierre de juego-info -->
+                        <button class="btn btn-primary btn-sm mt-2 w-100"
+                                hx-post="{% url 'carrito:agregar' juego.id %}"
+                                hx-target="body"
+                                hx-swap="none"
+                                onclick="event.stopPropagation(); event.preventDefault();">
+                            <i class="fas fa-cart-plus"></i> Agregar
+                        </button>
                     </div>
                 </div>
             </a>

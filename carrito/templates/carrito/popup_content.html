@@ -1,0 +1,19 @@
+<div class="carrito-popup-header">
+    <h5>Tu Carrito</h5>
+    <button class="btn-close" onclick="cerrarCarrito()"></button>
+</div>
+
+<div id="carrito-items-container">
+    {% if items %}
+        {% include 'carrito/cart_items.html' %}
+    {% else %}
+        {% include 'carrito/cart_empty.html' %}
+    {% endif %}
+</div>
+
+<script>
+function cerrarCarrito() {
+    document.getElementById('carrito-popup').classList.remove('show');
+    document.getElementById('carrito-overlay').classList.remove('show');
+}
+</script>

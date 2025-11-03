@@ -1,0 +1,23 @@
+<!-- Badge actualizado (se reemplaza con OOB swap) -->
+<span id="carrito-badge" class="badge bg-danger rounded-pill" hx-swap-oob="true">
+    {{ total_items }}
+</span>
+
+<!-- Notificación (se inserta con OOB swap) -->
+<div id="carrito-notification" class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" 
+     style="z-index: 9999; min-width: 300px;" 
+     hx-swap-oob="true">
+    <strong>✓</strong> {{ juego_nombre }} agregado al carrito
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+
+<script>
+    // Auto-ocultar notificación después de 3 segundos
+    setTimeout(function() {
+        const notif = document.getElementById('carrito-notification');
+        if (notif) {
+            notif.classList.remove('show');
+            setTimeout(() => notif.remove(), 150);
+        }
+    }, 3000);
+</script>

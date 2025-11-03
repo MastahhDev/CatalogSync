@@ -1,0 +1,83 @@
+{% load static %}
+<div class="carrito-items">
+    {% for item in items %}
+    <div class="carrito-item" id="item-{{ item.juego.id }}">
+        <img src="{% static item.juego.imagen %}" 
+             alt="{{ item.juego.nombre }}"
+             class="carrito-item-img"
+             onerror="this.src='/static/img/default.png'">
+        
+        <div class="carrito-item-info">
+            <h6>{{ item.juego.nombre }}</h6>
+            <p class="text-muted mb-1">${{ item.juego.precio|floatformat:0 }}</p>
+            
+            <div class="carrito-item-cantidad">
+                <button class="btn btn-sm btn-outline-secondary"
+                        hx-post="{% url 'carrito:actualizar' item.juego.id %}"
+                        hx-vals='{"cantidad": "{{ item.cantidad|add:-1 }}"}'
+                        hx-target="#carrito-items-container"
+                        hx-swap="innerHTML">
+                    -
+                </button>
+                
+                <span class="mx-2">{{ item.cantidad }}</span>
+                
+                <button class="btn btn-sm btn-outline-secondary"
+                        hx-post="{% url 'carrito:actualizar' item.juego.id %}"
+                        hx-vals='{"cantidad": "{{ item.cantidad|add:1 }}"}'
+                        hx-target="#carrito-items-container"
+                        hx-swap="innerHTML">
+                    +
+                </button>
+            </div>
+        </div>
+        
+        <div class="carrito-item-actions">
+            <p class="fw-bold mb-2">${{ item.subtotal|floatformat:0 }}</p>
+            <button class="btn btn-sm btn-danger"
+                    hx-post="{% url 'carrito:eliminar' item.juego.id %}"
+                    hx-target="#carrito-items-container"
+                    hx-swap="innerHTML"
+                    hx-confirm="¿Eliminar {{ item.juego.nombre }}?">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="carrito-total">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5>Total:</h5>
+        <h4 class="text-primary">${{ total_price|floatformat:0 }}</h4>
+    </div>
+    
+    <button class="btn btn-primary w-100 mb-2">
+        Finalizar Compra
+    </button>
+    
+    <button class="btn btn-outline-danger w-100"
+            hx-post="{% url 'carrito:vaciar' %}"
+            hx-target="#carrito-items-container"
+            hx-swap="innerHTML"
+            hx-confirm="¿Vaciar todo el carrito?">
+        Vaciar Carrito
+    </button>
+</div>
+
+<!-- Actualizar badge también (OOB swap) -->
+<span id="carrito-badge" class="badge bg-danger rounded-pill" hx-swap-oob="true">
+    {{ total_items }}
+</span>
+
+<script>
+// Formatear precios con separador de miles
+document.querySelectorAll('.carrito-item-info p, .carrito-item-actions p, .carrito-total h4').forEach(el => {
+    if (el.textContent.includes('$')) {
+        let precio = el.textContent.replace('$', '').trim();
+        if (!isNaN(parseInt(precio))) {
+            el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
+        }
+    }
+});
+</script>
