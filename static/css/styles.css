@@ -93,9 +93,8 @@ body {
 /* NAVBAR */
 .navbar {
     background-color: var(--navbar-bg) !important;
-    padding-top: 5px !important;     
-    padding-bottom: 5px !important;  
-    height: 60px !important;         
+    padding: 0.5rem 0 !important;
+    position: relative;
 }
 
 .navbar-container {
@@ -105,12 +104,14 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
+    position: relative;
 }
 
 .navbar-brand {
     font-size: 1.25rem !important;
     padding: 0 !important;
     color: white !important;
+    white-space: nowrap;
 }
 
 .navbar-nav {
@@ -156,15 +157,68 @@ body {
     background: rgba(255, 255, 255, 0.2) !important;
     color: white !important;
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    padding: 0.25rem 0.75rem !important;
+    padding: 0.5rem 1rem !important;
     font-size: 0.9rem;
-    margin-left: 0.5rem !important;
     border-radius: 20px !important;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.3) !important;
     transform: translateY(-2px);
+}
+
+/* BUSCADOR */
+.buscador {
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.buscador form {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+}
+
+.buscador-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    background: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 0;
+}
+
+.buscador-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.buscador-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.buscador-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
 }
 
 /* Contenedor principal */
@@ -849,246 +903,68 @@ h1 {
 }
 
 /* ========== RESPONSIVE ========== */
-@media (max-width: 576px) {
-    .juegos-container {
-        gap: 8px; /* Reducido de 10px para pegarlas más */
-        padding: 8px;
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr);
-        justify-items: center;
-        max-width: 400px; /* Limita el ancho total del contenedor */
-        margin: 0 auto; /* Centra el contenedor */
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    
-    .juego-card {
-        width: 180px; /* Aumentado de 160px a 180px */
-        height: auto;
-    }
-    
-    .juego-imagen-wrapper {
-        height: 200px; /* Aumentado proporcionalmente */
-        padding: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .juego-imagen {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-    
-    .juego-info {
-        padding: 8px;
-    }
-    
-    .juego-nombre {
-        font-size: 0.75rem;
-        height: 32px;
-        margin-bottom: 4px;
-        line-height: 1.2;
-        overflow: hidden;
-    }
-    
-    .juego-precio {
-        font-size: 1rem;
-    }
-    
-    .juego-recargo {
-        font-size: 0.75rem;
-    }
-    
-    .badge-destacado {
-        font-size: 0.55rem;
-        padding: 3px 6px;
-        top: 4px;
-        right: 4px;
-    }
-
-    /* FAQs responsive */
-    .faq-item {
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    .faq-item summary {
-        font-size: 1rem;
-        padding-right: 25px;
-    }
-    
-    .titulo_preguntas {
-        font-size: 1.8rem;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    /* Métodos de pago responsive */
-    .metodo-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-        padding: 15px;
-    }
-    
-    .metodo-item strong {
-        min-width: auto;
-    }
-    
-    .metodo-descripcion {
-        margin-left: 0;
-    }
-    
-    .btn-whatsapp,
-    .btn-catalogo {
-        padding: 12px 20px;
-        font-size: 1rem;
-    }
-
-    /* Paginación responsive */
-    .pagination {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    
-    .page-link {
-        padding: 10px 14px;
-        min-width: 44px;
-        font-size: 0.9rem;
-    }
-    
-    .pagination-info {
-        font-size: 0.8rem;
-    }
-}
 
 /* Tablets y móviles grandes */
 @media (max-width: 768px) {
     .navbar-container {
         flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .juegos-container {
-        gap: 1rem;
-    }
-    
-    .container {
+        gap: 15px;
         padding: 1rem;
     }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    /* --- Navbar --- */
+
     .navbar {
-        padding: 0.5rem 1rem !important;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         height: auto !important;
+        padding: 1rem 0 !important;
     }
 
-    .navbar-brand img {
-        max-width: 120px;
-        height: auto;
-        margin-bottom: 0.5rem;
-    }
-
-    .navbar-toggler {
-        border: none;
-        background: transparent;
-        margin-top: 0.25rem;
-    }
-
-    .navbar-toggler:focus {
-        box-shadow: none;
-    }
-
-    .navbar-collapse {
-        background-color: var(--navbar-bg);
-        border-radius: 8px;
-        margin-top: 0.5rem;
-        padding: 0.5rem;
+    .buscador {
         width: 100%;
-        text-align: center;
+        margin: 0;
+        order: 3;
     }
 
-    .navbar-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        width: 100%;
-    }
-
-    .navbar-nav a {
-        display: block;
-        padding: 0.75rem 0;
-        text-align: center;
-    }
-
-    /* --- Botón tema --- */
-    #theme-toggle {
-        margin-top: 10px;
-        width: 100%;
-        max-width: 200px;
-        text-align: center;
-    }
-
-    #theme-text {
-        display: none !important;
-    }
-
-    #theme-toggle {
-        padding: 0.5rem;
-        font-size: 1.3rem;
-        border-radius: 50%;
-        width: 40px;
-        margin: 10px auto 0 0;
-        height: 40px;
-        justify-content: center;
-        min-width: unset;
-    }
-
-    /* --- FAQs responsive --- */
-    .faq-container {
-        padding: 15px;
-    }
-    
-    .faq-item {
+    .buscador form {
         max-width: 100%;
     }
 
-    /* --- Botones en detalle --- */
-    .detalle-acciones .btn {
-        display: block;
+    .buscador-input {
+        padding: 14px 18px;
+        font-size: 1.1rem;
+    }
+
+    .buscador-btn {
+        padding: 14px 24px;
+        font-size: 1.1rem;
+    }
+
+    .navbar-nav {
+        order: 2;
         width: 100%;
-        margin-bottom: 10px;
-        text-align: center;
+        justify-content: center;
+        gap: 1rem;
     }
 
-    .detalle-acciones .btn:last-child {
-        margin-bottom: 0;
+    .navbar-brand {
+        order: 1;
     }
 
-    /* --- Ajustes generales --- */
-    .detalle-titulo {
-        margin-top: 25px;
-        text-align: center;
-        font-size: 1.7rem;
+    .theme-toggle {
+        order: 4;
+        margin: 10px auto 0 auto;
     }
 
-    .detalle-consola-badge {
-        display: block;
-        margin: 0 auto 1rem auto;
-        text-align: center;
+    .juegos-container {
+        gap: 1rem;
     }
-    
-    /* --- Ajuste tarjetas --- */
+
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
     .juego-imagen-wrapper {
         height: 140px;
     }
@@ -1101,25 +977,187 @@ h1 {
         font-size: 1.2rem;
     }
 
-    /* --- Paginación móvil --- */
     .page-link {
         padding: 8px 12px;
         min-width: 40px;
         font-size: 0.85rem;
     }
-    
-    /* Ocultar algunos números en móviles muy pequeños */
+
+    .faq-container {
+        padding: 15px;
+    }
+
+    .faq-item {
+        max-width: 100%;
+    }
+
+    .detalle-acciones .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .detalle-titulo {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 1.7rem;
+    }
+
+    .detalle-consola-badge {
+        display: block;
+        margin: 0 auto 1rem auto;
+        text-align: center;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+    .navbar-container {
+        padding: 0.5rem;
+    }
+
+    .buscador {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+
+    .buscador form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .buscador-input {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .buscador-btn {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        width: 100%;
+    }
+
+    .juegos-container {
+        gap: 8px;
+        padding: 8px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .juego-card {
+        width: 180px;
+        height: auto;
+    }
+
+    .juego-imagen-wrapper {
+        height: 200px;
+        padding: 8px;
+    }
+
+    .juego-info {
+        padding: 8px;
+    }
+
+    .juego-nombre {
+        font-size: 0.75rem;
+        height: 32px;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    .juego-precio {
+        font-size: 1rem;
+    }
+
+    .juego-recargo {
+        font-size: 0.75rem;
+    }
+
+    .badge-destacado {
+        font-size: 0.55rem;
+        padding: 3px 6px;
+        top: 4px;
+        right: 4px;
+    }
+
+    .faq-item {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .faq-item summary {
+        font-size: 1rem;
+        padding-right: 25px;
+    }
+
+    .titulo_preguntas {
+        font-size: 1.8rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .metodo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 15px;
+    }
+
+    .btn-whatsapp,
+    .btn-catalogo {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .page-link {
+        padding: 10px 14px;
+        min-width: 44px;
+        font-size: 0.9rem;
+    }
+
+    .pagination-info {
+        font-size: 0.8rem;
+    }
+
     .page-item:nth-child(n+4):nth-last-child(n+4) .pagination-number {
         display: none;
     }
-    
+
     .page-item:nth-child(2) .pagination-ellipsis,
     .page-item:nth-last-child(2) .pagination-ellipsis {
         display: inline-block !important;
     }
 }
 
-.buscador{
-    width: 40%;
-    margin: 0 auto; /* centra horizontalmente */
+/* Muy pequeños */
+@media (max-width: 380px) {
+    .juego-card {
+        width: 160px;
+    }
+
+    .juego-imagen-wrapper {
+        height: 180px;
+    }
+
+    .buscador-input {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+
+    .buscador-btn {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
 }

@@ -7,15 +7,30 @@ from django.db.models import Q
 
 def catalogo_general(request):
     """Muestra todos los juegos DISPONIBLES"""
-    juegos = Juego.objects.filter(disponible=True)  # ← CLAVE: disponible=True
-    paginator = Paginator(juegos, 20)
-    page_obj = paginator.get_page(request.GET.get('page', 1))
-    
-    return render(request, 'catalog/lista.html', {
-        'juegos': page_obj,
-        'total_juegos': juegos.count(),
-        'titulo': 'Catálogo Completo'
-    })
+    query = request.GET.get('q')  # texto que escribe el usuario
+
+    # Base: todos los juegos disponibles (sin filtrar por consola)
+    juegos_list = Juego.objects.filter(disponible=True)
+
+    # Si hay texto en el buscador, filtramos
+    if query:
+        juegos_list = juegos_list.filter(
+            Q(nombre__icontains=query) | Q(descripcion__icontains=query)
+        )
+
+    # Orden y paginación
+    juegos_list = juegos_list.order_by('nombre')
+    paginator = Paginator(juegos_list, 20)
+    page_number = request.GET.get('page')
+    juegos = paginator.get_page(page_number)
+
+    context = {
+        'juegos': juegos,
+        'titulo': 'Catálogo Completo',
+        'total_juegos': juegos_list.count(),
+        'query': query,  # para mantener el valor en el input
+    }
+    return render(request, 'catalog/lista.html', context)
 
 def catalogo_ps4(request):
     query = request.GET.get('q')  # texto que escribe el usuario
