@@ -53,173 +53,238 @@
 </script>
 
 <body>
-    <!-- Token CSRF oculto para HTMX -->
-    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  <!-- Token CSRF oculto para HTMX -->
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-2">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="{% static 'img/proshop_logo.png' %}" alt="Logo" width="64" height="40" class="me-2">
-            </a>
-            <button 
-                 class="navbar-toggler" 
-                 type="button" 
-                 data-bs-toggle="collapse" 
-                 data-bs-target="#navbarNav" 
-                 aria-controls="navbarNav" 
-                 aria-expanded="false" 
-                 aria-label="Toggle navigation">
-                 <span class="navbar-toggler-icon"></span>
-             </button>
+  <!-- 🔹 NAVBAR FIJO -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+      <div class="container">
+          <a class="navbar-brand" href="/">
+              <img src="{% static 'img/proshop_logo.png' %}" alt="Logo" width="64" height="40" class="me-2">
+          </a>
+          <button 
+               class="navbar-toggler" 
+               type="button" 
+               data-bs-toggle="collapse" 
+               data-bs-target="#navbarNav" 
+               aria-controls="navbarNav" 
+               aria-expanded="false" 
+               aria-label="Toggle navigation">
+               <span class="navbar-toggler-icon"></span>
+           </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'catalogo:destacados' %}">Destacados</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'catalogo:ps4' %}">PS4</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'catalogo:ps5' %}">PS5</a>
-                    </li class="nav-item">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/questions/">Preguntas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/about/">Sobre nosotros</a>
-                    </li>
-                </ul>
-            </div>
-          <div class="ml-auto">
-            <button id="theme-toggle" class="btn btn-light">
-                <span id="theme-icon"></span>
-                <span id="theme-text"></span>
-            </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'catalogo:destacados' %}">Destacados</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'catalogo:ps4' %}">PS4</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="{% url 'catalogo:ps5' %}">PS5</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="/questions/">Preguntas</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active" href="/about/">Sobre nosotros</a>
+                  </li>
+              </ul>
           </div>
-        <div class="ms-3">
-          <button id="carrito-toggle" 
-                  class="btn btn-light position-relative"
-                  hx-get="{% url 'carrito:ver' %}"
-                  hx-target="#carrito-popup-inner"
-                  hx-swap="innerHTML"
-                  onclick="abrirCarrito()">
-              <i class="fas fa-shopping-cart"></i>
-              <span id="carrito-badge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle" style="display: none;">
-                  0
-              </span>
-          </button>
-        </div>
+
+          <div class="ml-auto">
+              <button id="theme-toggle" class="btn btn-light">
+                  <span id="theme-icon"></span>
+                  <span id="theme-text"></span>
+              </button>
+          </div>
+
+          <div class="ms-3">
+              <button id="carrito-toggle" 
+                      class="btn btn-light position-relative"
+                      hx-get="{% url 'carrito:ver' %}"
+                      hx-target="#carrito-popup-inner"
+                      hx-swap="innerHTML"
+                      onclick="abrirCarrito()">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span id="carrito-badge" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle" style="display: none;">
+                      0
+                  </span>
+              </button>
+          </div>
       </div>    
-    </nav>
-    {% block content %}
-    {% endblock %}
+  </nav>
 
-    
+  <!-- 🔹 CONTENIDO ANIMADO -->
+  <div id="page-wrapper" class="page-transition">
+      {% block content %}
+      {% endblock %}
+  </div>
 
+  <!-- 🔹 OVERLAY Y POPUP DEL CARRITO -->
+  <div id="carrito-overlay" class="carrito-overlay" onclick="cerrarCarrito()"></div>
+  <div id="carrito-popup" class="carrito-popup">
+      <div id="carrito-popup-inner"></div>
+  </div>
 
+  <!-- 🔹 CONTENEDOR DE NOTIFICACIONES -->
+  <div id="carrito-notification"></div>
 
- <script>
- document.addEventListener("DOMContentLoaded", () => {
-  const topBtn = document.getElementById('back-to-top');
+  <!-- 🔹 FOOTER -->
+  <footer class="footer">
+      <div class="container">
+          <p>&copy; 2025 CatalogSync. Todos los derechos reservados.</p>
+      </div>
+  </footer>
 
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.scrollY;
-    const trigger = 50;
-    const fadeDistance = 300;
+  <!-- 🔹 SCRIPTS -->
+  <script>
+    // Animación de transición (ahora solo afecta al contenido)
+    document.addEventListener("DOMContentLoaded", () => {
+      const page = document.getElementById("page-wrapper");
+      page.classList.add("page-transition");
 
-    if (scrollTop > trigger) {
-      let opacity = (scrollTop - trigger) / fadeDistance;
-      if (opacity > 1) opacity = 1;
-      topBtn.classList.add('visible');
-      topBtn.style.opacity = opacity;
-    } else {
-      topBtn.classList.remove('visible');
-      topBtn.style.opacity = 0;
-    }
-  });
+      setTimeout(() => {
+        page.classList.add("active");
+      }, 10);
 
-  topBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
- });
- </script>
+      document.querySelectorAll('a').forEach(link => {
+        if (link.hostname === window.location.hostname) {
+          link.addEventListener('click', e => {
+            const target = e.currentTarget.getAttribute('href');
+            if (target && target[0] !== '#') {
+              e.preventDefault();
+              page.classList.remove("active");
+              setTimeout(() => { window.location.href = target; }, 300);
+            }
+          });
+        }
+      });
+    });
+  </script>
 
- <button id="back-to-top" title="Volver arriba">
-  <i class="fa-solid fa-arrow-up"></i>
-</button>
+  <script>
+    // Navbar con sombra al scrollear
+    document.addEventListener("scroll", function() {
+      const navbar = document.querySelector(".navbar");
+      if (window.scrollY > 10) {
+        navbar.classList.add("navbar-shadow");
+      } else {
+        navbar.classList.remove("navbar-shadow");
+      }
+    });
+  </script>
 
-<!-- Overlay y Popup del Carrito -->
-<div id="carrito-overlay" class="carrito-overlay" onclick="cerrarCarrito()"></div>
-<div id="carrito-popup" class="carrito-popup">
-    <div id="carrito-popup-inner">
-        <!-- Contenido cargado dinámicamente -->
-    </div>
-</div>
+  <script>
+    // Botón "Volver arriba"
+    document.addEventListener("DOMContentLoaded", () => {
+      const topBtn = document.getElementById('back-to-top');
 
-<!-- Contenedor para notificaciones -->
-<div id="carrito-notification"></div>
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const trigger = 50;
+        const fadeDistance = 300;
 
-<script>
-function abrirCarrito() {
-    document.getElementById('carrito-popup').classList.add('show');
-    document.getElementById('carrito-overlay').classList.add('show');
-}
+        if (scrollTop > trigger) {
+          let opacity = (scrollTop - trigger) / fadeDistance;
+          if (opacity > 1) opacity = 1;
+          topBtn.classList.add('visible');
+          topBtn.style.opacity = opacity;
+        } else {
+          topBtn.classList.remove('visible');
+          topBtn.style.opacity = 0;
+        }
+      });
 
-function cerrarCarrito() {
-    document.getElementById('carrito-popup').classList.remove('show');
-    document.getElementById('carrito-overlay').classList.remove('show');
-}
+      topBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
 
-// CONFIGURACIÓN CSRF PARA HTMX - ¡ESTO ES LO IMPORTANTE!
-document.addEventListener('DOMContentLoaded', function() {
-    // Función para obtener el token CSRF de las cookies
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+  <script>
+    // Carrito (abrir / cerrar)
+     const carritoPopup = document.getElementById('carrito-popup');
+  const carritoOverlay = document.getElementById('carrito-overlay');
+
+  function abrirCarrito() {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    carritoPopup.style.animation = isMobile
+      ? "carritoSlideInMobile 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards"
+      : "carritoSlideInDesktop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards";
+
+    carritoOverlay.classList.add('show');
+
+    // Asegura que aparezca si estaba oculto
+    carritoPopup.classList.add('show');
+  }
+
+  function cerrarCarrito() {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    carritoPopup.style.animation = isMobile
+      ? "carritoSlideOutMobile 0.45s ease forwards"
+      : "carritoSlideOutDesktop 0.45s ease forwards";
+
+    // Espera a que termine la animación antes de ocultarlo
+    carritoPopup.addEventListener('animationend', () => {
+      if (carritoPopup.style.animation.includes("Out")) {
+        carritoPopup.classList.remove('show');
+        carritoOverlay.classList.remove('show');
+      }
+    }, { once: true });
+  }
+
+    // CSRF para HTMX
+    document.addEventListener('DOMContentLoaded', function() {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
-    
-    // Obtener el token CSRF
-    const csrftoken = getCookie('csrftoken');
-    
-    // Configurar HTMX para incluir el token CSRF en todas las peticiones POST
-    document.body.addEventListener('htmx:configRequest', function(event) {
-        if (event.detail.verb === 'post') {
-            event.detail.headers['X-CSRFToken'] = csrftoken;
-        }
+        
+        const csrftoken = getCookie('csrftoken');
+        
+        document.body.addEventListener('htmx:configRequest', function(event) {
+            if (event.detail.verb === 'post') {
+                event.detail.headers['X-CSRFToken'] = csrftoken;
+            }
+        });
+        
+        document.body.addEventListener('htmx:beforeRequest', function(event) {
+            if (event.detail.verb === 'POST' && csrftoken) {
+                const xhr = event.detail.xhr;
+                xhr.setRequestHeader('X-CSRFToken', csrftoken);
+            }
+        });
     });
-    
-    // También configurar para peticiones que usen hx-vals
-    document.body.addEventListener('htmx:beforeRequest', function(event) {
-        if (event.detail.verb === 'POST' && csrftoken) {
-            const xhr = event.detail.xhr;
-            xhr.setRequestHeader('X-CSRFToken', csrftoken);
-        }
-    });
+  </script>
+
+  <script src="{% static 'js/theme.js' %}?v={{ now|date:'U' }}"></script>
+  {% block extra_js %}{% endblock %}
+
+  <script>
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
 });
+
+function abrirCarrito() {
+  const carritoPopup = document.getElementById('carrito-popup');
+  const carritoOverlay = document.getElementById('carrito-overlay');
+
+  carritoPopup.classList.add('show');
+  carritoOverlay.classList.add('show');
+}
 </script>
 
-</body>
-
-
-<footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 CatalogSync. Todos los derechos reservados.</p>
-        </div>
-    </footer>
-
-    <script src="{% static 'js/theme.js' %}?v={{ now|date:'U' }}"></script>
-
-    {% block extra_js %}{% endblock %}
 </body>
 </html>

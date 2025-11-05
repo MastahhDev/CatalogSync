@@ -41,6 +41,7 @@
 }
 
 body {
+    padding-top: 70px;
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -94,7 +95,10 @@ body {
 .navbar {
     background-color: var(--navbar-bg) !important;
     padding: 0.5rem 0 !important;
-    position: relative;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .navbar-container {
@@ -1186,19 +1190,21 @@ h1 {
 /* Popup del carrito */
 .carrito-popup {
     position: fixed;
-    top: 0;
-    right: -400px;
+    right: 0;
     width: 400px;
     height: 100vh;
     background: white;
     z-index: 9999;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    transition: right 0.3s ease;
-    overflow-y: auto;
+    transform: translateX(100%); /* totalmente fuera de pantalla */
+    transition: transform 0.3s ease;
+    display: none;
+    top: calc(var(--scroll-y, 0px)); /* <--- evita que se vea el bloque blanco */
 }
 
 .carrito-popup.show {
-    right: 0;
+    transform: translateX(0);
+    display: block; /* vuelve visible solo al activarse */
 }
 
 /* Header del popup */
@@ -1277,12 +1283,35 @@ h1 {
 }
 
 /* Responsive */
+/* ===== RESPONSIVE CARRITO ===== */
 @media (max-width: 768px) {
-    .carrito-popup {
-        width: 100%;
-        right: -100%;
-    }
+  .carrito-popup {
+    width: 100% !important;      /* ocupa todo el ancho */
+    height: 100vh !important;    /* ocupa toda la altura */
+    right: -100%;                /* oculta fuera de vista al inicio */
+    top: 0;
+    border-radius: 0;
+    transition: right 0.3s ease;
+  }
+
+  .carrito-popup.show {
+    right: 0 !important;         /* entra a la vista completa */
+  }
+
+  .carrito-popup-header {
+    position: sticky;
+    top: 0;
+    background: var(--navbar-bg, #fff);
+    z-index: 10;
+  }
+
+  .carrito-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    visibility: visible;
+  }
 }
+
 
 /* Dark mode */
 [data-theme="dark"] .carrito-popup {
@@ -1302,4 +1331,84 @@ h1 {
 [data-theme="dark"] .carrito-total {
     background: #1a1a1a;
     border-color: #333;
+}
+
+.carrito-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.carrito-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.navbar.fixed-top {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .carrito-popup {
+    position: absolute !important;
+    top: calc(var(--scroll-y, 0px)); /* se actualiza dinámicamente */
+  }
+}
+
+/* ========================
+   🎬 ANIMACIONES CARRITO JS
+======================== */
+
+/* Animación de entrada */
+@keyframes carritoSlideInDesktop {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes carritoSlideInMobile {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animación de salida */
+@keyframes carritoSlideOutDesktop {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes carritoSlideOutMobile {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
