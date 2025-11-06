@@ -270,6 +270,22 @@
   </script>
 
   <script src="{% static 'js/theme.js' %}?v={{ now|date:'U' }}"></script>
+
+  <script>
+  document.body.addEventListener('htmx:afterOnLoad', (event) => {
+      try {
+          const data = JSON.parse(event.detail.xhr.responseText);
+          if (data.url) {
+              window.open(data.url, '_blank'); // abre WhatsApp con el mensaje
+          } else if (data.error) {
+              alert(data.error);
+          }
+      } catch (e) {
+          // Si no es JSON, no hacemos nada
+      }
+  });
+  </script>
+
   {% block extra_js %}{% endblock %}
 
   <script>
@@ -285,6 +301,9 @@ function abrirCarrito() {
   carritoOverlay.classList.add('show');
 }
 </script>
+
+
+
 
 </body>
 </html>

@@ -52,11 +52,26 @@
         <h4 class="text-primary">${{ total_price|floatformat:0 }}</h4>
     </div>
     
-    <button class="btn btn-primary w-100 mb-2">
-        Finalizar Compra
-    </button>
+    <form 
+        hx-post="{% url 'carrito:finalizar' %}" 
+        hx-target="#respuesta-finalizar"
+        hx-swap="none">
+        
+        <select name="metodo_pago" class="form-select mb-2">
+            <option value="transferencia">Transferencia (Mercado Pago, Uala, etc)</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjeta">Tarjeta de Credito/Debito</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary w-100 finish-cart">
+            Finalizar Compra
+        </button>
+    </form>
+
+<div id="respuesta-finalizar"></div>
+
     
-    <button class="btn btn-outline-danger w-100"
+    <button class="btn btn-outline-danger w-100 void-cart"
             hx-post="{% url 'carrito:vaciar' %}"
             hx-target="#carrito-items-container"
             hx-swap="innerHTML"

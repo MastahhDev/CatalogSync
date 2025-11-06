@@ -1413,3 +1413,164 @@ h1 {
     opacity: 0;
   }
 }
+
+/* ====================================
+   🎨 SELECTOR MÉTODO DE PAGO ELEGANTE
+   ==================================== */
+
+.metodo-pago-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+    padding: 0 10px;
+}
+
+.metodo-pago-container label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    display: block;
+    text-align: center;
+}
+
+/* Selector personalizado */
+.select-metodo-animado {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 14px 45px 14px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Flecha personalizada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    
+    /* Sombra suave */
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+}
+
+/* Hover */
+.select-metodo-animado:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Focus */
+.select-metodo-animado:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Opciones del select */
+.select-metodo-animado option {
+    padding: 12px;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Modo oscuro - Flecha */
+[data-theme="dark"] .select-metodo-animado {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238FB3E3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Modo oscuro - Opciones */
+[data-theme="dark"] .select-metodo-animado option {
+    background-color: #161624;
+    color: #E8F4F8;
+}
+
+/* ====================================
+   📱 RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+    .metodo-pago-container label {
+        font-size: 1rem;
+    }
+    
+    .select-metodo-animado {
+        padding: 16px 45px 16px 18px;
+        font-size: 1rem;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .metodo-pago-container {
+        gap: 12px;
+        margin: 20px 0;
+    }
+    
+    .select-metodo-animado {
+        padding: 18px 45px 18px 16px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+    
+    .metodo-pago-container label {
+        font-size: 0.95rem;
+    }
+}
+
+/* ====================================
+   ✨ ANIMACIÓN OPCIONAL AL CAMBIAR
+   ==================================== */
+
+.select-metodo-animado.changed {
+    animation: selectPulse 0.4s ease;
+}
+
+@keyframes selectPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.finish-cart{
+    margin-top: 15px;
+}
+
+.void-cart{
+    margin-top: 15px;
+}
+
+/* ====================================
+   🎯 ESTILO ALTERNATIVO (OPCIONAL)
+   ==================================== */
+
+/* Si prefieres un estilo más minimalista, descomenta esto:
+
+.select-metodo-animado {
+    border-radius: 25px;
+    padding: 16px 50px 16px 24px;
+    background-color: rgba(74, 144, 226, 0.05);
+    border: 2px solid transparent;
+    background-image: 
+        linear-gradient(var(--card-background), var(--card-background)),
+        linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+*/

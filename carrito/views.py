@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from catalog.models import Juego
 from .cart import Cart
+from urllib.parse import quote
 
 @require_POST
 def agregar_al_carrito(request, juego_id):
@@ -74,3 +75,36 @@ def vaciar_carrito(request):
     cart.clear()
     
     return render(request, 'carrito/cart_empty.html')
+
+@require_POST
+def finalizar_compra(request):
+    """Arma el mensaje de WhatsApp con los juegos del carrito y devuelve el enlace"""
+    cart = Cart(request)
+    items = cart.get_items()
+
+    if not items:
+        return JsonResponse({'error': 'El carrito está vacío.'}, status=400)
+
+    # 1️⃣ Obtener nombres y total
+    nombres = [item['juego'].nombre for item in items]
+    total = cart.get_total_price()
+
+    # 2️⃣ Obtener método de pago (si se envió desde un formulario)
+    metodo_pago = request.POST.get('metodo_pago', 'sin especificar')
+
+    # 3️⃣ Construir el mensaje
+    mensaje = (
+        f"Buenas! Vengo de la página web.\n"
+        f"Quiero los siguientes juegos: {', '.join(nombres)}.\n"
+        f"Abono el total de ${total:,.0f} por {metodo_pago}."
+    )
+
+    # 4️⃣ Codificar mensaje para WhatsApp
+    mensaje_url = quote(mensaje)
+
+    # 5️⃣ Número de destino
+    numero = "5491151594477"  # ⚠️ tu número en formato internacional sin + ni 0
+    url_whatsapp = f"https://wa.me/{numero}?text={mensaje_url}"
+
+    # 6️⃣ Devolver respuesta JSON para abrir el link en JS
+    return JsonResponse({'url': url_whatsapp})
