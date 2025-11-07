@@ -432,6 +432,6 @@ class Command(BaseCommand):
         
         if no_encontrados:
             self.stdout.write(self.style.WARNING("\nJuegos no encontrados en BD:"))
-            for nombre in no_encontrados[:10]:
+            for nombre in no_encontrados[:100]:
                 self.stdout.write(f"  - {nombre}")
         self.generar_reporte_portadas_no_encontradas(actualizados)
