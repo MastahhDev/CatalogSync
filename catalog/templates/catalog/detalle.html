@@ -45,7 +45,8 @@
                 <h5 class="mb-3">💰 Elige tu opción de compra</h5>
                 
                 <div class="precios-opciones">
-                    <!-- OPCIÓN PRIMARIO -->
+                    <!-- OPCIÓN PRIMARIO - Solo si NO es solo secundario -->
+                    {% if not juego.es_solo_secundario %}
                     <div class="precio-card primario {% if not juego.tiene_secundario %}unico{% endif %}">
                         <div class="precio-header">
                             <span class="precio-badge primario-badge">🟢 PRIMARIO</span>
@@ -81,14 +82,18 @@
                             </button>
                         </div>
                     </div>
+                    {% endif %}
                     
-                    <!-- OPCIÓN SECUNDARIO (si existe) -->
-                    {% if juego.tiene_secundario or juego.es_solo_secundario %}
-                    <div class="precio-card secundario">
+                    <!-- OPCIÓN SECUNDARIO - Solo si es SOLO secundario o tiene secundario -->
+                    {% if juego.es_solo_secundario or juego.tiene_secundario %}
+                    <div class="precio-card secundario {% if juego.es_solo_secundario %}unico{% endif %}">
                         <div class="precio-header">
                             <span class="precio-badge secundario-badge">🔵 SECUNDARIO</span>
                             {% if juego.tiene_secundario and juego.precio_secundario < juego.precio %}
                                 <span class="mejor-precio-tag">⭐ MEJOR PRECIO</span>
+                            {% endif %}
+                            {% if juego.es_solo_secundario %}
+                                <span class="mejor-precio-tag">ÚNICA OPCIÓN</span>
                             {% endif %}
                         </div>
                         
@@ -112,6 +117,9 @@
                                     <li>✅ Precio más económico</li>
                                     <li>⚠️ Requiere WiFi permanente</li>
                                     <li>⚠️ Jugas desde el usuario entregado</li>
+                                    {% if juego.es_solo_secundario %}
+                                    <li>🎮 <strong>Disponible solo en formato secundario</strong></li>
+                                    {% endif %}
                                 </ul>
                             </div>
                             
@@ -119,23 +127,36 @@
                                     hx-post="{% url 'carrito:agregar' juego.id %}?tipo=secundario"
                                     hx-target="body"
                                     hx-swap="none">
-                                <i class="fas fa-cart-plus"></i> Agregar Secundario
+                                <i class="fas fa-cart-plus"></i> 
+                                {% if juego.es_solo_secundario %}
+                                    Agregar al Carrito
+                                {% else %}
+                                    Agregar Secundario
+                                {% endif %}
                             </button>
                         </div>
                     </div>
                     {% endif %}
                 </div>
                 
-                <!-- Ahorro destacado -->
-                {% if juego.tiene_secundario %}
+                <!-- Ahorro destacado - Solo si tiene ambas opciones -->
+                {% if juego.tiene_secundario and not juego.es_solo_secundario %}
                 <div class="ahorro-info">
                     {% if juego.precio_secundario < juego.precio %}
-                        💡 <strong>Ahorrás ${{ juego.recargo|floatformat:0|add:"-"|add:juego.recargo_secundario|floatformat:0 }}</strong> 
+                        💡 <strong>Ahorrás ${{ juego.precio|floatformat:0|add:"-"|add:juego.precio_secundario|floatformat:0 }}</strong> 
                         eligiendo Secundario
                     {% elif juego.precio < juego.precio_secundario %}
-                        💡 <strong>Ahorrás ${{ juego.recargo_secundario|floatformat:0|add:"-"|add:juego.recargo|floatformat:0 }}</strong> 
+                        💡 <strong>Ahorrás ${{ juego.precio_secundario|floatformat:0|add:"-"|add:juego.precio|floatformat:0 }}</strong> 
                         eligiendo Primario
                     {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Info para juegos solo secundarios -->
+                {% if juego.es_solo_secundario %}
+                <div class="ahorro-info" style="background: linear-gradient(135deg, #E3F2FD, #BBDEFB); border-color: #2196F3;">
+                    💡 <strong>Este juego está disponible únicamente en formato secundario</strong> - 
+                    Precio especial por tiempo limitado
                 </div>
                 {% endif %}
             </div>

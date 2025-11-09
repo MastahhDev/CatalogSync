@@ -80,11 +80,14 @@ class Command(BaseCommand):
 
     def buscar_juego_similar(self, nombre_limpio, consola):
         """Busca juegos en la base de datos que coincidan aproximadamente"""
-        nombre_sin_consola = nombre_limpio.replace(f' {consola.upper()}', '').replace(f' {consola}', '').strip()
+        # Primero quitar (SECUNDARIO) si existe para buscar el juego original
+        nombre_limpio_sin_secundario = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_limpio, flags=re.IGNORECASE).strip()
+        
+        nombre_sin_consola = nombre_limpio_sin_secundario.replace(f' {consola.upper()}', '').replace(f' {consola}', '').strip()
         
         # Buscar coincidencias exactas
         juegos_exactos = Juego.objects.filter(
-            nombre__iexact=nombre_limpio,
+            nombre__iexact=nombre_limpio_sin_secundario,
             consola=consola
         )
         if juegos_exactos.exists():
@@ -166,7 +169,9 @@ class Command(BaseCommand):
 
     def buscar_imagen(self, nombre_juego, consola):
         """Busca la imagen correspondiente al juego"""
-        nombre = nombre_juego.lower()
+        # Quitar (SECUNDARIO) para buscar la imagen
+        nombre = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
+        nombre = nombre.lower()
         nombre = nombre.replace(f' {consola}', '').strip()
         nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
         nombre = nombre.replace(" ", "_")
@@ -192,6 +197,7 @@ class Command(BaseCommand):
         col_nombre = options['columna_nombre']
         col_precio = options['columna_precio']
         consola = options['consola'].lower()
+        solo_actualizar = options['solo_actualizar']
         
         if not os.path.exists(csv_path):
             self.stdout.write(self.style.ERROR(f'No se encontró {csv_path}'))
@@ -282,10 +288,19 @@ class Command(BaseCommand):
                         
                         else:
                             # ❌ CASO 2: JUEGO NO EXISTE - Crear nuevo en categoría secundarios
+                            if solo_actualizar:
+                                self.stdout.write(self.style.WARNING(
+                                    f'⏭️  OMITIDO (--solo-actualizar): {nombre_busqueda}'
+                                ))
+                                continue
+                            
+                            # ⭐ NUEVO: Agregar identificador (SECUNDARIO) al nombre
+                            nombre_con_identificador = f"{nombre_busqueda} (SECUNDARIO)"
+                            
                             imagen = self.buscar_imagen(nombre_busqueda, consola_real)
                             
                             nuevo_juego = Juego.objects.create(
-                                nombre=nombre_busqueda,
+                                nombre=nombre_con_identificador,  # ⭐ Con identificador
                                 precio=precio_secundario,
                                 recargo=recargo_secundario,
                                 consola=consola_real,  # Usar consola detectada
