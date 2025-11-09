@@ -38,10 +38,18 @@
                     
                     <div class="juego-info">
                         <h5 class="juego-nombre">{{ juego.nombre }}</h5>
-                        <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
-                        {% if juego.recargo > 0 %}
-                            <p class="juego-recargo text-decoration-line-through">${{ juego.recargo|floatformat:0 }}</p>
+                        {% if juego.es_solo_secundario %}
+                            <p class="juego-precio">${{ juego.precio_secundario|floatformat:0 }}</p>
+                            {% if juego.recargo_secundario > 0 %}
+                                <p class="juego-recargo text-decoration-line-through">${{ juego.recargo_secundario|floatformat:0 }}</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="juego-precio">${{ juego.precio|floatformat:0 }}</p>
+                            {% if juego.recargo > 0 %}
+                                <p class="juego-recargo text-decoration-line-through">${{ juego.recargo|floatformat:0 }}</p>
+                            {% endif %}
                         {% endif %}
+                        
                         <!-- Después de los precios, antes del cierre de juego-info -->
                         <button class="btn btn-primary btn-sm mt-2 w-100"
                                 hx-post="{% url 'carrito:agregar' juego.id %}"
