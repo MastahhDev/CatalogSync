@@ -11,6 +11,11 @@ class Juego(models.Model):
     
     nombre = models.CharField(max_length=200)
     consola = models.CharField(max_length=10, choices=CONSOLAS)
+    descripcion = models.TextField(
+        blank=True, 
+        null=True,
+        help_text="Descripción del juego"
+    )
     
     # PRECIOS PRIMARIOS
     precio = models.DecimalField(max_digits=10, decimal_places=2, default=0)

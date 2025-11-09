@@ -34,7 +34,9 @@
                     <p>{{ juego.descripcion }}</p>
                 {% endif %}
                 <p>Este juego está disponible en:</p>
+                {% if not juego.es_solo_secundario %}
                 <p><strong>Método PRIMARIO:</strong> Jugas en tu usuario personal, una vez instalado no necesita WiFi</p>
+                {% endif %}
                 <p><strong>Método SECUNDARIO:</strong> Jugas desde el usuario entregado, siempre conectado a WiFi</p>
                 <p>Contás con 1 año de garantía con todos los juegos</p>
                 <p>Descuento exclusivo únicamente en transferencia!</p>
@@ -49,7 +51,7 @@
                     {% if not juego.es_solo_secundario %}
                     <div class="precio-card primario {% if not juego.tiene_secundario %}unico{% endif %}">
                         <div class="precio-header">
-                            <span class="precio-badge primario-badge">🟢 PRIMARIO</span>
+                            <span class="precio-badge primario-badge">PRIMARIO</span>
                             {% if juego.tiene_secundario and juego.precio <= juego.precio_secundario %}
                                 <span class="mejor-precio-tag">⭐ MEJOR PRECIO</span>
                             {% endif %}
@@ -88,7 +90,7 @@
                     {% if juego.es_solo_secundario or juego.tiene_secundario %}
                     <div class="precio-card secundario {% if juego.es_solo_secundario %}unico{% endif %}">
                         <div class="precio-header">
-                            <span class="precio-badge secundario-badge">🔵 SECUNDARIO</span>
+                            <span class="precio-badge secundario-badge">SECUNDARIO</span>
                             {% if juego.tiene_secundario and juego.precio_secundario < juego.precio %}
                                 <span class="mejor-precio-tag">⭐ MEJOR PRECIO</span>
                             {% endif %}
@@ -143,10 +145,10 @@
                 {% if juego.tiene_secundario and not juego.es_solo_secundario %}
                 <div class="ahorro-info">
                     {% if juego.precio_secundario < juego.precio %}
-                        💡 <strong>Ahorrás ${{ juego.precio|floatformat:0|add:"-"|add:juego.precio_secundario|floatformat:0 }}</strong> 
+                        💡 <strong>Ahorrás</strong> 
                         eligiendo Secundario
                     {% elif juego.precio < juego.precio_secundario %}
-                        💡 <strong>Ahorrás ${{ juego.precio_secundario|floatformat:0|add:"-"|add:juego.precio|floatformat:0 }}</strong> 
+                        💡 <strong>Ahorrás</strong> 
                         eligiendo Primario
                     {% endif %}
                 </div>

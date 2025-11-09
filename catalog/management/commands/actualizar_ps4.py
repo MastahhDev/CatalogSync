@@ -3,6 +3,7 @@ import csv
 import os
 import re
 import difflib
+import unicodedata
 from decimal import Decimal
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -33,10 +34,29 @@ class Command(BaseCommand):
             help='Nombre de la columna con el precio'
         )
 
+    def quitar_acentos(self, texto):
+        """Elimina acentos y diacríticos de un texto"""
+        if not texto:
+            return ""
+        
+        # Normalizar el texto a forma NFD (descomposición canónica)
+        texto_normalizado = unicodedata.normalize('NFD', texto)
+        
+        # Filtrar solo caracteres que no son diacríticos
+        texto_sin_acentos = ''.join(
+            c for c in texto_normalizado
+            if unicodedata.category(c) != 'Mn'
+        )
+        
+        return texto_sin_acentos
+
     def limpiar_nombre_avanzado(self, nombre):
         """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
         if not nombre:
             return ""
+        
+        # ⭐ NUEVO: Primero quitar acentos y diacríticos
+        nombre = self.quitar_acentos(nombre)
             
         # Quitar emojis y caracteres especiales
         nombre = re.sub(r'[^\x00-\x7F]+', '', nombre)
@@ -54,16 +74,16 @@ class Command(BaseCommand):
         # PATRONES A FILTRAR (case insensitive)
         patrones_a_eliminar = [
             # Idiomas y subtítulos
-            r'\bespañol\s+españa\b', r'\bespañol\s+latino\b', r'\binglés\b',
+            r'\bespanol\s+espana\b', r'\bespanol\s+latino\b', r'\bingles\b',
             r'\benglish\b', r'\bsubtitulado\b', r'\bsubtitulada\b',
-            r'\bespañol\b', r'\bspanish\b',
+            r'\bespanol\b', r'\bspanish\b',
             
             # Ediciones (EXCEPTO definitive edition que se mantiene)
             r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
             r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
             r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
-            r'\bgoty\b', r'\bedición\s+deluxe\b', r'\bedición\s+gold\b',
-            r'\bedición\s+estándar\b', r'\bedición\s+especial\b', r'\blatino\b', r'\bespaol\s+espaa\b',
+            r'\bgoty\b', r'\bedicion\s+deluxe\b', r'\bedicion\s+gold\b',
+            r'\bedicion\s+estandar\b', r'\bedicion\s+especial\b', r'\blatino\b', r'\bespaol\s+espaa\b',
             
             # Palabras generales a eliminar
             r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
@@ -138,6 +158,7 @@ class Command(BaseCommand):
             mejor_ratio = 0.0
 
             for juego_candidato in juegos_similares:
+                # ⭐ NUEVO: Limpiar también el nombre del candidato para mejor comparación
                 nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
                 ratio = SequenceMatcher(None, nombre_muy_limpio.lower(), nombre_juego_limpio.lower()).ratio()
 
@@ -221,7 +242,8 @@ class Command(BaseCommand):
 
     def generar_nombre_imagen_simple(self, nombre_juego):
         """Genera nombre de imagen de forma simple y directa"""
-        nombre = nombre_juego.lower()
+        # ⭐ NUEVO: Quitar acentos también para nombres de imagen
+        nombre = self.quitar_acentos(nombre_juego.lower())
         
         # Determinar consola
         if 'ps5' in nombre:
@@ -244,13 +266,15 @@ class Command(BaseCommand):
 
     def mostrar_archivos_relacionados(self, nombre_juego, archivos_existentes):
         """Muestra archivos relacionados para debug"""
-        palabras_busqueda = [p for p in nombre_juego.lower().split() if len(p) > 3]
+        # ⭐ NUEVO: Quitar acentos también para la búsqueda
+        nombre_busqueda = self.quitar_acentos(nombre_juego.lower())
+        palabras_busqueda = [p for p in nombre_busqueda.split() if len(p) > 3]
         
         self.stdout.write("Archivos relacionados encontrados:")
         relacionados = []
         
         for archivo in archivos_existentes:
-            archivo_lower = archivo.lower()
+            archivo_lower = self.quitar_acentos(archivo.lower())
             if any(palabra in archivo_lower for palabra in palabras_busqueda):
                 relacionados.append(archivo)
         
@@ -302,7 +326,8 @@ class Command(BaseCommand):
         
     def generar_nombre_imagen_sugerido(self, nombre_juego):
         """Genera el nombre de archivo sugerido para la imagen"""
-        nombre = nombre_juego.lower()
+        # ⭐ NUEVO: Quitar acentos también para nombres sugeridos
+        nombre = self.quitar_acentos(nombre_juego.lower())
         
         # Determinar consola
         if 'ps5' in nombre:
