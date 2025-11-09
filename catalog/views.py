@@ -1,111 +1,138 @@
 # catalog/views.py
 from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 from django.core.paginator import Paginator
 from .models import Juego
-from django.utils.text import slugify
-from django.db.models import Q
 
 def catalogo_general(request):
-    """Muestra todos los juegos DISPONIBLES"""
-    query = request.GET.get('q')  # texto que escribe el usuario
-
-    # Base: todos los juegos disponibles (sin filtrar por consola)
-    juegos_list = Juego.objects.filter(disponible=True)
-
-    # Si hay texto en el buscador, filtramos
+    """Vista del catálogo general con todos los juegos"""
+    query = request.GET.get('q', '')
+    
     if query:
-        juegos_list = juegos_list.filter(
-            Q(nombre__icontains=query) | Q(descripcion__icontains=query)
-        )
-
-    # Orden y paginación
-    juegos_list = juegos_list.order_by('nombre')
-    paginator = Paginator(juegos_list, 20)
+        juegos = Juego.objects.filter(
+            nombre__icontains=query,
+            disponible=True
+        ).order_by('nombre')
+    else:
+        juegos = Juego.objects.filter(disponible=True).order_by('nombre')
+    
+    # Paginación
+    paginator = Paginator(juegos, 24)
     page_number = request.GET.get('page')
-    juegos = paginator.get_page(page_number)
-
+    juegos_paginados = paginator.get_page(page_number)
+    
     context = {
-        'juegos': juegos,
-        'titulo': 'Catálogo Completo',
-        'total_juegos': juegos_list.count(),
-        'query': query,  # para mantener el valor en el input
+        'juegos': juegos_paginados,
+        'total_juegos': juegos.count(),
+        'titulo': 'Catálogo General',
+        'query': query,
     }
+    
     return render(request, 'catalog/lista.html', context)
 
 def catalogo_ps4(request):
-    query = request.GET.get('q')  # texto que escribe el usuario
-
-    # Base: solo juegos de PS4 disponibles
-    juegos_list = Juego.objects.filter(consola='ps4', disponible=True)
-
-    # Si hay texto en el buscador, filtramos
+    """Vista del catálogo de PS4"""
+    query = request.GET.get('q', '')
+    
     if query:
-        juegos_list = juegos_list.filter(
-            Q(nombre__icontains=query) | Q(descripcion__icontains=query)
-        )
-
-    # Orden y paginación
-    juegos_list = juegos_list.order_by('nombre')
-    paginator = Paginator(juegos_list, 20)
+        juegos = Juego.objects.filter(
+            nombre__icontains=query,
+            consola='ps4',
+            disponible=True
+        ).order_by('nombre')
+    else:
+        juegos = Juego.objects.filter(consola='ps4', disponible=True).order_by('nombre')
+    
+    paginator = Paginator(juegos, 24)
     page_number = request.GET.get('page')
-    juegos = paginator.get_page(page_number)
-
+    juegos_paginados = paginator.get_page(page_number)
+    
     context = {
-        'juegos': juegos,
+        'juegos': juegos_paginados,
+        'total_juegos': juegos.count(),
         'titulo': 'Catálogo PS4',
-        'total_juegos': juegos_list.count(),
-        'query': query,  # para mantener el valor en el input
+        'query': query,
     }
+    
     return render(request, 'catalog/lista.html', context)
 
-
 def catalogo_ps5(request):
-    query = request.GET.get('q')  # texto que escribe el usuario
-
-    # Base: solo juegos de PS4 disponibles
-    juegos_list = Juego.objects.filter(consola='ps5', disponible=True)
-
-    # Si hay texto en el buscador, filtramos
+    """Vista del catálogo de PS5"""
+    query = request.GET.get('q', '')
+    
     if query:
-        juegos_list = juegos_list.filter(
-            Q(nombre__icontains=query) | Q(descripcion__icontains=query)
-        )
-
-    # Orden y paginación
-    juegos_list = juegos_list.order_by('nombre')
-    paginator = Paginator(juegos_list, 20)
+        juegos = Juego.objects.filter(
+            nombre__icontains=query,
+            consola='ps5',
+            disponible=True
+        ).order_by('nombre')
+    else:
+        juegos = Juego.objects.filter(consola='ps5', disponible=True).order_by('nombre')
+    
+    paginator = Paginator(juegos, 24)
     page_number = request.GET.get('page')
-    juegos = paginator.get_page(page_number)
-
+    juegos_paginados = paginator.get_page(page_number)
+    
     context = {
-        'juegos': juegos,
+        'juegos': juegos_paginados,
+        'total_juegos': juegos.count(),
         'titulo': 'Catálogo PS5',
-        'total_juegos': juegos_list.count(),
-        'query': query,  # para mantener el valor en el input
+        'query': query,
     }
+    
     return render(request, 'catalog/lista.html', context)
 
 def destacados(request):
-    """Muestra solo juegos destacados DISPONIBLES"""
-    juegos = Juego.objects.filter(destacado=True, disponible=True)  # ← CLAVE
-    paginator = Paginator(juegos, 20)
-    page_obj = paginator.get_page(request.GET.get('page', 1))
+    """Vista de juegos destacados"""
+    # Si tienes un campo 'destacado' en el modelo
+    # juegos = Juego.objects.filter(destacado=True, disponible=True).order_by('nombre')
     
-    return render(request, 'catalog/lista.html', {
-        'juegos': page_obj,
+    # Por ahora, mostrar los más recientes
+    juegos = Juego.objects.filter(disponible=True).order_by('-fecha_actualizacion')[:20]
+    
+    context = {
+        'juegos': juegos,
         'total_juegos': juegos.count(),
-        'titulo': 'Juegos Destacados'
-    })
+        'titulo': 'Juegos Destacados',
+    }
+    
+    return render(request, 'catalog/lista.html', context)
 
 def detalle_juego(request, slug):
-    """Página de detalle de un juego"""
-    # Buscar por slug generado
-    juegos = Juego.objects.all()
+    """
+    Vista de detalle del juego.
+    El slug tiene formato: {id}-{nombre-slugificado}
+    Ejemplo: 10-a-way-out o 10-a-way-out-ps4
+    """
+    try:
+        # Extraer el ID del slug (todo lo que está antes del primer guion)
+        partes = slug.split('-')
+        juego_id = int(partes[0])
+        
+        # Buscar el juego por ID
+        juego = get_object_or_404(Juego, id=juego_id)
+        
+        # Verificar que el juego esté disponible
+        if not juego.disponible:
+            raise Http404("Este juego no está disponible actualmente")
+        
+        # Debug: Imprimir info en consola
+        print(f"✅ Juego encontrado: {juego.nombre} (ID: {juego.id})")
+        print(f"   Slug recibido: {slug}")
+        print(f"   Tiene secundario: {juego.tiene_secundario}")
+        if juego.tiene_secundario:
+            print(f"   Precio primario: ${juego.recargo}")
+            print(f"   Precio secundario: ${juego.recargo_secundario}")
+        
+    except (ValueError, IndexError) as e:
+        print(f"❌ Error parseando slug '{slug}': {e}")
+        raise Http404("Formato de URL inválido")
+    except Juego.DoesNotExist:
+        print(f"❌ Juego con ID extraído de '{slug}' no encontrado")
+        raise Http404("Juego no encontrado")
     
-    for juego in juegos:
-        if slugify(juego.nombre) == slug:
-            return render(request, 'catalog/detalle.html', {'juego': juego})
+    context = {
+        'juego': juego,
+    }
     
-    # Si no se encuentra, 404
-    from django.http import Http404
-    raise Http404("Juego no encontrado")
+    return render(request, 'catalog/detalle.html', context)

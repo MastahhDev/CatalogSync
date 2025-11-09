@@ -1,98 +1,179 @@
+<!-- carrito/templates/carrito/cart_items.html -->
 {% load static %}
-<div class="carrito-items">
-    {% for item in items %}
-    <div class="carrito-item" id="item-{{ item.juego.id }}">
+
+{% for item in items %}
+<div class="cart-item" data-item-key="{{ item.item_key }}">
+    <div class="cart-item-image">
         <img src="{% static item.juego.imagen %}" 
              alt="{{ item.juego.nombre }}"
-             class="carrito-item-img"
              onerror="this.src='/static/img/default.png'">
+    </div>
+    
+    <div class="cart-item-details">
+        <h6 class="cart-item-name">{{ item.juego.nombre }}</h6>
         
-        <div class="carrito-item-info">
-            <h6>{{ item.juego.nombre }}</h6>
-            <p class="text-muted mb-1">${{ item.juego.precio|floatformat:0 }}</p>
-            
-            <div class="carrito-item-cantidad">
-                <button class="btn btn-sm btn-outline-secondary"
-                        hx-post="{% url 'carrito:actualizar' item.juego.id %}"
-                        hx-vals='{"cantidad": "{{ item.cantidad|add:-1 }}"}'
-                        hx-target="#carrito-items-container"
-                        hx-swap="innerHTML">
-                    -
-                </button>
-                
-                <span class="mx-2">{{ item.cantidad }}</span>
-                
-                <button class="btn btn-sm btn-outline-secondary"
-                        hx-post="{% url 'carrito:actualizar' item.juego.id %}"
-                        hx-vals='{"cantidad": "{{ item.cantidad|add:1 }}"}'
-                        hx-target="#carrito-items-container"
-                        hx-swap="innerHTML">
-                    +
-                </button>
-            </div>
+        <!-- ⭐ NUEVO: Badge de tipo de precio -->
+        {% if item.tipo_precio == 'secundario' %}
+            <span class="badge bg-info">🔵 Secundario</span>
+        {% else %}
+            <span class="badge bg-success">🟢 Primario</span>
+        {% endif %}
+        
+        <div class="cart-item-price">
+            <span class="price-base text-muted text-decoration-line-through">
+                ${{ item.precio_base|floatformat:0 }}
+            </span>
+            <span class="price-final fw-bold">
+                ${{ item.precio_final|floatformat:0 }}
+            </span>
         </div>
         
-        <div class="carrito-item-actions">
-            <p class="fw-bold mb-2">${{ item.subtotal|floatformat:0 }}</p>
-            <button class="btn btn-sm btn-danger"
-                    hx-post="{% url 'carrito:eliminar' item.juego.id %}"
-                    hx-target="#carrito-items-container"
-                    hx-swap="innerHTML"
-                    hx-confirm="¿Eliminar {{ item.juego.nombre }}?">
-                <i class="fas fa-trash"></i>
+        <div class="cart-item-quantity">
+            <button class="btn btn-sm btn-outline-secondary"
+                    hx-post="{% url 'carrito:actualizar' item.item_key %}"
+                    hx-vals='{"cantidad": {{ item.cantidad|add:"-1" }}}'
+                    hx-target=".cart-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-minus"></i>
+            </button>
+            
+            <span class="quantity-display">{{ item.cantidad }}</span>
+            
+            <button class="btn btn-sm btn-outline-secondary"
+                    hx-post="{% url 'carrito:actualizar' item.item_key %}"
+                    hx-vals='{"cantidad": {{ item.cantidad|add:"1" }}}'
+                    hx-target=".cart-content"
+                    hx-swap="innerHTML">
+                <i class="fas fa-plus"></i>
             </button>
         </div>
+        
+        <div class="cart-item-subtotal">
+            Subtotal: <strong>${{ item.subtotal|floatformat:0 }}</strong>
+        </div>
     </div>
-    {% endfor %}
+    
+    <button class="btn btn-sm btn-danger cart-item-remove"
+            hx-post="{% url 'carrito:eliminar' item.item_key %}"
+            hx-target=".cart-content"
+            hx-swap="innerHTML"
+            title="Eliminar">
+        <i class="fas fa-trash"></i>
+    </button>
 </div>
+{% endfor %}
 
-<div class="carrito-total">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="cart-total">
+    <div class="d-flex justify-content-between align-items-center">
         <h5>Total:</h5>
         <h4 class="text-primary">${{ total_price|floatformat:0 }}</h4>
     </div>
     
-    <form 
-        hx-post="{% url 'carrito:finalizar' %}" 
-        hx-target="#respuesta-finalizar"
-        hx-swap="none">
-        
-        <select name="metodo_pago" class="form-select mb-2">
-            <option value="transferencia">Transferencia (Mercado Pago, Uala, etc)</option>
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta de Credito/Debito</option>
-        </select>
-
-        <button type="submit" class="btn btn-primary w-100 finish-cart">
-            Finalizar Compra
-        </button>
-    </form>
-
-<div id="respuesta-finalizar"></div>
-
+    <button class="btn btn-success w-100 mt-3"
+            hx-post="{% url 'carrito:finalizar' %}"
+            hx-vals='{"metodo_pago": "transferencia"}'
+            hx-on::after-request="if(event.detail.xhr.response) { const data = JSON.parse(event.detail.xhr.response); window.open(data.url, '_blank'); }">
+        <i class="fab fa-whatsapp"></i> Finalizar por WhatsApp
+    </button>
     
-    <button class="btn btn-outline-danger w-100 void-cart"
+    <button class="btn btn-outline-danger w-100 mt-2"
             hx-post="{% url 'carrito:vaciar' %}"
-            hx-target="#carrito-items-container"
+            hx-target=".cart-content"
             hx-swap="innerHTML"
-            hx-confirm="¿Vaciar todo el carrito?">
-        Vaciar Carrito
+            hx-confirm="¿Estás seguro de vaciar el carrito?">
+        <i class="fas fa-trash"></i> Vaciar carrito
     </button>
 </div>
 
-<!-- Actualizar badge también (OOB swap) -->
-<span id="carrito-badge" class="badge bg-danger rounded-pill" hx-swap-oob="true">
-    {{ total_items }}
-</span>
+<style>
+.cart-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+    align-items: center;
+}
+
+.cart-item-image img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.cart-item-price {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.price-base {
+    font-size: 0.85rem;
+}
+
+.price-final {
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.quantity-display {
+    min-width: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.cart-item-subtotal {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.cart-item-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.cart-total {
+    padding: 20px;
+    border-top: 2px solid #e0e0e0;
+    background: #f8f9fa;
+}
+
+/* Badge de tipo de precio */
+.badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    margin: 5px 0;
+}
+</style>
 
 <script>
-// Formatear precios con separador de miles
-document.querySelectorAll('.carrito-item-info p, .carrito-item-actions p, .carrito-total h4').forEach(el => {
-    if (el.textContent.includes('$')) {
-        let precio = el.textContent.replace('$', '').trim();
-        if (!isNaN(parseInt(precio))) {
-            el.textContent = '$' + parseInt(precio).toLocaleString('es-AR');
-        }
+// Formatear precios con separadores de miles
+document.querySelectorAll('.price-final, .cart-item-subtotal strong, .cart-total h4').forEach(el => {
+    let text = el.textContent.trim();
+    if (text.includes('$')) {
+        let price = text.replace(/[^\d]/g, '');
+        el.textContent = '$' + parseInt(price).toLocaleString('es-AR');
     }
 });
 </script>
+
