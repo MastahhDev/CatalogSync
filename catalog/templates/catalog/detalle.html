@@ -57,11 +57,11 @@
                         <div class="precio-contenido">
                             <div class="precio-info">
                                 <div class="precio-base-detalle">
-                                    Precio base: <span class="text-muted">${{ juego.precio|floatformat:0 }}</span>
+                                    Precio base: <span class="text-muted">${{ juego.recargo|floatformat:0 }}</span>
                                 </div>
                                 <div class="precio-final-detalle">
-                                    <span class="precio-label">Precio final:</span>
-                                    <span class="precio-valor">${{ juego.recargo|floatformat:0 }}</span>
+                                    <span class="precio-label">Precio final: (Transferencia)</span>
+                                    <span class="precio-valor">${{ juego.precio|floatformat:0 }}</span>
                                 </div>
                             </div>
                             
@@ -96,13 +96,13 @@
                             <div class="precio-info">
                                 <div class="precio-base-detalle">
                                     Precio base: <span class="text-muted">
-                                        ${{ juego.precio_secundario|default:juego.precio|floatformat:0 }}
+                                        ${{ juego.recargo_secundario|default:juego.recargo|floatformat:0 }}
                                     </span>
                                 </div>
                                 <div class="precio-final-detalle">
-                                    <span class="precio-label">Precio final:</span>
+                                    <span class="precio-label">Precio final: (Transferencia)</span>
                                     <span class="precio-valor">
-                                        ${{ juego.recargo_secundario|default:juego.recargo|floatformat:0 }}
+                                       ${{ juego.precio_secundario|default:juego.precio|floatformat:0 }}
                                     </span>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@
                                 <ul>
                                     <li>✅ Precio más económico</li>
                                     <li>⚠️ Requiere WiFi permanente</li>
-                                    <li>⚠️ Usuario compartido</li>
+                                    <li>⚠️ Jugas desde el usuario entregado</li>
                                 </ul>
                             </div>
                             

@@ -37,6 +37,11 @@ class Command(BaseCommand):
             default='ps4',
             help='Consola (ps4 o ps5)'
         )
+        parser.add_argument(
+            '--solo-actualizar',
+            action='store_true',
+            help='Solo actualizar juegos existentes, NO crear nuevos'
+        )
 
     def limpiar_nombre_avanzado(self, nombre):
         """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
@@ -229,11 +234,25 @@ class Command(BaseCommand):
                         if not nombre_limpio or len(nombre_limpio) < 3:
                             continue
                         
-                        # Agregar consola al nombre si no la tiene
-                        if not nombre_limpio.upper().endswith(consola.upper()):
-                            nombre_busqueda = f"{nombre_limpio} {consola.upper()}"
+                        # ⭐ MEJORADO: Detección de consola en el nombre
+                        nombre_upper = nombre_limpio.upper()
+                        
+                        # Detectar si ya tiene PS4 o PS5 en el nombre
+                        tiene_ps4 = 'PS4' in nombre_upper
+                        tiene_ps5 = 'PS5' in nombre_upper
+                        
+                        if tiene_ps5:
+                            # Si el nombre dice PS5, usar PS5 (ignorar el parámetro --consola)
+                            consola_real = 'ps5'
+                            nombre_busqueda = nombre_limpio  # Ya tiene PS5 en el nombre
+                        elif tiene_ps4:
+                            # Si el nombre dice PS4, usar PS4
+                            consola_real = 'ps4'
+                            nombre_busqueda = nombre_limpio  # Ya tiene PS4 en el nombre
                         else:
-                            nombre_busqueda = nombre_limpio
+                            # Si no tiene consola en el nombre, usar la del parámetro
+                            consola_real = consola
+                            nombre_busqueda = f"{nombre_limpio} {consola.upper()}"
                         
                         self.stdout.write(f"\n{'='*60}")
                         self.stdout.write(f"PROCESANDO: '{nombre_sucio}' -> '{nombre_busqueda}'")
@@ -243,8 +262,8 @@ class Command(BaseCommand):
                         precio_secundario = self.limpiar_precio(precio_str)
                         recargo_secundario = self.calcular_recargo(precio_secundario)
                         
-                        # Buscar juego existente
-                        juego_existente = self.buscar_juego_similar(nombre_busqueda, consola)
+                        # Buscar juego existente (usar consola detectada)
+                        juego_existente = self.buscar_juego_similar(nombre_busqueda, consola_real)
                         
                         if juego_existente:
                             # ✅ CASO 1: JUEGO EXISTE - Agregar precio secundario
@@ -263,16 +282,16 @@ class Command(BaseCommand):
                         
                         else:
                             # ❌ CASO 2: JUEGO NO EXISTE - Crear nuevo en categoría secundarios
-                            imagen = self.buscar_imagen(nombre_busqueda, consola)
+                            imagen = self.buscar_imagen(nombre_busqueda, consola_real)
                             
                             nuevo_juego = Juego.objects.create(
                                 nombre=nombre_busqueda,
                                 precio=precio_secundario,
                                 recargo=recargo_secundario,
-                                consola=consola,
+                                consola=consola_real,  # Usar consola detectada
                                 disponible=True,
                                 imagen=imagen,
-                                es_solo_secundario=True,  # Marca especial para secundarios sin primario
+                                es_solo_secundario=True,
                                 precio_secundario=None,
                                 recargo_secundario=None,
                                 tiene_secundario=False
@@ -300,7 +319,6 @@ class Command(BaseCommand):
         if secundarios_ids:
             # Desactivar solo los que tienen precio secundario y no están en la lista
             juegos_a_desactivar_secundario = Juego.objects.filter(
-                consola=consola,
                 tiene_secundario=True
             ).exclude(id__in=secundarios_ids)
             
@@ -314,7 +332,6 @@ class Command(BaseCommand):
             
             # Desactivar juegos que son SOLO secundarios y no están en lista
             juegos_solo_secundarios = Juego.objects.filter(
-                consola=consola,
                 es_solo_secundario=True
             ).exclude(id__in=secundarios_ids)
             
