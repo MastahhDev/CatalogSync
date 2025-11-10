@@ -54,6 +54,73 @@ class Command(BaseCommand):
             action='store_true',
             help='Mostrar lista de portadas faltantes'
         )
+        parser.add_argument(
+            '--debug',
+            action='store_true',
+            help='Mostrar información de depuración del proceso de limpieza'
+        )
+        parser.add_argument(
+            '--corregir-precios',
+            action='store_true',
+            help='Corregir juegos secundarios con precios en campos equivocados'
+        )
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Simular sin hacer cambios reales (solo con --corregir-precios)'
+        )
+
+    def corregir_precios_secundarios(self, dry_run=False):
+        """Corrige juegos secundarios que tienen el precio en el campo equivocado"""
+        # Buscar juegos secundarios con precio_secundario NULL pero precio válido
+        juegos_incorrectos = Juego.objects.filter(
+            es_solo_secundario=True,
+            precio_secundario__isnull=True,
+            precio__gt=0
+        )
+        
+        total = juegos_incorrectos.count()
+        
+        if total == 0:
+            self.stdout.write(self.style.SUCCESS('✅ No hay juegos con precios incorrectos'))
+            return 0, 0
+        
+        self.stdout.write(self.style.WARNING(f'\n🔧 CORRECCIÓN DE PRECIOS - Encontrados {total} juegos para corregir\n'))
+        
+        corregidos = 0
+        errores = 0
+        
+        for juego in juegos_incorrectos:
+            try:
+                self.stdout.write(f"{'[DRY-RUN] ' if dry_run else ''}Corrigiendo: {juego.nombre}")
+                self.stdout.write(f"  precio: {juego.precio} -> 0")
+                self.stdout.write(f"  precio_secundario: None -> {juego.precio}")
+                self.stdout.write(f"  recargo: {juego.recargo} -> 0")
+                self.stdout.write(f"  recargo_secundario: None -> {juego.recargo}")
+                
+                if not dry_run:
+                    # Guardar valores originales
+                    precio_original = juego.precio
+                    recargo_original = juego.recargo
+                    
+                    # Mover precios a los campos correctos
+                    juego.precio_secundario = precio_original
+                    juego.recargo_secundario = recargo_original
+                    juego.precio = 0
+                    juego.recargo = 0
+                    juego.save()
+                    
+                    self.stdout.write(self.style.SUCCESS(f"  ✅ Corregido\n"))
+                else:
+                    self.stdout.write(self.style.WARNING(f"  ⚠️  Simulado\n"))
+                
+                corregidos += 1
+                
+            except Exception as e:
+                errores += 1
+                self.stdout.write(self.style.ERROR(f"  ❌ Error: {str(e)}\n"))
+        
+        return corregidos, errores
 
     def quitar_acentos(self, texto):
         """Elimina acentos y diacríticos de un texto"""
@@ -68,39 +135,116 @@ class Command(BaseCommand):
         
         return texto_sin_acentos
 
-    def limpiar_nombre_avanzado(self, nombre):
+    def limpiar_nombre_avanzado(self, nombre, debug=False):
         """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
         if not nombre:
             return ""
         
+        casos_especificos = {
+            'mortal kombat 11 ultimate latino': 'mortal kombat 11 ultimate',
+            # Agrega más casos aquí según los problemas que encuentres
+        }
+        
+        nombre_lower = nombre.lower()
+        for caso_problematico, resultado in casos_especificos.items():
+            if caso_problematico in nombre_lower:
+                if debug:
+                    self.stdout.write(f"  🎯 APLICANDO CASO ESPECÍFICO: '{nombre}' -> '{resultado}'")
+                return resultado
+        
+        nombre_original = nombre
+        
+        # Paso 1: Quitar acentos
         nombre = self.quitar_acentos(nombre)
+        if debug:
+            self.stdout.write(f"  [1] Sin acentos: '{nombre}'")
+        
+        # Paso 2: Quitar caracteres especiales
         nombre = re.sub(r'[^\x00-\x7F]+', '', nombre)
         nombre = nombre.replace('®', '').replace('™', '').replace('©', '')
-        nombre = nombre.replace(':', '').replace('#', '').replace('-', ' ')
-        nombre = re.sub(r'\$\s*[\d.,]+', '', nombre)
-        nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
+        if debug:
+            self.stdout.write(f"  [2] Sin especiales: '{nombre}'")
         
+        # Paso 3: Limpiar caracteres problemáticos pero NO los dos puntos aún
+        nombre = nombre.replace('#', '').replace('-', ' ')
+        if debug:
+            self.stdout.write(f"  [3] Sin # y -: '{nombre}'")
+        
+        # Paso 4: Eliminar precios
+        nombre = re.sub(r'\$\s*[\d.,]+', '', nombre)
+        if debug:
+            self.stdout.write(f"  [4] Sin precios: '{nombre}'")
+        
+        # Paso 5: Eliminar comillas y caracteres al inicio
+        nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
+        if debug:
+            self.stdout.write(f"  [5] Limpio al inicio: '{nombre}'")
+        
+        # Paso 6: Eliminar patrones específicos CON WORD BOUNDARIES MÁS ESTRICTAS
         patrones_a_eliminar = [
-            r'\bespanol\s+espana\b', r'\bespanol\s+latino\b', r'\bingles\b',
-            r'\benglish\b', r'\bsubtitulado\b', r'\bsubtitulada\b',
-            r'\bespanol\b', r'\bspanish\b',
-            r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
-            r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
-            r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
-            r'\bgoty\b', r'\bedicion\s+deluxe\b', r'\bedicion\s+gold\b',
-            r'\bedicion\s+estandar\b', r'\bedicion\s+especial\b', r'\blatino\b',
-            r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
-            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b',
+            # Idiomas - con word boundaries estrictas
+            r'\bespanol\s+espana\b',
+            r'\bespanol\s+latino\b',
+            r'\bingles\s+subtitulado\b',  # Específico primero
+            r'\bingles\b(?!\w)',  # Solo si no sigue con letra
+            r'\benglish\b',
+            r'\bsubtitulado\b',
+            r'\bsubtitulada\b',
+            r'\bespanol\b',
+            r'\bspanish\b',
+            r'\blatino\b',
+            
+            # Ediciones - más específicas
+            r'\b(?:deluxe|gold|standard|special|ultimate|premium|complete)\s+edition\b',
+            r'\bcollector\'?s\s+edition\b',
+            r'\bgame\s+of\s+the\s+year\s+edition\b',
+            r'\bgoty\s+edition\b',
+            r'\bedicion\s+(?:deluxe|gold|estandar|especial)\b',
+            
+            # Palabras sueltas al final o con espacios
+            r'\s+(?:edicion|digital|fisico|physical|download|descarga)\s*$',
+            r'\s+(?:edicion|digital|fisico|physical|download|descarga)\s+',
         ]
         
         for patron in patrones_a_eliminar:
-            nombre = re.sub(patron, '', nombre, flags=re.IGNORECASE)
+            nombre_antes = nombre
+            nombre = re.sub(patron, ' ', nombre, flags=re.IGNORECASE)
+            if debug and nombre != nombre_antes:
+                self.stdout.write(f"  [6] Patrón '{patron}' aplicado: '{nombre}'")
         
+        # Paso 7: Ahora sí, eliminar dos puntos
+        nombre = nombre.replace(':', ' ')
+        if debug:
+            self.stdout.write(f"  [7] Sin dos puntos: '{nombre}'")
+        
+        # Paso 8: Limpiar paréntesis y corchetes vacíos
         nombre = re.sub(r'\(\s*\)', '', nombre)
         nombre = re.sub(r'\[\s*\]', '', nombre)
+        if debug:
+            self.stdout.write(f"  [8] Sin paréntesis vacíos: '{nombre}'")
+        
+        # Paso 9: Normalizar espacios
         nombre = re.sub(r'\s+', ' ', nombre)
         nombre = nombre.strip()
+        if debug:
+            self.stdout.write(f"  [9] Espacios normalizados: '{nombre}'")
+        
+        # Paso 10: Eliminar puntuación final
         nombre = re.sub(r'[.,;\s]+$', '', nombre)
+        if debug:
+            self.stdout.write(f"  [10] Final limpio: '{nombre}'")
+        
+        # VERIFICACIÓN DE SEGURIDAD
+        if not nombre or len(nombre) < 2:
+            self.stdout.write(self.style.ERROR(
+                f"\n⚠️  ADVERTENCIA: Nombre quedó muy corto o vacío!\n"
+                f"    Original: '{nombre_original}'\n"
+                f"    Resultado: '{nombre}'\n"
+                f"    Se devolverá el original sin limpiar.\n"
+            ))
+            # Devolver versión mínimamente limpia del original
+            nombre = nombre_original.strip()
+            nombre = re.sub(r'\s+', ' ', nombre)
         
         return nombre
 
@@ -147,7 +291,7 @@ class Command(BaseCommand):
             return juego
         
         # Limpiar también el nombre para búsqueda más flexible
-        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_consola)
+        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_consola, debug=False)
         
         if nombre_muy_limpio != nombre_sin_consola:
             juegos_muy_limpios = Juego.objects.filter(
@@ -178,7 +322,7 @@ class Command(BaseCommand):
                 mejor_ratio = 0.0
 
                 for juego_candidato in juegos_similares:
-                    nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
+                    nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre, debug=False)
                     ratio = SequenceMatcher(None, nombre_muy_limpio.lower(), nombre_juego_limpio.lower()).ratio()
 
                     if ratio > mejor_ratio:
@@ -219,28 +363,138 @@ class Command(BaseCommand):
         recargo = precio + (precio * Decimal('0.10'))
         return recargo.quantize(Decimal('0.01'))
 
+    # catalog/management/commands/actualizar_secundarios.py
+# (solo mostrando la función buscar_imagen mejorada y partes relacionadas)
+
     def buscar_imagen(self, nombre_juego, consola):
-        """Busca la imagen correspondiente al juego"""
-        nombre = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
-        nombre = self.quitar_acentos(nombre.lower())
-        nombre = nombre.replace(f' {consola}', '').strip()
-        nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
-        nombre = nombre.replace(" ", "_")
-        nombre_archivo = f"{nombre}_{consola}.jpg"
-        
+        """Busca la imagen correspondiente al juego - VERSIÓN MEJORADA"""
+        try:
+            # Limpiar el nombre más agresivamente
+            nombre = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
+            nombre = self.quitar_acentos(nombre.lower())
+            
+            # Remover consola del nombre si está presente
+            nombre = nombre.replace(f' {consola}', '').replace(f'{consola}', '').strip()
+            
+            # Limpiar caracteres problemáticos
+            nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
+            nombre = nombre.replace("+", "").replace("#", "").replace("!", "")
+            nombre = nombre.replace("?", "").replace("*", "").replace("/", "")
+            nombre = nombre.replace("\\", "").replace('"', "").replace("|", "")
+            
+            # Primera versión: reemplazar espacios con guiones bajos
+            nombre_archivo1 = f"{nombre.replace(' ', '_')}_{consola}.jpg"
+            
+            # Segunda versión: sin espacios
+            nombre_archivo2 = f"{nombre.replace(' ', '')}_{consola}.jpg"
+            
+            # Tercera versión: solo palabras clave
+            palabras = [p for p in nombre.split() if len(p) > 2 and p not in ['the', 'and', 'del', 'de', 'la', 'el']]
+            nombre_archivo3 = f"{'_'.join(palabras[:4])}_{consola}.jpg" if palabras else None
+            
+            img_dir = os.path.join(settings.BASE_DIR, 'static', 'img')
+            
+            # DEBUG: Mostrar qué estamos buscando
+            self.stdout.write(f"  🔍 Buscando imagen para: '{nombre_juego}'")
+            self.stdout.write(f"  📁 En directorio: {img_dir}")
+            self.stdout.write(f"  🎯 Nombres a buscar: {nombre_archivo1}, {nombre_archivo2}, {nombre_archivo3}")
+            
+            # Verificar si el directorio existe
+            if not os.path.exists(img_dir):
+                self.stdout.write(self.style.ERROR(f"  ❌ Directorio de imágenes no existe: {img_dir}"))
+                return "img/default.jpg"
+            
+            # Listar archivos disponibles (para debug)
+            archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+            self.stdout.write(f"  📂 Archivos en directorio: {len(archivos_existentes)}")
+            
+            # Buscar por nombres exactos primero
+            for nombre_archivo in [nombre_archivo1, nombre_archivo2, nombre_archivo3]:
+                if nombre_archivo and os.path.exists(os.path.join(img_dir, nombre_archivo)):
+                    self.stdout.write(f"  ✅ Encontrada imagen exacta: {nombre_archivo}")
+                    return f"img/{nombre_archivo}"
+            
+            # Buscar case-insensitive
+            archivos_lower = [f.lower() for f in archivos_existentes]
+            
+            for nombre_archivo in [nombre_archivo1, nombre_archivo2, nombre_archivo3]:
+                if nombre_archivo and nombre_archivo.lower() in archivos_lower:
+                    archivo_real = archivos_existentes[archivos_lower.index(nombre_archivo.lower())]
+                    self.stdout.write(f"  ✅ Encontrada imagen (case-insensitive): {archivo_real}")
+                    return f"img/{archivo_real}"
+            
+            # Búsqueda flexible por partes del nombre
+            nombre_busqueda = nombre.replace(' ', '_').lower()
+            
+            for archivo in archivos_existentes:
+                archivo_lower = archivo.lower()
+                archivo_sin_ext = archivo_lower.rsplit('.', 1)[0]
+                
+                # Verificar si el nombre del juego está en el archivo o viceversa
+                if (nombre_busqueda in archivo_sin_ext or 
+                    archivo_sin_ext in nombre_busqueda or
+                    any(palabra in archivo_sin_ext for palabra in nombre_busqueda.split('_') if len(palabra) > 3)):
+                    
+                    self.stdout.write(f"  ✅ Encontrada imagen flexible: {archivo}")
+                    return f"img/{archivo}"
+            
+            # Búsqueda por similitud para casos como "Terraria"
+            nombre_simplificado = re.sub(r'[_\-\d\s]+', '', nombre).lower()
+            
+            for archivo in archivos_existentes:
+                archivo_sin_ext = re.sub(r'[_\-\d\s]+', '', archivo.lower().rsplit('.', 1)[0])
+                
+                if nombre_simplificado in archivo_sin_ext or archivo_sin_ext in nombre_simplificado:
+                    self.stdout.write(f"  ✅ Encontrada imagen por similitud: {archivo}")
+                    return f"img/{archivo}"
+            
+            self.stdout.write(self.style.WARNING(f"  ⚠️  No se encontró imagen, usando default"))
+            return "img/default.jpg"
+            
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"  ❌ Error buscando imagen: {str(e)}"))
+            return "img/default.jpg"
+
+    def verificar_imagenes_problema(self, juegos_procesados):
+        """Verificación especial para imágenes problemáticas"""
         img_dir = os.path.join(settings.BASE_DIR, 'static', 'img')
+        problemas = []
         
-        if os.path.exists(os.path.join(img_dir, nombre_archivo)):
-            return f"img/{nombre_archivo}"
+        for juego_info in juegos_procesados:
+            nombre_juego = juego_info['nombre']
+            imagen_actual = juego_info.get('imagen', '')
+            
+            # Verificar si la imagen existe físicamente
+            if imagen_actual and imagen_actual != "img/default.jpg":
+                ruta_imagen = os.path.join(settings.BASE_DIR, 'static', imagen_actual.replace('img/', ''))
+                if not os.path.exists(ruta_imagen):
+                    problemas.append({
+                        'juego': nombre_juego,
+                        'imagen_referenciada': imagen_actual,
+                        'problema': 'ARCHIVO NO EXISTE',
+                        'ruta_buscada': ruta_imagen
+                    })
+            
+            # Verificar si está usando default.jpg pero debería tener imagen
+            elif imagen_actual == "img/default.jpg":
+                # Intentar buscar manualmente
+                nombres_posibles = self.generar_nombres_sugeridos(nombre_juego, juego_info['consola'])
+                archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
+                
+                encontrados = []
+                for nombre_posible in nombres_posibles:
+                    if nombre_posible.lower() in [f.lower() for f in archivos_existentes]:
+                        encontrados.append(nombre_posible)
+                
+                if encontrados:
+                    problemas.append({
+                        'juego': nombre_juego,
+                        'imagen_referenciada': imagen_actual,
+                        'problema': 'USANDO DEFAULT PERO EXISTE IMAGEN',
+                        'imagenes_encontradas': encontrados
+                    })
         
-        archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
-        archivos_lower = [f.lower() for f in archivos_existentes]
-        
-        if nombre_archivo.lower() in archivos_lower:
-            archivo_real = archivos_existentes[archivos_lower.index(nombre_archivo.lower())]
-            return f"img/{archivo_real}"
-        
-        return "img/default.jpg"
+        return problemas
 
     def verificar_portadas_faltantes(self, juegos_procesados):
         """Verifica qué juegos no tienen portada y sugiere nombres de archivo"""
@@ -252,11 +506,9 @@ class Command(BaseCommand):
             consola = juego_info['consola']
             imagen_actual = juego_info.get('imagen', '')
             
-            # Si ya tiene imagen y no es default, saltar
             if imagen_actual and imagen_actual != "img/default.jpg":
                 continue
             
-            # Generar nombres sugeridos para portada
             nombres_sugeridos = self.generar_nombres_sugeridos(nombre_juego, consola)
             
             portadas_faltantes.append({
@@ -270,41 +522,59 @@ class Command(BaseCommand):
 
     def generar_nombres_sugeridos(self, nombre_juego, consola):
         """Genera nombres de archivo sugeridos para las portadas"""
-        # Limpiar el nombre para el archivo
         nombre_limpio = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
         nombre_limpio = self.quitar_acentos(nombre_limpio.lower())
         nombre_limpio = nombre_limpio.replace(f' {consola}', '').strip()
         
-        # Variaciones del nombre
         variaciones = []
         
-        # 1. Nombre básico con consola
         basico = nombre_limpio.replace("'", "").replace(":", "").replace("&", "and")
         basico = basico.replace(" ", "_")
         variaciones.append(f"{basico}_{consola}.jpg")
         
-        # 2. Nombre sin artículos
         sin_articulos = re.sub(r'\b(the|a|an|el|la|los|las|un|una|unos|unas)\b', '', nombre_limpio, flags=re.IGNORECASE)
         sin_articulos = re.sub(r'\s+', ' ', sin_articulos).strip()
         sin_articulos = sin_articulos.replace(" ", "_")
         variaciones.append(f"{sin_articulos}_{consola}.jpg")
         
-        # 3. Nombre muy limpio (sin ediciones especiales)
         muy_limpio = re.sub(r'\b(deluxe|gold|standard|special|collector\'s|ultimate|premium|complete|edition|edicion|goty|game of the year)\b', '', nombre_limpio, flags=re.IGNORECASE)
         muy_limpio = re.sub(r'\s+', ' ', muy_limpio).strip()
         muy_limpio = muy_limpio.replace(" ", "_")
         if muy_limpio and muy_limpio != basico:
             variaciones.append(f"{muy_limpio}_{consola}.jpg")
         
-        # 4. Solo palabras clave (primeras 3-4 palabras)
         palabras = nombre_limpio.split()
         if len(palabras) > 3:
             clave = "_".join(palabras[:3])
             variaciones.append(f"{clave}_{consola}.jpg")
         
-        return variaciones[:5]  # Máximo 5 sugerencias
+        return variaciones[:5]
 
     def handle(self, *args, **options):
+        # Si solo se solicita corrección de precios
+        if options['corregir_precios']:
+            dry_run = options['dry_run']
+            corregidos, errores = self.corregir_precios_secundarios(dry_run)
+            
+            # Resumen de corrección
+            self.stdout.write(self.style.SUCCESS(f'\n{"="*60}'))
+            self.stdout.write(self.style.SUCCESS('📊 RESUMEN DE CORRECCIÓN'))
+            self.stdout.write(self.style.SUCCESS(f'{"="*60}'))
+            
+            if dry_run:
+                self.stdout.write(self.style.WARNING(f'🔍 MODO SIMULACIÓN - No se hicieron cambios reales'))
+            
+            self.stdout.write(self.style.SUCCESS(f'✅ Juegos corregidos: {corregidos}'))
+            
+            if errores > 0:
+                self.stdout.write(self.style.ERROR(f'❌ Errores: {errores}'))
+            
+            if dry_run:
+                self.stdout.write(self.style.WARNING(f'\n💡 Ejecuta sin --dry-run para aplicar los cambios'))
+            
+            return
+        
+        # Proceso normal de actualización de secundarios
         csv_filename = options['file']
         csv_path = os.path.join(settings.BASE_DIR, csv_filename)
         col_nombre = options['columna_nombre']
@@ -312,6 +582,7 @@ class Command(BaseCommand):
         col_disponible = options['columna_disponible']
         consola = options['consola'].lower()
         solo_actualizar = options['solo_actualizar']
+        debug = options.get('debug', False)
         
         if not os.path.exists(csv_path):
             self.stdout.write(self.style.ERROR(f'No se encontró {csv_path}'))
@@ -325,7 +596,7 @@ class Command(BaseCommand):
         reactivados = 0
         convertidos_a_solo_secundario = 0
         secundarios_ids = []
-        juegos_procesados = []  # ⭐ NUEVO: Para trackear juegos procesados
+        juegos_procesados = []
         
         try:
             with open(csv_path, 'r', encoding='utf-8-sig') as file:
@@ -368,9 +639,14 @@ class Command(BaseCommand):
                             self.stdout.write(self.style.WARNING(f'⏭️  OMITIDO (no disponible): {nombre_sucio}'))
                             continue
                         
-                        nombre_limpio = self.limpiar_nombre_avanzado(nombre_sucio)
+                        if debug:
+                            self.stdout.write(f"\n{'='*60}")
+                            self.stdout.write(f"🔍 DEBUG - Limpieza de: '{nombre_sucio}'")
+                        
+                        nombre_limpio = self.limpiar_nombre_avanzado(nombre_sucio, debug=debug)
                         
                         if not nombre_limpio or len(nombre_limpio) < 3:
+                            self.stdout.write(self.style.ERROR(f'⚠️  Nombre muy corto después de limpiar: "{nombre_sucio}" -> "{nombre_limpio}"'))
                             continue
                         
                         nombre_upper = nombre_limpio.upper()
@@ -387,8 +663,9 @@ class Command(BaseCommand):
                             consola_real = consola
                             nombre_busqueda = f"{nombre_limpio} {consola.upper()}"
                         
-                        self.stdout.write(f"\n{'='*60}")
-                        self.stdout.write(f"PROCESANDO: '{nombre_sucio}' -> '{nombre_busqueda}'")
+                        if not debug:
+                            self.stdout.write(f"\n{'='*60}")
+                            self.stdout.write(f"PROCESANDO: '{nombre_sucio}' -> '{nombre_busqueda}'")
                         
                         precio_str = row.get(col_precio, '').strip()
                         precio_secundario = self.limpiar_precio(precio_str)
@@ -397,6 +674,13 @@ class Command(BaseCommand):
                         juego_existente = self.buscar_juego_similar(nombre_busqueda, consola_real)
                         
                         if juego_existente:
+                            # ⭐ ACTUALIZAR IMAGEN si está en default
+                            if juego_existente.imagen == "img/default.jpg" or not juego_existente.imagen:
+                                nueva_imagen = self.buscar_imagen(nombre_busqueda, consola_real)
+                                if nueva_imagen != "img/default.jpg":
+                                    juego_existente.imagen = nueva_imagen
+                                    self.stdout.write(f"  🖼️  Imagen actualizada: {nueva_imagen}")
+                            
                             if juego_existente.precio == Decimal('0.0'):
                                 self.stdout.write(f"  ⚡ Juego con precio primario 0 - Marcando como solo secundario")
                                 
@@ -425,7 +709,6 @@ class Command(BaseCommand):
                             secundarios_ids.append(juego_existente.id)
                             actualizados_existentes += 1
                             
-                            # ⭐ NUEVO: Agregar a juegos procesados para verificación de portadas
                             juegos_procesados.append({
                                 'nombre': juego_existente.nombre,
                                 'consola': consola_real,
@@ -447,23 +730,23 @@ class Command(BaseCommand):
                             nombre_con_identificador = f"{nombre_busqueda} (SECUNDARIO)"
                             imagen = self.buscar_imagen(nombre_busqueda, consola_real)
                             
+                            # ⭐ CORREGIDO: Guardar precio en el campo correcto
                             nuevo_juego = Juego.objects.create(
                                 nombre=nombre_con_identificador,
-                                precio=precio_secundario,
-                                recargo=recargo_secundario,
+                                precio=0,  # Precio primario en 0
+                                recargo=0,
                                 consola=consola_real,
                                 disponible=True,
                                 imagen=imagen,
                                 es_solo_secundario=True,
-                                precio_secundario=None,
-                                recargo_secundario=None,
+                                precio_secundario=precio_secundario,  # ✅ AQUÍ va el precio
+                                recargo_secundario=recargo_secundario,  # ✅ AQUÍ va el recargo
                                 tiene_secundario=False
                             )
                             
                             secundarios_ids.append(nuevo_juego.id)
                             creados_nuevos += 1
                             
-                            # ⭐ NUEVO: Agregar a juegos procesados para verificación de portadas
                             juegos_procesados.append({
                                 'nombre': nuevo_juego.nombre,
                                 'consola': consola_real,
@@ -508,7 +791,7 @@ class Command(BaseCommand):
             desactivados_secundario_count = 0
             desactivados_solo_secundario = 0
         
-        # ⭐ CAMBIO: Verificar portadas faltantes SIEMPRE (sin condición de mostrar_portadas)
+        # Verificar portadas faltantes
         if juegos_procesados:
             portadas_faltantes = self.verificar_portadas_faltantes(juegos_procesados)
             
@@ -537,7 +820,6 @@ class Command(BaseCommand):
         self.stdout.write(self.style.ERROR(f'🔴 Secundarios puros desactivados: {desactivados_solo_secundario}'))
         self.stdout.write(self.style.WARNING(f'⏭️  Juegos omitidos (no disponibles en CSV): {omitidos_no_disponibles}'))
         
-        # ⭐ CAMBIO: Mostrar siempre el conteo de portadas faltantes
         if juegos_procesados:
             portadas_faltantes_count = len(self.verificar_portadas_faltantes(juegos_procesados))
             self.stdout.write(self.style.WARNING(f'🖼️  Portadas faltantes detectadas: {portadas_faltantes_count}'))

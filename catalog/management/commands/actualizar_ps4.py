@@ -50,11 +50,11 @@ class Command(BaseCommand):
         
         return texto_sin_acentos
 
-    def limpiar_nombre_avanzado(self, nombre):
+    def limpiar_nombre_avanzado(self, nombre, debug=False):
         """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
         if not nombre:
             return ""
-        
+
         # ⭐ NUEVO: Primero quitar acentos y diacríticos
         nombre = self.quitar_acentos(nombre)
             
@@ -114,7 +114,7 @@ class Command(BaseCommand):
         # Primero intenta búsqueda exacta sin "PS4"
         nombre_sin_ps4 = nombre_limpio.replace(' PS4', '').strip()
         
-        # Buscar coincidencias exactas
+        # 1. Buscar coincidencias EXACTAS (case insensitive)
         juegos_exactos = Juego.objects.filter(
             nombre__iexact=nombre_limpio,
             consola='ps4'
@@ -122,53 +122,62 @@ class Command(BaseCommand):
         if juegos_exactos.exists():
             return juegos_exactos.first()
         
-        # Buscar por nombre sin "PS4"
-        juegos_sin_ps4 = Juego.objects.filter(
-            nombre__icontains=nombre_sin_ps4,
+        # 2. Buscar sin "PS4" pero EXACTO
+        juegos_sin_ps4_exacto = Juego.objects.filter(
+            nombre__iexact=nombre_sin_ps4,
             consola='ps4'
         )
-        if juegos_sin_ps4.exists():
-            return juegos_sin_ps4.first()
+        if juegos_sin_ps4_exacto.exists():
+            return juegos_sin_ps4_exacto.first()
         
-        # Limpiar también el nombre para búsqueda más flexible
+        # 3. Limpiar el nombre de la BD también antes de comparar
         nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_ps4)
         
-        # Buscar por nombre muy limpio
-        if nombre_muy_limpio != nombre_sin_ps4:
-            juegos_muy_limpios = Juego.objects.filter(
-                nombre__icontains=nombre_muy_limpio,
-                consola='ps4'
+        # 4. Obtener TODOS los juegos PS4 y compararlos uno por uno
+        todos_juegos_ps4 = Juego.objects.filter(consola='ps4')
+        
+        mejor_coincidencia = None
+        mejor_ratio = 0.0
+        
+        for juego_candidato in todos_juegos_ps4:
+            # Limpiar el nombre del candidato de la BD
+            nombre_candidato_limpio = self.limpiar_nombre_avanzado(
+                juego_candidato.nombre.replace(' PS4', '')
             )
-            if juegos_muy_limpios.exists():
-                return juegos_muy_limpios.first()
+            
+            # Calcular similitud
+            ratio = SequenceMatcher(
+                None, 
+                nombre_muy_limpio.lower(), 
+                nombre_candidato_limpio.lower()
+            ).ratio()
+            
+            # Debug: mostrar comparación
+            if ratio > 0.7:  # Solo mostrar candidatos prometedores
+                self.stdout.write(
+                    f"  Comparando: '{nombre_muy_limpio}' vs '{nombre_candidato_limpio}' = {ratio:.2f}"
+                )
+            
+            if ratio > mejor_ratio:
+                mejor_ratio = ratio
+                mejor_coincidencia = juego_candidato
         
-        # Buscar por palabras clave (las primeras 3-4 palabras)
-        palabras_clave = nombre_muy_limpio.split()[:4]
-        query = None
-        for palabra in palabras_clave:
-            if len(palabra) > 3:
-                if query is None:
-                    query = models.Q(nombre__icontains=palabra)
-                else:
-                    query |= models.Q(nombre__icontains=palabra)
+        # Solo aceptar coincidencias MUY similares (umbral más alto)
+        if mejor_ratio >= 0.90:  # ✅ Aumentado de 0.85 a 0.90
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"✓ MATCH encontrado: '{mejor_coincidencia.nombre}' (similitud: {mejor_ratio:.2f})"
+                )
+            )
+            return mejor_coincidencia
+        elif mejor_ratio > 0.7:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"⚠ Match rechazado (muy bajo): '{mejor_coincidencia.nombre if mejor_coincidencia else 'N/A'}' (similitud: {mejor_ratio:.2f})"
+                )
+            )
         
-        if query:
-            juegos_similares = Juego.objects.filter(query, consola='ps4')
-            mejor_coincidencia = None
-            mejor_ratio = 0.0
-
-            for juego_candidato in juegos_similares:
-                # ⭐ NUEVO: Limpiar también el nombre del candidato para mejor comparación
-                nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre)
-                ratio = SequenceMatcher(None, nombre_muy_limpio.lower(), nombre_juego_limpio.lower()).ratio()
-
-                if ratio > mejor_ratio:
-                    mejor_ratio = ratio
-                    mejor_coincidencia = juego_candidato
-
-            # Solo aceptar coincidencias si son MUY similares (por ejemplo > 0.85)
-            if mejor_ratio > 0.85:
-                return mejor_coincidencia
+        return None
 
     def limpiar_precio(self, precio_str):
         """Convierte string con precio a Decimal - FORMATO ARGENTINO"""
