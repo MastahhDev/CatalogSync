@@ -12,7 +12,7 @@
     <div class="cart-item-details">
         <h6 class="cart-item-name">{{ item.juego.nombre }}</h6>
         
-        <!-- ⭐ NUEVO: Badge de tipo de precio -->
+        <!-- Badge de tipo de precio -->
         {% if item.tipo_precio == 'secundario' %}
             <span class="badge bg-info">🔵 Secundario</span>
         {% else %}
@@ -20,19 +20,30 @@
         {% endif %}
         
         <div class="cart-item-price">
-            <span class="price-base text-muted text-decoration-line-through">
-                ${{ item.precio_base|floatformat:0 }}
-            </span>
-            <span class="price-final fw-bold">
-                ${{ item.precio_final|floatformat:0 }}
-            </span>
+            <!-- Precio principal (el que se cobra) -->
+            {% if item.precio and item.precio > 0 %}
+                <span class="price-main fw-bold">
+                    ${{ item.precio|floatformat:0 }}
+                </span>
+            {% else %}
+                <span class="price-main fw-bold text-danger">
+                    Precio no disponible
+                </span>
+            {% endif %}
+            
+            <!-- Precio con recargo (tachado, solo si existe) -->
+            {% if item.precio_recargo and item.precio_recargo > 0 %}
+                <span class="price-recargo text-muted text-decoration-line-through">
+                    ${{ item.precio_recargo|floatformat:0 }}
+                </span>
+            {% endif %}
         </div>
         
         <div class="cart-item-quantity">
             <button class="btn btn-sm btn-outline-secondary"
                     hx-post="{% url 'carrito:actualizar' item.item_key %}"
                     hx-vals='{"cantidad": {{ item.cantidad|add:"-1" }}}'
-                    hx-target=".cart-content"
+                    hx-target="#carrito-items-container"
                     hx-swap="innerHTML">
                 <i class="fas fa-minus"></i>
             </button>
@@ -42,7 +53,7 @@
             <button class="btn btn-sm btn-outline-secondary"
                     hx-post="{% url 'carrito:actualizar' item.item_key %}"
                     hx-vals='{"cantidad": {{ item.cantidad|add:"1" }}}'
-                    hx-target=".cart-content"
+                    hx-target="#carrito-items-container"
                     hx-swap="innerHTML">
                 <i class="fas fa-plus"></i>
             </button>
@@ -55,7 +66,7 @@
     
     <button class="btn btn-sm btn-danger cart-item-remove"
             hx-post="{% url 'carrito:eliminar' item.item_key %}"
-            hx-target=".cart-content"
+            hx-target="#carrito-items-container"
             hx-swap="innerHTML"
             title="Eliminar">
         <i class="fas fa-trash"></i>
@@ -66,7 +77,7 @@
 <div class="cart-total">
     <div class="d-flex justify-content-between align-items-center">
         <h5>Total:</h5>
-        <h4 class="text-primary">${{ total_price|floatformat:0 }}</h4>
+        <h4 class="text-primary fw-bold">${{ total_price|floatformat:0 }}</h4>
     </div>
     
     <button class="btn btn-success w-100 mt-3"
@@ -78,12 +89,17 @@
     
     <button class="btn btn-outline-danger w-100 mt-2"
             hx-post="{% url 'carrito:vaciar' %}"
-            hx-target=".cart-content"
+            hx-target="#carrito-items-container"
             hx-swap="innerHTML"
             hx-confirm="¿Estás seguro de vaciar el carrito?">
         <i class="fas fa-trash"></i> Vaciar carrito
     </button>
 </div>
+
+<!-- ⭐ ACTUALIZAR BADGE DEL CARRITO -->
+<span id="carrito-badge" class="badge bg-danger rounded-pill" hx-swap-oob="true">
+    {{ total_items }}
+</span>
 
 <style>
 .cart-item {
@@ -119,13 +135,13 @@
     margin: 5px 0;
 }
 
-.price-base {
-    font-size: 0.85rem;
+.price-main {
+    font-size: 1.1rem;
+    color: #28a745;
 }
 
-.price-final {
-    font-size: 1.1rem;
-    color: #2c3e50;
+.price-recargo {
+    font-size: 0.85rem;
 }
 
 .cart-item-quantity {
@@ -158,22 +174,9 @@
     background: #f8f9fa;
 }
 
-/* Badge de tipo de precio */
 .badge {
     font-size: 0.7rem;
     padding: 3px 8px;
     margin: 5px 0;
 }
 </style>
-
-<script>
-// Formatear precios con separadores de miles
-document.querySelectorAll('.price-final, .cart-item-subtotal strong, .cart-total h4').forEach(el => {
-    let text = el.textContent.trim();
-    if (text.includes('$')) {
-        let price = text.replace(/[^\d]/g, '');
-        el.textContent = '$' + parseInt(price).toLocaleString('es-AR');
-    }
-});
-</script>
-

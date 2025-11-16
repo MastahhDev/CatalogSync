@@ -1,11 +1,68 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'css/carrusel.css' %}?v={{ now|date:'U' }}">
     <main class="container py-5">
         <section class="card card-body">
             <h1 class="display-1 text-center">ProshopGames</h1>
             <p class="text-center">Catalogo digital de juegos PS4 y PS5</p>
             <p class="text-center">Podes ver los juegos disponibles, o mandanos un mensaje en nuestras redes sociales!</p>
+
+            <!-- Carrusel de Destacados -->
+            <div class="destacados-section mb-5">
+                <h2 class="display-1 text-center">Juegos destacados</h1>
+                <div class="carrusel-container">
+                    <div class="carrusel-wrapper">
+                        {% for juego in juegos %}
+                            {% if juego.destacado %}
+                                <a href="{% url 'catalogo:detalle' slug=juego.get_slug %}" style="text-decoration: none; color: inherit;">
+                                    <div class="juego-card-mini">
+                                        <span class="badge-destacado-mini">★</span>
+                                        
+                                        <div class="juego-imagen-wrapper-mini">
+                                            <img src="{% static juego.imagen %}" 
+                                                alt="{{ juego.nombre }}" 
+                                                class="juego-imagen-mini"
+                                                onerror="this.onerror=null; this.src='/static/img/default.png'">
+                                        </div>
+                                        
+                                        <div class="juego-info-mini">
+                                            <h6 class="juego-nombre-mini">{{ juego.nombre }}</h6>
+                                            
+                                            {% if juego.es_solo_secundario %}
+                                                {% if juego.precio_secundario and juego.precio_secundario > 0 %}
+                                                    <p class="juego-precio-mini">${{ juego.precio_secundario|floatformat:0 }}</p>
+                                                {% elif juego.precio and juego.precio > 0 %}
+                                                    <p class="juego-precio-mini">${{ juego.precio|floatformat:0 }}</p>
+                                                {% else %}
+                                                    <p class="juego-precio-mini text-muted">Consultar</p>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if juego.precio and juego.precio > 0 %}
+                                                    <p class="juego-precio-mini">${{ juego.precio|floatformat:0 }}</p>
+                                                {% else %}
+                                                    <p class="juego-precio-mini text-muted">Consultar</p>
+                                                {% endif %}
+                                            {% endif %}
+                                            
+                                            <button class="btn btn-primary btn-xs w-100"
+                                                    hx-post="{% url 'carrito:agregar' juego.id %}"
+                                                    hx-target="body"
+                                                    hx-swap="none"
+                                                    onclick="event.stopPropagation(); event.preventDefault();">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
             <h3 class="display-1 text-center">Catalogos</h3>
             <div class="text-center">
                 <a class="btn btn-dark" href="/catalogo/ps4/">

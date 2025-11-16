@@ -11,6 +11,7 @@ class Juego(models.Model):
     
     nombre = models.CharField(max_length=200)
     consola = models.CharField(max_length=10, choices=CONSOLAS)
+    destacado = models.BooleanField(default=False)
     descripcion = models.TextField(
         blank=True, 
         null=True,

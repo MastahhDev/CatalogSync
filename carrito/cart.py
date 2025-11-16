@@ -1,4 +1,4 @@
-# carrito/cart.py
+# carrito/cart.py - VERSIÓN CORRECTA
 from decimal import Decimal
 from catalog.models import Juego
 
@@ -16,49 +16,61 @@ class Cart:
     def add(self, juego_id, tipo_precio='primario', cantidad=1):
         """
         Agrega un juego al carrito con el tipo de precio especificado.
-        
-        Args:
-            juego_id: ID del juego
-            tipo_precio: 'primario' o 'secundario'
-            cantidad: cantidad a agregar (default 1)
         """
         juego_id = str(juego_id)
         tipo_precio = str(tipo_precio)
         
-        # Crear clave única: juego_id + tipo de precio
-        # Esto permite tener el mismo juego con diferentes precios
+        # Crear clave única
         item_key = f"{juego_id}_{tipo_precio}"
         
         if item_key not in self.cart:
-            # Obtener el juego de la base de datos
             try:
                 juego = Juego.objects.get(id=juego_id)
             except Juego.DoesNotExist:
                 return False
             
-            # Determinar precio según el tipo
+            # 🔧 LÓGICA CORRECTA:
+            # - precio = precio BASE (sin recargo) → el que se cobra
+            # - recargo = precio CON recargo (+10%) → va tachado
+            
             if tipo_precio == 'secundario':
-                if juego.tiene_secundario and juego.precio_secundario:
-                    # Tiene precio secundario disponible
-                    precio_base = float(juego.precio_secundario)
-                    precio_final = float(juego.recargo_secundario)
+                # Caso 1: Juego que SOLO existe como secundario (prioridad)
+                if juego.es_solo_secundario:
+                    # Primero intentar con precio_secundario
+                    if juego.precio_secundario is not None and juego.precio_secundario > 0:
+                        precio_cobrar = float(juego.precio_secundario)
+                        precio_recargo = float(juego.recargo_secundario) if juego.recargo_secundario and juego.recargo_secundario > 0 else 0
+                        etiqueta = "Secundario"
+                    # Fallback a precio normal
+                    elif juego.precio is not None and juego.precio > 0:
+                        precio_cobrar = float(juego.precio)
+                        precio_recargo = float(juego.recargo) if juego.recargo and juego.recargo > 0 else 0
+                        etiqueta = "Secundario"
+                    else:
+                        return False
+                # Caso 2: Juego con precio secundario disponible
+                elif juego.tiene_secundario and juego.precio_secundario is not None and juego.precio_secundario > 0:
+                    precio_cobrar = float(juego.precio_secundario)
+                    precio_recargo = float(juego.recargo_secundario) if juego.recargo_secundario and juego.recargo_secundario > 0 else 0
                     etiqueta = "Secundario"
-                elif juego.es_solo_secundario:
-                    # Es un juego solo secundario
-                    precio_base = float(juego.precio)
-                    precio_final = float(juego.recargo)
-                    etiqueta = "Secundario"
-                else:
-                    # No tiene secundario, usar primario
-                    precio_base = float(juego.precio)
-                    precio_final = float(juego.recargo)
+                # Caso 3: No tiene secundario, fallback a primario
+                elif juego.precio is not None and juego.precio > 0:
+                    precio_cobrar = float(juego.precio)
+                    precio_recargo = float(juego.recargo) if juego.recargo and juego.recargo > 0 else 0
                     etiqueta = "Primario"
-                    tipo_precio = 'primario'  # Corregir tipo
+                    tipo_precio = 'primario'
+                else:
+                    # Sin precio válido
+                    return False
             else:
                 # Precio primario (por defecto)
-                precio_base = float(juego.precio)
-                precio_final = float(juego.recargo)
-                etiqueta = "Primario"
+                if juego.precio is not None and juego.precio > 0:
+                    precio_cobrar = float(juego.precio)
+                    precio_recargo = float(juego.recargo) if juego.recargo and juego.recargo > 0 else 0
+                    etiqueta = "Primario"
+                else:
+                    # Sin precio válido
+                    return False
             
             # Crear item en el carrito
             self.cart[item_key] = {
@@ -66,8 +78,8 @@ class Cart:
                 'tipo_precio': tipo_precio,
                 'etiqueta': etiqueta,
                 'cantidad': cantidad,
-                'precio_base': precio_base,
-                'precio_final': precio_final,
+                'precio': precio_cobrar,          # Precio real a cobrar
+                'precio_recargo': precio_recargo, # Precio con recargo (tachado)
             }
         else:
             # Si ya existe, incrementar cantidad
@@ -102,10 +114,7 @@ class Cart:
         self.save()
     
     def get_items(self):
-        """
-        Retorna una lista de items del carrito con información completa.
-        Cada item incluye el objeto Juego y los datos del carrito.
-        """
+        """Retorna una lista de items del carrito con información completa."""
         items = []
         juego_ids = [item['juego_id'] for item in self.cart.values()]
         
@@ -119,26 +128,28 @@ class Cart:
             if juego_id in juegos_dict:
                 juego = juegos_dict[juego_id]
                 
+                precio = Decimal(str(item_data.get('precio', 0)))
+                precio_recargo = Decimal(str(item_data.get('precio_recargo', 0)))
+                cantidad = item_data.get('cantidad', 1)
+                
                 items.append({
                     'item_key': item_key,
                     'juego': juego,
                     'juego_id': juego_id,
-                    'tipo_precio': item_data['tipo_precio'],
-                    'etiqueta': item_data['etiqueta'],
-                    'cantidad': item_data['cantidad'],
-                    'precio_base': Decimal(str(item_data['precio_base'])),
-                    'precio_final': Decimal(str(item_data['precio_final'])),
-                    'subtotal': Decimal(str(item_data['precio_final'])) * item_data['cantidad'],
+                    'tipo_precio': item_data.get('tipo_precio', 'primario'),
+                    'etiqueta': item_data.get('etiqueta', 'Primario'),
+                    'cantidad': cantidad,
+                    'precio': precio,                    # Precio real a cobrar
+                    'precio_recargo': precio_recargo,    # Precio con recargo (tachado)
+                    'subtotal': precio * cantidad,       # Subtotal con precio base
                 })
         
         return items
     
     def get_total_price(self):
-        """Calcula el precio total del carrito"""
-        return sum(
-            Decimal(str(item['precio_final'])) * item['cantidad'] 
-            for item in self.cart.values()
-        )
+        """Calcula el precio total del carrito (usando precio base)"""
+        items = self.get_items()
+        return sum(item['subtotal'] for item in items)
     
     def get_total_items(self):
         """Retorna el total de items (suma de cantidades)"""

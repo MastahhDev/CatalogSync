@@ -37,6 +37,7 @@ NEW_APPS = [
     'questions',
     'catalog',
     'carrito',
+    'django_extensions'
 ]
 
 INSTALLED_APPS = BASIC_APPS + NEW_APPS

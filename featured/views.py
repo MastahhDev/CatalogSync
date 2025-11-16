@@ -1,9 +1,20 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
+from catalog.models import Juego
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    # Obtener solo los juegos destacados y disponibles
+    juegos_destacados = Juego.objects.filter(
+        destacado=True,
+        disponible=True
+    ).order_by('-fecha_actualizacion')[:10]  # Máximo 10 destacados
+    
+    context = {
+        'juegos': juegos_destacados,  # Para el carrusel
+    }
+    
+    return render(request, 'home.html', context)
 
 def featured(request):
     return render(request, 'featured.html')
