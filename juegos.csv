@@ -95,7 +95,7 @@ Black Myth Wukong PS5, "RPG de acción basado en la mitología china", RPG, 0
 Castle Crashers Remastered PS4, "Beat ‘em up cooperativo con humor y estilo cartoon.", Cartoon, 0
 Call of duty Black Ops III Zombies Edition PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
 Call of duty Black Ops III Zombies Chronicles Edition PS4, "Shooter futurista enfocado en modo zombies", Shooter, 0
-Call of duty Black Ops 3 PS5, "Shooter futurista enfocado en modo zombies", Shooter, 0
+Call of duty Black Ops 3 Zombies Edition PS5, "Shooter futurista enfocado en modo zombies", Shooter, 0
 Call Of Duty Black Ops 4 PS4, "Shooter multijugador sin campaña individual", Shooter, 0
 Call Of Duty Black Ops 4 PS5, "Shooter multijugador sin campaña individual", Shooter, 0
 Call of Duty Black Ops 6 PS4, "Nueva entrega de la saga Black Ops", Shooter, 1
@@ -139,7 +139,7 @@ Crash Bandicoot Crashiversary Bundle Crash Trilogy + Crash 4 + Crash Team Racing
 Crash Team Racing Nitro Fueled + Spyro Game Bundle PS4, "Carreras de Crash y aventura de Spyro", Racing, 0
 Crash Team Racing Nitro Fueled + Spyro Game Bundle PS5, "Carreras de Crash y aventura de Spyro", Racing, 0
 Crash + Spyro Triple Play Bundle PS4, "Bundle con juegos de Crash y Spyro", Plataformas, 0
-Crash + Spyro Triple Play Bundle PS5, "Bundle con juegos de Crash y Spyro", Plataformas, 0
+Crash + Spyro Triple Play Bundle Crash Trilogy + Spyro Trilogy PS5, "Bundle con juegos de Crash y Spyro", Plataformas, 0
 Cuphead PS4, "Run and gun estilo cartoon de los años 30", Plataformas, 0
 Cuphead & The Delicious Last Course PS4, "Run and gun estilo cartoon de los años 30", Plataformas, 0
 Cuphead PS5, "Run and gun estilo cartoon de los años 30", Plataformas, 0
@@ -218,11 +218,11 @@ DEATH STRANDING PS4, "Juego de mundo abierto y accion", Accion, 0
 DEATH STRANDING PS5, "Juego de mundo abierto y accion", Accion, 0
 Demon Slayer The Hinokami Chronicles PS4, "Juego de lucha basado en el anime", Lucha, 0
 Demon Slayer Kimetsu no Yaiba The Hinokami Chronicles PS4, "Peleas cinemáticas basadas en el anime de Kimetsu no Yaiba", Lucha, 0
-Demon Slayer The Hinokami Chronicles PS5, "Juego de lucha basado en el anime", Lucha, 0
+Demon Slayer Kimetsu no Yaiba The Hinokami Chronicles PS5, "Juego de lucha basado en el anime", Lucha, 0
 Dead by Daylight PS4, "Survival horror multijugador asimétrico", Terror, 0
 Dead by Daylight PS5, "Survival horror multijugador asimétrico", Terror, 0
 Dead Island Riptide Edition PS4, "Acción cooperativa contra zombies en isla tropical", Acción, 0
-Dead Island Riptide Edition PS5, "Acción cooperativa contra zombies en isla tropical", Acción, 0
+Dead Island Riptide Definitive Edition PS5, "Acción cooperativa contra zombies en isla tropical", Acción, 0
 Descenders PS4, "Roguelike de descensos en bicicleta", Deportes, 0
 Descenders PS5, "Roguelike de descensos en bicicleta", Deportes, 0
 EA FC 26 PS4, "Próxima entrega de EA Sports FC", Deportes, 1
@@ -410,7 +410,7 @@ Marvels Spider Man Edition PS4, "Aventura de superhéroes con combates y explora
 Mass Effect Andromeda Standard Recruit Edition PS4, "RPG espacial con exploración y decisiones narrativas", Rol, 0
 Marvels Spider Man G.O.T.Y PS4, "Aventura del Hombre Araña en Nueva York", Acción, 0
 MADiSON PS4, "Terror psicológico en primera persona con puzzles y sustos intensos", Terror, 0
-Marvels Spider Man PS5, "Aventura del Hombre Araña en Nueva York", Acción, 0
+Marvels Spider Man Edition PS5, "Aventura del Hombre Araña en Nueva York", Acción, 0
 Marvels Spider Man Miles Morales PS4, "Aventura de Miles Morales como Spider-Man", Acción, 0
 Marvels Spider Man Miles Morales PS5, "Aventura de Miles Morales como Spider-Man", Acción, 0
 Marvel's Spider Man 2 PS5, "Secuela con Peter y Miles juntos", Acción, 0
@@ -442,6 +442,7 @@ Monster Energy Supercross The Official Videogame 6 PS5, "Sexta entrega del simul
 Monster Hunter Rise PS4, "acción y caza cooperativa en un mundo lleno de monstruos gigantes y armas personalizables.", Caza, 0
 Monster Hunter Rise PS5, "acción y caza cooperativa en un mundo lleno de monstruos gigantes y armas personalizables.", Caza, 0
 Mortal Kombat 11 Audio Ingles PS5, "Juego de lucha brutal subtitulado", Lucha, 0
+Mortal Kombat 11 Ultimate Audio Ingles PS5, "Juego de lucha brutal subtitulado", Lucha, 0
 Mortal Kombat 11 Subtitulado PS4, "Juego de lucha brutal subtitulado", Lucha, 0
 Mortal Kombat 11 Subtitulado PS5, "Juego de lucha brutal subtitulado", Lucha, 0
 Mortal Kombat 11 Latino PS4, "Juego de lucha brutal en español latino", Lucha, 0
@@ -462,16 +463,16 @@ Mount & blade ii bannerlord PS4, "RPG medieval de batallas masivas", RPG, 0
 Mount & blade ii bannerlord PS5, "RPG medieval de batallas masivas", RPG, 0
 MudRunner PS4, "Simulador de conducción todoterreno extremo", Simulación, 0
 MudRunner PS5, "Simulador de conducción todoterreno extremo", Simulación, 0
-MotoGP25 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 25 PS5, "Simulador oficial de MotoGP", Racing, 0
 MotoGP25 PS4, "Simulador oficial de MotoGP", Racing, 0
 MotoGP24 PS4, "Simulador oficial de MotoGP", Racing, 0
-MotoGP24 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 24 PS5, "Simulador oficial de MotoGP", Racing, 0
 MotoGP21 PS4, "Simulador oficial de MotoGP", Racing, 0
-MotoGP21 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 21 PS5, "Simulador oficial de MotoGP", Racing, 0
 MotoGP22 PS4, "Simulador oficial de MotoGP", Racing, 0
-MotoGP22 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 22 PS5, "Simulador oficial de MotoGP", Racing, 0
 MotoGP23 PS4, "Simulador oficial de MotoGP", Racing, 0
-MotoGP23 PS5, "Simulador oficial de MotoGP", Racing, 0
+Moto GP 23 PS5, "Simulador oficial de MotoGP", Racing, 0
 My Friend Peppa Pig PS4, "explora y juega con Peppa en su mundo", Infantil, 0
 My Friend Peppa Pig PS5, "explora y juega con Peppa en su mundo", Infantil, 0
 MY HERO ONES JUSTICE 2 PS4, "Peleas de anime con los héroes y villanos de My Hero Academia", Lucha, 0
@@ -590,7 +591,8 @@ Resident Evil Village Gold Edition PS5, "Horror de supervivencia en pueblo europ
 Riders Republic PS4, "Deportes extremos en mundo abierto", Deportes, 0
 Riders Republic PS5, "Deportes extremos en mundo abierto", Deportes, 0
 Rise of the Tomb Raider PS4, "Aventura de exploración con Lara Croft", Aventura, 
-Rise of the Tomb Raider 20 Year Celebration PS4, "Aventura y exploración con Lara Croft en ambientes hostiles", Aventura, 00
+Rise of the Tomb Raider 20 Year Celebration PS4, "Aventura y exploración con Lara Croft en ambientes hostiles", Aventura, 0
+Rise of the Tomb Raider 20 Year Celebration PS5, "Aventura y exploración con Lara Croft en ambientes hostiles", Aventura, 00
 Rise of the Tomb Raider PS5, "Aventura de exploración con Lara Croft", Aventura, 0
 RIDE 4 PS4, "Simulacion de conduccion en Moto", Simulacion, 0
 RIDE 4 PS5, "Simulacion de conduccion en Moto", Simulacion, 0
@@ -767,7 +769,7 @@ WWE 2K25 PS5, "Simulador de lucha libre WWE", Deportes, 0
 Yakuza Like a Dragon Hero Edition PS4, "Un RPG por turnos con una nueva historia y protagonista en el universo de Yakuza, donde las "clases" se basan en trabajos absurdos.", RPG, 0
 Yakuza Like a Dragon Hero Edition PS5, "Un RPG por turnos con una nueva historia y protagonista en el universo de Yakuza, donde las "clases" se basan en trabajos absurdos.", RPG, 0
 Zombie Army 4 Dead War PS4, "Shooter cooperativo contra zombies nazis", Shooter, 0
-Zombie Army 4 PS5, "Shooter cooperativo contra zombies nazis", Shooterle , 0
+Zombie Army 4 Dead War PS5, "Shooter cooperativo contra zombies nazis", Shooterle , 0
 
 Bendy Studio Collection PS4, "Aventura de terror en una animación oscura y misteriosa.", terror, 0
 Bendy and the Ink Machine PS4, "Aventura de terror en una animación oscura y misteriosa.", terror, 0
