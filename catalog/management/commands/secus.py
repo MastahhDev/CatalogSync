@@ -136,117 +136,137 @@ class Command(BaseCommand):
         return texto_sin_acentos
 
     def limpiar_nombre_avanzado(self, nombre, debug=False):
-        """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
+        """Limpia el nombre quitando idiomas, ediciones específicas, etc. - MISMA QUE PS5"""
         if not nombre:
             return ""
-        
-        casos_especificos = {
-            'mortal kombat 11 ultimate latino': 'mortal kombat 11 ultimate',
-            # Agrega más casos aquí según los problemas que encuentres
-        }
-        
-        nombre_lower = nombre.lower()
-        for caso_problematico, resultado in casos_especificos.items():
-            if caso_problematico in nombre_lower:
-                if debug:
-                    self.stdout.write(f"  🎯 APLICANDO CASO ESPECÍFICO: '{nombre}' -> '{resultado}'")
-                return resultado
-        
-        nombre_original = nombre
-        
-        # Paso 1: Quitar acentos
+
+        # Primero quitar acentos y diacríticos
         nombre = self.quitar_acentos(nombre)
-        if debug:
-            self.stdout.write(f"  [1] Sin acentos: '{nombre}'")
-        
-        # Paso 2: Quitar caracteres especiales
+            
+        # Quitar emojis y caracteres especiales
         nombre = re.sub(r'[^\x00-\x7F]+', '', nombre)
+        
+        # Quitar símbolos especiales
         nombre = nombre.replace('®', '').replace('™', '').replace('©', '')
-        if debug:
-            self.stdout.write(f"  [2] Sin especiales: '{nombre}'")
+        nombre = nombre.replace(':', '').replace('#', '').replace('-', ' ')
         
-        # Paso 3: Limpiar caracteres problemáticos pero NO los dos puntos aún
-        nombre = nombre.replace('#', '').replace('-', ' ')
-        if debug:
-            self.stdout.write(f"  [3] Sin # y -: '{nombre}'")
-        
-        # Paso 4: Eliminar precios
+        # Quitar el precio del nombre si está
         nombre = re.sub(r'\$\s*[\d.,]+', '', nombre)
-        if debug:
-            self.stdout.write(f"  [4] Sin precios: '{nombre}'")
         
-        # Paso 5: Eliminar comillas y caracteres al inicio
+        # Quitar caracteres especiales al inicio
         nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
-        if debug:
-            self.stdout.write(f"  [5] Limpio al inicio: '{nombre}'")
         
-        # Paso 6: Eliminar patrones específicos CON WORD BOUNDARIES MÁS ESTRICTAS
+        # PATRONES A FILTRAR (case insensitive) - MISMA LISTA QUE PS5
         patrones_a_eliminar = [
-            # Idiomas - con word boundaries estrictas
-            r'\bespanol\s+espana\b',
-            r'\bespanol\s+latino\b',
-            r'\bingles\s+subtitulado\b',  # Específico primero
-            r'\bingles\b(?!\w)',  # Solo si no sigue con letra
-            r'\benglish\b',
-            r'\bsubtitulado\b',
-            r'\bsubtitulada\b',
-            r'\bespanol\b',
-            r'\bspanish\b',
-            r'\blatino\b',
+            # Idiomas y subtítulos
+            r'\bespanol\s+espana\b', r'\bespanol\s+latino\b',
+            r'\benglish\b', r'\bsubtitulado\b', r'\bsubtitulada\b',
+            r'\bespanol\b', r'\bspanish\b',
             
-            # Ediciones - más específicas
-            r'\b(?:deluxe|gold|standard|special|ultimate|premium|complete)\s+edition\b',
-            r'\bcollector\'?s\s+edition\b',
-            r'\bgame\s+of\s+the\s+year\s+edition\b',
-            r'\bgoty\s+edition\b',
-            r'\bedicion\s+(?:deluxe|gold|estandar|especial)\b',
+            # Ediciones
+            r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
+            r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
+            r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
+            r'\bgoty\b', r'\bedicion\s+deluxe\b', r'\bedicion\s+gold\b',
+            r'\bedicion\s+estandar\b', r'\bedicion\s+especial\b', r'\blatino\b', r'\bespaol\s+espaa\b',
             
-            # Palabras sueltas al final o con espacios
-            r'\s+(?:edicion|digital|fisico|physical|download|descarga)\s*$',
-            r'\s+(?:edicion|digital|fisico|physical|download|descarga)\s+',
+            # Palabras generales a eliminar
+            r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
+            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b', r'\bespaol\b', r'\bespaa\b',
         ]
         
+        # Aplicar todos los patrones
         for patron in patrones_a_eliminar:
-            nombre_antes = nombre
-            nombre = re.sub(patron, ' ', nombre, flags=re.IGNORECASE)
-            if debug and nombre != nombre_antes:
-                self.stdout.write(f"  [6] Patrón '{patron}' aplicado: '{nombre}'")
+            nombre = re.sub(patron, '', nombre, flags=re.IGNORECASE)
         
-        # Paso 7: Ahora sí, eliminar dos puntos
-        nombre = nombre.replace(':', ' ')
-        if debug:
-            self.stdout.write(f"  [7] Sin dos puntos: '{nombre}'")
-        
-        # Paso 8: Limpiar paréntesis y corchetes vacíos
+        # Quitar paréntesis vacíos y espacios extra
         nombre = re.sub(r'\(\s*\)', '', nombre)
         nombre = re.sub(r'\[\s*\]', '', nombre)
-        if debug:
-            self.stdout.write(f"  [8] Sin paréntesis vacíos: '{nombre}'")
         
-        # Paso 9: Normalizar espacios
+        # Quitar múltiples espacios
         nombre = re.sub(r'\s+', ' ', nombre)
+        
+        # Quitar espacios al inicio y final
         nombre = nombre.strip()
-        if debug:
-            self.stdout.write(f"  [9] Espacios normalizados: '{nombre}'")
         
-        # Paso 10: Eliminar puntuación final
+        # Quitar comas y puntos al final
         nombre = re.sub(r'[.,;\s]+$', '', nombre)
-        if debug:
-            self.stdout.write(f"  [10] Final limpio: '{nombre}'")
-        
-        # VERIFICACIÓN DE SEGURIDAD
-        if not nombre or len(nombre) < 2:
-            self.stdout.write(self.style.ERROR(
-                f"\n⚠️  ADVERTENCIA: Nombre quedó muy corto o vacío!\n"
-                f"    Original: '{nombre_original}'\n"
-                f"    Resultado: '{nombre}'\n"
-                f"    Se devolverá el original sin limpiar.\n"
-            ))
-            # Devolver versión mínimamente limpia del original
-            nombre = nombre_original.strip()
-            nombre = re.sub(r'\s+', ' ', nombre)
         
         return nombre
+
+    def buscar_juego_similar(self, nombre_limpio, consola):
+        """Busca juegos en la base de datos que coincidan aproximadamente - MISMA LÓGICA QUE PS5"""
+        # Primero intenta búsqueda exacta sin consola
+        nombre_sin_consola = nombre_limpio.replace(f' {consola.upper()}', '').replace(f' {consola}', '').strip()
+        
+        # 1. Buscar coincidencias EXACTAS (case insensitive) - INCLUYE NO DISPONIBLES
+        juegos_exactos = Juego.objects.filter(
+            nombre__iexact=nombre_limpio,
+            consola=consola
+        )
+        if juegos_exactos.exists():
+            juego = juegos_exactos.first()
+            self.stdout.write(f"  ✓ Encontrado exacto (disponible={juego.disponible}): {juego.nombre}")
+            return juego
+        
+        # 2. Buscar sin consola pero EXACTO
+        juegos_sin_consola_exacto = Juego.objects.filter(
+            nombre__iexact=nombre_sin_consola,
+            consola=consola
+        )
+        if juegos_sin_consola_exacto.exists():
+            juego = juegos_sin_consola_exacto.first()
+            self.stdout.write(f"  ✓ Encontrado sin consola (disponible={juego.disponible}): {juego.nombre}")
+            return juego
+        
+        # 3. Limpiar el nombre de la BD también antes de comparar
+        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_consola)
+        
+        # 4. Obtener TODOS los juegos de la consola y compararlos uno por uno
+        todos_juegos_consola = Juego.objects.filter(consola=consola)
+        
+        mejor_coincidencia = None
+        mejor_ratio = 0.0
+        
+        for juego_candidato in todos_juegos_consola:
+            # Limpiar el nombre del candidato de la BD
+            nombre_candidato_limpio = self.limpiar_nombre_avanzado(
+                juego_candidato.nombre.replace(f' {consola.upper()}', '').replace(f' {consola}', '')
+            )
+            
+            # Calcular similitud
+            ratio = SequenceMatcher(
+                None, 
+                nombre_muy_limpio.lower(), 
+                nombre_candidato_limpio.lower()
+            ).ratio()
+            
+            # Debug: mostrar comparación
+            if ratio > 0.7:
+                self.stdout.write(
+                    f"  Comparando: '{nombre_muy_limpio}' vs '{nombre_candidato_limpio}' = {ratio:.2f}"
+                )
+            
+            if ratio > mejor_ratio:
+                mejor_ratio = ratio
+                mejor_coincidencia = juego_candidato
+        
+        # Solo aceptar coincidencias MUY similares
+        if mejor_ratio >= 0.90:
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"✓ MATCH encontrado: '{mejor_coincidencia.nombre}' (similitud: {mejor_ratio:.2f})"
+                )
+            )
+            return mejor_coincidencia
+        elif mejor_ratio > 0.7:
+            self.stdout.write(
+                self.style.WARNING(
+                    f"⚠ Match rechazado (muy bajo): '{mejor_coincidencia.nombre if mejor_coincidencia else 'N/A'}' (similitud: {mejor_ratio:.2f})"
+                )
+            )
+        
+        return None
 
     def determinar_disponibilidad(self, disponible_str):
         """Determina la disponibilidad basada en el valor de la columna"""
@@ -267,79 +287,6 @@ class Command(BaseCommand):
         
         # Cualquier otro valor se considera True
         return True
-
-    def buscar_juego_similar(self, nombre_limpio, consola):
-        """Busca juegos en la base de datos que coincidan aproximadamente - INCLUYE NO DISPONIBLES"""
-        nombre_limpio_sin_secundario = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_limpio, flags=re.IGNORECASE).strip()
-        nombre_sin_consola = nombre_limpio_sin_secundario.replace(f' {consola.upper()}', '').replace(f' {consola}', '').strip()
-        
-        # Buscar coincidencias exactas (incluyendo no disponibles)
-        juegos_exactos = Juego.objects.filter(
-            nombre__iexact=nombre_limpio_sin_secundario,
-            consola=consola
-        )
-        
-        if juegos_exactos.exists():
-            juego = juegos_exactos.first()
-            self.stdout.write(f"  ✓ Encontrado exacto (disponible={juego.disponible}): {juego.nombre}")
-            return juego
-        
-        # Buscar por nombre sin consola (incluyendo no disponibles)
-        juegos_sin_consola = Juego.objects.filter(
-            nombre__icontains=nombre_sin_consola,
-            consola=consola
-        )
-        
-        if juegos_sin_consola.exists():
-            juego = juegos_sin_consola.first()
-            self.stdout.write(f"  ✓ Encontrado por nombre (disponible={juego.disponible}): {juego.nombre}")
-            return juego
-        
-        # Limpiar también el nombre para búsqueda más flexible
-        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_consola, debug=False)
-        
-        if nombre_muy_limpio != nombre_sin_consola:
-            juegos_muy_limpios = Juego.objects.filter(
-                nombre__icontains=nombre_muy_limpio,
-                consola=consola
-            )
-            
-            if juegos_muy_limpios.exists():
-                juego = juegos_muy_limpios.first()
-                self.stdout.write(f"  ✓ Encontrado por nombre limpio (disponible={juego.disponible}): {juego.nombre}")
-                return juego
-        
-        # Buscar por palabras clave (incluyendo no disponibles)
-        palabras_clave = nombre_muy_limpio.split()[:4]
-        query = None
-        for palabra in palabras_clave:
-            if len(palabra) > 3:
-                if query is None:
-                    query = models.Q(nombre__icontains=palabra)
-                else:
-                    query |= models.Q(nombre__icontains=palabra)
-        
-        if query:
-            juegos_similares = Juego.objects.filter(query, consola=consola)
-            
-            if juegos_similares.exists():
-                mejor_coincidencia = None
-                mejor_ratio = 0.0
-
-                for juego_candidato in juegos_similares:
-                    nombre_juego_limpio = self.limpiar_nombre_avanzado(juego_candidato.nombre, debug=False)
-                    ratio = SequenceMatcher(None, nombre_muy_limpio.lower(), nombre_juego_limpio.lower()).ratio()
-
-                    if ratio > mejor_ratio:
-                        mejor_ratio = ratio
-                        mejor_coincidencia = juego_candidato
-
-                if mejor_ratio > 0.85:
-                    self.stdout.write(f"  ✓ Encontrado por similitud {mejor_ratio:.2f} (disponible={mejor_coincidencia.disponible}): {mejor_coincidencia.nombre}")
-                    return mejor_coincidencia
-        
-        self.stdout.write(f"  ✗ No encontrado en BD: {nombre_limpio_sin_secundario}")
-        return None
 
     def limpiar_precio(self, precio_str):
         """Convierte string con precio a Decimal - FORMATO ARGENTINO"""
@@ -678,6 +625,7 @@ class Command(BaseCommand):
                         precio_secundario = self.limpiar_precio(precio_str)
                         recargo_secundario = self.calcular_recargo(precio_secundario)
                         
+                        # ⭐ USAR LA NUEVA BÚSQUEDA INTELIGENTE
                         juego_existente = self.buscar_juego_similar(nombre_busqueda, consola_real)
                         
                         if juego_existente:
@@ -733,6 +681,7 @@ class Command(BaseCommand):
                                 self.stdout.write(self.style.WARNING(
                                     f'⏭️  OMITIDO (--solo-actualizar): {nombre_busqueda}'
                                 ))
+                                no_encontrados.append(f"'{nombre_sucio}' -> '{nombre_busqueda}'")
                                 continue
                             
                             nombre_con_identificador = f"{nombre_busqueda} (SECUNDARIO)"
@@ -807,7 +756,7 @@ class Command(BaseCommand):
             portadas_faltantes = self.verificar_portadas_faltantes(juegos_procesados)
             
             if portadas_faltantes:
-                self.stdout.write(self.style.WARNING(f'\n{"="*60}'))
+                self.stdout.write(self.style.WARNING(f'\n{'='*60}'))
                 self.stdout.write(self.style.WARNING('🖼️  PORTADAS FALTANTES DETECTADAS'))
                 self.stdout.write(self.style.WARNING(f'{"="*60}'))
                 
@@ -830,6 +779,12 @@ class Command(BaseCommand):
         self.stdout.write(self.style.ERROR(f'🔴 Precios secundarios eliminados: {desactivados_secundario_count}'))
         self.stdout.write(self.style.ERROR(f'🔴 Secundarios puros desactivados: {desactivados_solo_secundario}'))
         self.stdout.write(self.style.WARNING(f'⏭️  Juegos omitidos (no disponibles en CSV): {omitidos_no_disponibles}'))
+        self.stdout.write(self.style.WARNING(f'🔍 Juegos no encontrados en BD: {len(no_encontrados)}'))
+        
+        if no_encontrados:
+            self.stdout.write(self.style.WARNING("\nJuegos no encontrados en BD:"))
+            for nombre in no_encontrados[:10]:
+                self.stdout.write(f"  - {nombre}")
         
         if juegos_procesados:
             portadas_faltantes_count = len(self.verificar_portadas_faltantes(juegos_procesados))
