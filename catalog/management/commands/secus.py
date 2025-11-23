@@ -250,17 +250,22 @@ class Command(BaseCommand):
 
     def determinar_disponibilidad(self, disponible_str):
         """Determina la disponibilidad basada en el valor de la columna"""
-        if not disponible_str or disponible_str.strip() == '':
+        # Verificar si es None primero
+        if disponible_str is None:
             return True
         
-        disponible_str = str(disponible_str).strip().lower()
+        # Convertir a string y limpiar
+        disponible_str = str(disponible_str).strip()
         
-        if disponible_str in ['0', 'false', 'no', 'falso']:
+        # Caso especial: string vacío después de strip significa disponible
+        if disponible_str == '':
+            return True
+        
+        # Manejar diferentes representaciones de False
+        if disponible_str.lower() in ['0', 'false', 'no', 'falso']:
             return False
         
-        if disponible_str in ['1', 'true', 'si', 'verdadero']:
-            return True
-        
+        # Cualquier otro valor se considera True
         return True
 
     def buscar_juego_similar(self, nombre_limpio, consola):
@@ -362,9 +367,6 @@ class Command(BaseCommand):
         
         recargo = precio + (precio * Decimal('0.10'))
         return recargo.quantize(Decimal('0.01'))
-
-    # catalog/management/commands/actualizar_secundarios.py
-# (solo mostrando la función buscar_imagen mejorada y partes relacionadas)
 
     def buscar_imagen(self, nombre_juego, consola):
         """Busca la imagen correspondiente al juego - VERSIÓN MEJORADA"""
@@ -596,6 +598,7 @@ class Command(BaseCommand):
         reactivados = 0
         convertidos_a_solo_secundario = 0
         secundarios_ids = []
+        secundarios_disponibles_ids = []  # ⭐ NUEVA LISTA: solo IDs de secundarios DISPONIBLES
         juegos_procesados = []
         
         try:
@@ -629,15 +632,19 @@ class Command(BaseCommand):
                             continue
                         
                         if tiene_columna_disponible:
-                            disponible_str = row.get(col_disponible, '').strip()
+                            disponible_str = row.get(col_disponible, '')
+                            if disponible_str is None:
+                                disponible_str = ''
                             disponible = self.determinar_disponibilidad(disponible_str)
                         else:
                             disponible = True
                         
+                        # ⭐ CORRECCIÓN: SI NO ESTÁ DISPONIBLE, OMITIR PERO NO AGREGAR A LA LISTA DE DISPONIBLES
                         if not disponible:
                             omitidos_no_disponibles += 1
-                            self.stdout.write(self.style.WARNING(f'⏭️  OMITIDO (no disponible): {nombre_sucio}'))
-                            continue
+                            if debug:
+                                self.stdout.write(f"  ⏭️  OMITIDO (no disponible en CSV): {nombre_sucio}")
+                            continue  # ⭐ IMPORTANTE: saltar este juego
                         
                         if debug:
                             self.stdout.write(f"\n{'='*60}")
@@ -707,6 +714,7 @@ class Command(BaseCommand):
                             juego_existente.save()
                             
                             secundarios_ids.append(juego_existente.id)
+                            secundarios_disponibles_ids.append(juego_existente.id)  # ⭐ AGREGAR A DISPONIBLES
                             actualizados_existentes += 1
                             
                             juegos_procesados.append({
@@ -745,6 +753,7 @@ class Command(BaseCommand):
                             )
                             
                             secundarios_ids.append(nuevo_juego.id)
+                            secundarios_disponibles_ids.append(nuevo_juego.id)  # ⭐ AGREGAR A DISPONIBLES
                             creados_nuevos += 1
                             
                             juegos_procesados.append({
@@ -768,11 +777,12 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Error: {str(e)}'))
             return
         
-        # Desactivar secundarios que ya no están en stock
-        if secundarios_ids:
+        # ⭐ CORRECCIÓN: Usar secundarios_disponibles_ids para la desactivación
+        if secundarios_disponibles_ids:
+            # Desactivar precios secundarios de juegos que ya no están disponibles
             juegos_a_desactivar_secundario = Juego.objects.filter(
                 tiene_secundario=True
-            ).exclude(id__in=secundarios_ids)
+            ).exclude(id__in=secundarios_disponibles_ids)
             
             for juego in juegos_a_desactivar_secundario:
                 juego.precio_secundario = None
@@ -782,9 +792,10 @@ class Command(BaseCommand):
             
             desactivados_secundario_count = juegos_a_desactivar_secundario.count()
             
+            # Desactivar juegos "solo secundarios" que ya no están disponibles
             juegos_solo_secundarios = Juego.objects.filter(
                 es_solo_secundario=True
-            ).exclude(id__in=secundarios_ids)
+            ).exclude(id__in=secundarios_disponibles_ids)
             
             desactivados_solo_secundario = juegos_solo_secundarios.update(disponible=False)
         else:

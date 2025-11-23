@@ -1,82 +1,85 @@
 <!-- carrito/templates/carrito/cart_items.html -->
 {% load static %}
 
-{% for item in items %}
-<div class="cart-item" data-item-key="{{ item.item_key }}">
-    <div class="cart-item-image">
-        <img src="{% static item.juego.imagen %}" 
-             alt="{{ item.juego.nombre }}"
-             onerror="this.src='/static/img/default.png'">
-    </div>
-    
-    <div class="cart-item-details">
-        <h6 class="cart-item-name">{{ item.juego.nombre }}</h6>
+<!-- Contenedor con scroll condicional -->
+<div class="cart-items-container {% if items|length > 3 %}with-scroll{% endif %}">
+    {% for item in items %}
+    <div class="cart-item" data-item-key="{{ item.item_key }}">
+        <div class="cart-item-image">
+            <img src="{% static item.juego.imagen %}" 
+                 alt="{{ item.juego.nombre }}"
+                 onerror="this.src='/static/img/default.png'">
+        </div>
         
-        <!-- Badge de tipo de precio -->
-        {% if item.tipo_precio == 'secundario' %}
-            <span class="badge bg-info">🔵 Secundario</span>
-        {% else %}
-            <span class="badge bg-success">🟢 Primario</span>
-        {% endif %}
-        
-        <div class="cart-item-price">
-            <!-- Precio principal (el que se cobra) -->
-            {% if item.precio and item.precio > 0 %}
-                <span class="price-main fw-bold">
-                    ${{ item.precio|floatformat:0 }}
-                </span>
+        <div class="cart-item-details">
+            <h6 class="cart-item-name text-dark-emphasis">{{ item.juego.nombre }}</h6>
+            
+            <!-- Badge de tipo de precio -->
+            {% if item.tipo_precio == 'secundario' %}
+                <span class="badge bg-info">🔵 Secundario</span>
             {% else %}
-                <span class="price-main fw-bold text-danger">
-                    Precio no disponible
-                </span>
+                <span class="badge bg-success">🟢 Primario</span>
             {% endif %}
             
-            <!-- Precio con recargo (tachado, solo si existe) -->
-            {% if item.precio_recargo and item.precio_recargo > 0 %}
-                <span class="price-recargo text-muted text-decoration-line-through">
-                    ${{ item.precio_recargo|floatformat:0 }}
-                </span>
-            {% endif %}
+            <div class="cart-item-price">
+                <!-- Precio principal (el que se cobra) -->
+                {% if item.precio and item.precio > 0 %}
+                    <span class="price-main fw-bold text-success">
+                        ${{ item.precio|floatformat:0 }}
+                    </span>
+                {% else %}
+                    <span class="price-main fw-bold text-danger">
+                        Precio no disponible
+                    </span>
+                {% endif %}
+                
+                <!-- Precio con recargo (tachado, solo si existe) -->
+                {% if item.precio_recargo and item.precio_recargo > 0 %}
+                    <span class="price-recargo text-muted text-decoration-line-through">
+                        ${{ item.precio_recargo|floatformat:0 }}
+                    </span>
+                {% endif %}
+            </div>
+            
+            <div class="cart-item-quantity">
+                <button class="btn btn-sm btn-outline-secondary"
+                        hx-post="{% url 'carrito:actualizar' item.item_key %}"
+                        hx-vals='{"cantidad": {{ item.cantidad|add:"-1" }}}'
+                        hx-target="#carrito-items-container"
+                        hx-swap="innerHTML">
+                    <i class="fas fa-minus"></i>
+                </button>
+                
+                <span class="quantity-display text-body">{{ item.cantidad }}</span>
+                
+                <button class="btn btn-sm btn-outline-secondary"
+                        hx-post="{% url 'carrito:actualizar' item.item_key %}"
+                        hx-vals='{"cantidad": {{ item.cantidad|add:"1" }}}'
+                        hx-target="#carrito-items-container"
+                        hx-swap="innerHTML">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            
+            <div class="cart-item-subtotal text-body-secondary">
+                Subtotal: <strong class="text-body">${{ item.subtotal|floatformat:0 }}</strong>
+            </div>
         </div>
         
-        <div class="cart-item-quantity">
-            <button class="btn btn-sm btn-outline-secondary"
-                    hx-post="{% url 'carrito:actualizar' item.item_key %}"
-                    hx-vals='{"cantidad": {{ item.cantidad|add:"-1" }}}'
-                    hx-target="#carrito-items-container"
-                    hx-swap="innerHTML">
-                <i class="fas fa-minus"></i>
-            </button>
-            
-            <span class="quantity-display">{{ item.cantidad }}</span>
-            
-            <button class="btn btn-sm btn-outline-secondary"
-                    hx-post="{% url 'carrito:actualizar' item.item_key %}"
-                    hx-vals='{"cantidad": {{ item.cantidad|add:"1" }}}'
-                    hx-target="#carrito-items-container"
-                    hx-swap="innerHTML">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        
-        <div class="cart-item-subtotal">
-            Subtotal: <strong>${{ item.subtotal|floatformat:0 }}</strong>
-        </div>
+        <button class="btn btn-sm btn-danger cart-item-remove"
+                hx-post="{% url 'carrito:eliminar' item.item_key %}"
+                hx-target="#carrito-items-container"
+                hx-swap="innerHTML"
+                title="Eliminar">
+            <i class="fas fa-trash"></i>
+        </button>
     </div>
-    
-    <button class="btn btn-sm btn-danger cart-item-remove"
-            hx-post="{% url 'carrito:eliminar' item.item_key %}"
-            hx-target="#carrito-items-container"
-            hx-swap="innerHTML"
-            title="Eliminar">
-        <i class="fas fa-trash"></i>
-    </button>
+    {% endfor %}
 </div>
-{% endfor %}
 
-<div class="cart-total">
+<div class="cart-total bg-body-tertiary border-top">
     <div class="d-flex justify-content-between align-items-center">
-        <h5>Total:</h5>
+        <h5 class="text-body">Total:</h5>
         <h4 class="text-primary fw-bold">${{ total_price|floatformat:0 }}</h4>
     </div>
     
@@ -102,13 +105,34 @@
 </span>
 
 <style>
+.cart-items-container {
+    /* Contenedor base sin scroll */
+    max-height: none;
+    overflow-y: visible;
+}
+
+.cart-items-container.with-scroll {
+    /* Contenedor con scroll cuando hay más de 3 items */
+    max-height: 400px; /* Altura máxima ajustable */
+    overflow-y: auto;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background: var(--bs-body-bg);
+}
+
 .cart-item {
     display: flex;
     gap: 15px;
     padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--bs-border-color);
     position: relative;
     align-items: center;
+    background: var(--bs-body-bg);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
 }
 
 .cart-item-image img {
@@ -137,7 +161,6 @@
 
 .price-main {
     font-size: 1.1rem;
-    color: #28a745;
 }
 
 .price-recargo {
@@ -159,7 +182,6 @@
 
 .cart-item-subtotal {
     font-size: 0.9rem;
-    color: #555;
 }
 
 .cart-item-remove {
@@ -170,13 +192,52 @@
 
 .cart-total {
     padding: 20px;
-    border-top: 2px solid #e0e0e0;
-    background: #f8f9fa;
+    border-top: 2px solid var(--bs-border-color);
+    position: sticky;
+    bottom: 0;
+    /* Asegurar que esté por encima del contenido */
+    z-index: 10;
 }
 
 .badge {
     font-size: 0.7rem;
     padding: 3px 8px;
     margin: 5px 0;
+}
+
+/* Personalizar scrollbar para tema oscuro */
+.cart-items-container.with-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.cart-items-container.with-scroll::-webkit-scrollbar-track {
+    background: var(--bs-secondary-bg);
+    border-radius: 3px;
+}
+
+.cart-items-container.with-scroll::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
+    border-radius: 3px;
+}
+
+.cart-items-container.with-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-tertiary-color);
+}
+
+/* Para Firefox */
+.cart-items-container.with-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-border-color) var(--bs-secondary-bg);
+}
+
+/* Asegurar que los textos sean legibles en ambos temas */
+@media (prefers-color-scheme: dark) {
+    .cart-items-container.with-scroll {
+        background: var(--bs-body-bg);
+    }
+    
+    .cart-item {
+        background: var(--bs-body-bg);
+    }
 }
 </style>
