@@ -1016,8 +1016,19 @@ h1 {
     }
 }
 
+#theme-text {
+    display: inline;
+}
+
+#theme-icon {
+    display: inline;
+}
+
 /* Móviles pequeños */
 @media (max-width: 576px) {
+    #theme-text {
+        display: none;
+    }
     .navbar-container {
         padding: 0.5rem;
     }
@@ -1146,8 +1157,14 @@ h1 {
     }
 }
 
+
+
 /* Muy pequeños */
 @media (max-width: 380px) {
+    #theme-text {
+        display: none;
+    }
+
     .juego-card {
         width: 160px;
     }
