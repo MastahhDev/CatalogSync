@@ -1,0 +1,1779 @@
+/* static/css/styles.css - COMBINADO COMPLETO CON PAGINACIÓN */
+
+:root {
+    /* Modo Claro - Paleta de Azules Celestes */
+    --primary-color: #4A90E2;
+    --secondary-color: #7FB3D5;
+    --accent-color: #98bbd3;
+    --background-color: #d3e2f0;
+    --card-background: #f1f7ff;
+    --text-color: #2C3E50;
+    --text-secondary: #566573;
+    --border-color: #D6EAF8;
+    --success-color: #27AE60;
+    --warning-color: #F39C12;
+    --shadow: 0 4px 6px rgba(74, 144, 226, 0.1);
+    --navbar-bg: #4e87c7;
+    --image-card: #8FB3E3;
+    --image-card-dark: #D9E1F1;
+}
+
+[data-theme="dark"] {
+    /* Modo Oscuro */
+    --primary-color: #3a4b6b;
+    --secondary-color: #16243b;
+    --accent-color: #19345a;
+    --background-color: #1E2E4F;
+    --card-background: #161624;
+    --text-color: #E8F4F8;
+    --text-secondary: #e9cbcb;
+    --border-color: #4a59b9;
+    --success-color: #dcebe2;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --navbar-bg: #192338;
+    --image-card: #0C121D;
+    --image-card-dark: #334663;
+}
+
+/* Estilos base */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    padding-top: 70px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-juegos {
+    color: #6c757d; /* modo claro */
+}
+
+[data-theme="dark"] .info-juegos {
+    color: #8fb3e3; /* modo oscuro */
+}
+
+[data-theme="dark"] .text-muted {
+    color: #d9e1f1 !important;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, var(--navbar-bg) 0%, var(--secondary-color) 100%) !important;
+    color: white;
+    padding: 0.75rem 0 !important;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.25rem !important;
+    color: white !important;
+    background: none !important;
+    -webkit-text-fill-color: white !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+}
+
+.header p {
+    font-size: 0.8rem !important;
+    margin-bottom: 0 !important;
+    line-height: 1.3 !important;
+    color: white !important;
+    opacity: 0.9;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    padding: 0.5rem 0 !important;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.navbar-brand {
+    font-size: 1.25rem !important;
+    padding: 0 !important;
+    color: white !important;
+    white-space: nowrap;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav a {
+    color: white !important;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav a:hover::after {
+    width: 100%;
+}
+
+.navbar-nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+/* Botón de cambio de tema */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem;
+    border-radius: 20px !important;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(-2px);
+}
+
+/* BUSCADOR */
+.buscador {
+    width: 40%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.buscador form {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+}
+
+.buscador-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
+    background: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    min-width: 0;
+}
+
+.buscador-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.buscador-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.buscador-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+}
+
+.main-content {
+    flex: 1;
+}
+
+/* Títulos */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+/* Estilos para el catálogo de juegos */
+.juegos-container {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.juego-card {
+    width: 220px;
+    background: #c1d7dd;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.juego-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.juego-card.destacado {
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+    border: 2px solid #ffc107;
+}
+
+.card-consola-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    z-index: 10;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.badge-destacado {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #71c6db, #126291);
+    color: #000;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.7rem;
+    z-index: 10;
+}
+
+.juego-imagen-wrapper {
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(135deg, var(--image-card), var(--image-card-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 12px 12px 0 0;
+}
+
+.juego-imagen {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.juego-info {
+    padding: 15px;
+    background: var(--card-background);
+    text-align: center;
+    border-radius: 0 0 12px 12px;
+}
+
+.juego-nombre {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 5px 0;
+    height: 40px;
+    overflow: hidden;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+.juego-precio {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--success-color);
+    margin: 0 0 5px 0;
+    text-align: center;
+}
+
+.juego-recargo {
+    font-size: 1rem;
+    font-weight: normal;
+    color: var(--text-secondary);
+    margin: 0;
+    text-align: center;
+    text-decoration: line-through;
+}
+
+/* Botones */
+.btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(165, 191, 219, 0.3);
+    color: white;
+}
+
+/* Footer */
+.footer {
+    background: var(--card-background);
+    color: var(--text-color);
+    text-align: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    width: 100%;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Página de detalle del juego */
+.detalle-imagen-container {
+    position: relative;
+    background: var(--card-background);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
+}
+
+.detalle-imagen-container:hover {
+    transform: scale(1.02);
+}
+
+.detalle-imagen {
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.badge-destacado-detalle {
+    display: inline-block;
+    background: linear-gradient(135deg, #9af3ff, #1a9fc0);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 10px rgba(134, 255, 245, 0.7);
+    animation: shine 2s infinite alternate;
+}
+
+.detalle-titulo {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.detalle-consola-badge {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.detalle-descripcion {
+    background: var(--card-background);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.detalle-descripcion p {
+    margin-bottom: 0.5rem;
+}
+
+/* SECCIÓN DE PRECIOS Y MÉTODOS DE PAGO */
+.detalle-precios {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.precio-actual {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--success-color);
+    margin-bottom: 20px;
+}
+
+.detalle-metodos-pago {
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    padding: 25px;
+    border-radius: 12px;
+    margin: 25px 0;
+    box-shadow: var(--shadow);
+}
+
+.detalle-metodos-pago h5 {
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+/* Métodos de pago con emojis y estilo blanco */
+.metodos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.metodo-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.metodo-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 1);
+}
+
+.metodo-emoji {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.metodo-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metodo-principal {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.metodo-secundario {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* BOTONES DE ACCIÓN */
+.detalle-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    margin-bottom: 15px;
+}
+
+.btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    color: white;
+}
+
+.btn-catalogo {
+    background: transparent;
+    color: var(--primary-color);
+    padding: 12px 25px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-catalogo:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* PAGINACIÓN MODERNA */
+.pagination-container {
+    padding: 2rem 0;
+}
+
+.pagination {
+    gap: 8px;
+}
+
+.page-link {
+    border: 2px solid var(--border-color);
+    background: var(--card-background);
+    color: var(--text-color);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 50px;
+    text-align: center;
+}
+
+.pagination-arrow {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white !important;
+    border-color: var(--primary-color) !important;
+}
+
+.pagination-arrow:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.pagination-number:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.pagination-current {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+}
+
+.pagination-ellipsis {
+    background: transparent;
+    border: 2px solid transparent;
+    color: var(--text-secondary);
+}
+
+.page-item.disabled .page-link {
+    background: var(--background-color);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+}
+
+/* Efectos hover modernos */
+.page-link:not(.disabled):not(.pagination-current):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animaciones */
+.page-transition {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.page-transition.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@keyframes shine {
+    from {
+        box-shadow: 0 0 10px rgba(134, 255, 245, 0.7);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(134, 255, 245, 1);
+    }
+}
+
+/* Botón volver arriba */
+#back-to-top {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 99999;
+}
+
+#back-to-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+#back-to-top:hover {
+    transform: translateY(-3px) scale(1.1);
+}
+
+/* Modo oscuro para la card del home */
+[data-theme="dark"] .card-body {
+    background-color: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .display-1 {
+    background: linear-gradient(135deg, #ffffff, #cccccc) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="dark"] .btn-dark {
+    background-color: #333333 !important;
+    border-color: #333333 !important;
+}
+
+[data-theme="dark"] .btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Color del título en modo oscuro */
+[data-theme="dark"] h1 {
+    background: linear-gradient(135deg, #4A90E2, #7FB3D5, #98bbd3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="dark"] .detalle-titulo {
+    background: linear-gradient(135deg, #4A90E2, #7FB3D5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Modo oscuro para elementos específicos */
+[data-theme="dark"] .metodo-item {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .metodo-principal {
+    color: #2C3E50;
+}
+
+[data-theme="dark"] .metodo-secundario {
+    color: #566573;
+}
+
+[data-theme="dark"] .btn-catalogo {
+    color:#8FB3E2;
+    border-color: #8FB3E2;
+}
+
+/* 🌞 Estilo general (PC / pantallas grandes) */
+#theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 0.5rem 0.75rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+#theme-icon {
+  font-size: 1.2rem;
+  display: inline-block;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+#theme-toggle:active #theme-icon {
+  opacity: 0.5;
+}
+
+[data-theme="dark"] #theme-icon {
+  transform: rotate(180deg);
+}
+
+/* ========== SECCIÓN FAQS CORREGIDA ========== */
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 2rem;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--card-background);
+    cursor: pointer;
+    width: 100%;
+    max-width: 800px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.faq-item summary {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+.faq-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    font-size: 1.5rem;
+    font-weight: 300;
+    transition: transform 0.3s ease;
+}
+
+.faq-item[open] summary::after {
+    content: '−';
+    transform: rotate(0deg);
+}
+
+.faq-item[open] summary {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.faq-item p {
+    margin-top: 15px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding-left: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.faq-item[open] p {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.titulo_preguntas {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablets y móviles grandes */
+@media (max-width: 768px) {
+    .navbar-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 1rem;
+    }
+
+    .navbar {
+        height: auto !important;
+        padding: 1rem 0 !important;
+    }
+
+    .buscador {
+        width: 100%;
+        margin: 0;
+        order: 3;
+    }
+
+    .buscador form {
+        max-width: 100%;
+    }
+
+    .buscador-input {
+        padding: 14px 18px;
+        font-size: 1.1rem;
+    }
+
+    .buscador-btn {
+        padding: 14px 24px;
+        font-size: 1.1rem;
+    }
+
+    .navbar-nav {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .navbar-brand {
+        order: 1;
+    }
+
+    .theme-toggle {
+        order: 4;
+        margin: 10px auto 0 auto;
+    }
+
+    .juegos-container {
+        gap: 1rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .juego-imagen-wrapper {
+        height: 140px;
+    }
+
+    .juego-nombre {
+        font-size: 0.9rem;
+    }
+
+    .juego-precio {
+        font-size: 1.2rem;
+    }
+
+    .page-link {
+        padding: 8px 12px;
+        min-width: 40px;
+        font-size: 0.85rem;
+    }
+
+    .faq-container {
+        padding: 15px;
+    }
+
+    .faq-item {
+        max-width: 100%;
+    }
+
+    .detalle-acciones .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .detalle-titulo {
+        margin-top: 25px;
+        text-align: center;
+        font-size: 1.7rem;
+    }
+
+    .detalle-consola-badge {
+        display: block;
+        margin: 0 auto 1rem auto;
+        text-align: center;
+    }
+}
+
+#theme-text {
+    display: inline;
+}
+
+#theme-icon {
+    display: inline;
+}
+
+/* Móviles pequeños */
+@media (max-width: 576px) {
+    #theme-text {
+        display: none;
+    }
+    .navbar-container {
+        padding: 0.5rem;
+    }
+
+    .buscador {
+        width: 100%;
+        margin: 10px 0 0 0;
+    }
+
+    .buscador form {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .buscador-input {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .buscador-btn {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        width: 100%;
+    }
+
+    .juegos-container {
+        gap: 8px;
+        padding: 8px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        justify-items: center;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .juego-card {
+        width: 180px;
+        height: auto;
+    }
+
+    .juego-imagen-wrapper {
+        height: 200px;
+        padding: 8px;
+    }
+
+    .juego-info {
+        padding: 8px;
+    }
+
+    .juego-nombre {
+        font-size: 0.75rem;
+        height: 32px;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    .juego-precio {
+        font-size: 1rem;
+    }
+
+    .juego-recargo {
+        font-size: 0.75rem;
+    }
+
+    .badge-destacado {
+        font-size: 0.55rem;
+        padding: 3px 6px;
+        top: 4px;
+        right: 4px;
+    }
+
+    .faq-item {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .faq-item summary {
+        font-size: 1rem;
+        padding-right: 25px;
+    }
+
+    .titulo_preguntas {
+        font-size: 1.8rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .metodo-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 15px;
+    }
+
+    .btn-whatsapp,
+    .btn-catalogo {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .page-link {
+        padding: 10px 14px;
+        min-width: 44px;
+        font-size: 0.9rem;
+    }
+
+    .pagination-info {
+        font-size: 0.8rem;
+    }
+
+    .page-item:nth-child(n+4):nth-last-child(n+4) .pagination-number {
+        display: none;
+    }
+
+    .page-item:nth-child(2) .pagination-ellipsis,
+    .page-item:nth-last-child(2) .pagination-ellipsis {
+        display: inline-block !important;
+    }
+}
+
+
+
+/* Muy pequeños */
+@media (max-width: 380px) {
+    #theme-text {
+        display: none;
+    }
+
+    .juego-card {
+        width: 160px;
+    }
+
+    .juego-imagen-wrapper {
+        height: 180px;
+    }
+
+    .buscador-input {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+
+    .buscador-btn {
+        padding: 14px 16px;
+        font-size: 1rem;
+    }
+}
+
+/* ============ CARRITO ============ */
+
+/* Overlay oscuro */
+.carrito-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.carrito-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Popup del carrito */
+.carrito-popup {
+    position: fixed;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    z-index: 9999;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(100%); /* totalmente fuera de pantalla */
+    transition: transform 0.3s ease;
+    display: none;
+    top: calc(var(--scroll-y, 0px)); /* <--- evita que se vea el bloque blanco */
+}
+
+.carrito-popup.show {
+    transform: translateX(0);
+    display: block; /* vuelve visible solo al activarse */
+}
+
+/* Header del popup */
+.carrito-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #dee2e6;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+}
+
+/* Items del carrito */
+.carrito-items {
+    padding: 15px;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.carrito-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.carrito-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.carrito-item-info {
+    flex: 1;
+}
+
+.carrito-item-info h6 {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.carrito-item-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.carrito-item-actions {
+    text-align: right;
+}
+
+/* Total */
+.carrito-total {
+    padding: 20px;
+    border-top: 2px solid #dee2e6;
+    position: sticky;
+    bottom: 0;
+    background: white;
+}
+
+/* Carrito vacío */
+.carrito-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+/* Badge del carrito */
+#carrito-badge {
+    font-size: 10px;
+    padding: 3px 6px;
+}
+
+/* Responsive */
+/* ===== RESPONSIVE CARRITO ===== */
+@media (max-width: 768px) {
+  .carrito-popup {
+    width: 100% !important;      /* ocupa todo el ancho */
+    height: 100vh !important;    /* ocupa toda la altura */
+    right: -100%;                /* oculta fuera de vista al inicio */
+    top: 0;
+    border-radius: 0;
+    transition: right 0.3s ease;
+  }
+
+  .carrito-popup.show {
+    right: 0 !important;         /* entra a la vista completa */
+  }
+
+  .carrito-popup-header {
+    position: sticky;
+    top: 0;
+    background: var(--navbar-bg, #fff);
+    z-index: 10;
+  }
+
+  .carrito-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+
+/* Dark mode */
+[data-theme="dark"] .carrito-popup {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+[data-theme="dark"] .carrito-popup-header {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+[data-theme="dark"] .carrito-item {
+    border-color: #333;
+}
+
+[data-theme="dark"] .carrito-total {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.carrito-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.carrito-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.navbar.fixed-top {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .carrito-popup {
+    position: absolute !important;
+    top: calc(var(--scroll-y, 0px)); /* se actualiza dinámicamente */
+  }
+}
+
+/* ========================
+   🎬 ANIMACIONES CARRITO JS
+======================== */
+
+/* Animación de entrada */
+@keyframes carritoSlideInDesktop {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes carritoSlideInMobile {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animación de salida */
+@keyframes carritoSlideOutDesktop {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes carritoSlideOutMobile {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* ====================================
+   🎨 SELECTOR MÉTODO DE PAGO ELEGANTE
+   ==================================== */
+
+.metodo-pago-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+    padding: 0 10px;
+}
+
+.metodo-pago-container label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    display: block;
+    text-align: center;
+}
+
+/* Selector personalizado */
+.select-metodo-animado {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 14px 45px 14px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Flecha personalizada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    
+    /* Sombra suave */
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+}
+
+/* Hover */
+.select-metodo-animado:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Focus */
+.select-metodo-animado:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Opciones del select */
+.select-metodo-animado option {
+    padding: 12px;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Modo oscuro - Flecha */
+[data-theme="dark"] .select-metodo-animado {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238FB3E3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Modo oscuro - Opciones */
+[data-theme="dark"] .select-metodo-animado option {
+    background-color: #161624;
+    color: #E8F4F8;
+}
+
+/* ====================================
+   📱 RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+    .metodo-pago-container label {
+        font-size: 1rem;
+    }
+    
+    .select-metodo-animado {
+        padding: 16px 45px 16px 18px;
+        font-size: 1rem;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .metodo-pago-container {
+        gap: 12px;
+        margin: 20px 0;
+    }
+    
+    .select-metodo-animado {
+        padding: 18px 45px 18px 16px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+    
+    .metodo-pago-container label {
+        font-size: 0.95rem;
+    }
+}
+
+/* ====================================
+   ✨ ANIMACIÓN OPCIONAL AL CAMBIAR
+   ==================================== */
+
+.select-metodo-animado.changed {
+    animation: selectPulse 0.4s ease;
+}
+
+@keyframes selectPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.finish-cart{
+    margin-top: 15px;
+}
+
+.void-cart{
+    margin-top: 15px;
+}
+
+/* ====================================
+   🎯 ESTILO ALTERNATIVO (OPCIONAL)
+   ==================================== */
+
+/* Si prefieres un estilo más minimalista, descomenta esto:
+
+.select-metodo-animado {
+    border-radius: 25px;
+    padding: 16px 50px 16px 24px;
+    background-color: rgba(74, 144, 226, 0.05);
+    border: 2px solid transparent;
+    background-image: 
+        linear-gradient(var(--card-background), var(--card-background)),
+        linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+*/
+
+/* Hamburguesa blanca para temas oscuros */
+.navbar-toggler {
+    border: 2px solid white;
+    background: transparent;
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    outline: none;
+}
+
+.navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+    top: -6px;
+}
+
+.navbar-toggler-icon::after {
+    top: 6px;
+}
+
+/* Efecto hover */
+.navbar-toggler:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ CARRITO - TEMA OSCURO ============ */
+
+[data-theme="dark"] .carrito-popup {
+    background: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border-left: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .carrito-popup-header {
+    background: var(--card-background) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header h5 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .cart-items-container {
+    background: var(--card-background) !important;
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll {
+    background: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item {
+    background: var(--card-background) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item-name {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-details h6 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-subtotal,
+[data-theme="dark"] .cart-item-subtotal strong {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .quantity-display {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total {
+    background: var(--navbar-bg) !important;
+    border-top-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total h5,
+[data-theme="dark"] .cart-total h4 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .text-body,
+[data-theme="dark"] .text-body-secondary {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-dark-emphasis {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Scrollbar en tema oscuro */
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-track {
+    background: var(--navbar-bg);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ============ CORRECCIÓN TRANSICIÓN PÁGINAS ============ */
+
+/* Remover transiciones problemáticas para navegación */
+body.page-transition {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+#page-wrapper.page-transition {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Mantener solo transiciones suaves para elementos específicos */
+.juego-card, .btn, .navbar, .footer {
+    transition: all 0.3s ease !important;
+}
+
+/* Deshabilitar animaciones de entrada/salida de página */
+.page-transition {
+    animation: none !important;
+}
+
+/* Forzar que el body siempre sea visible */
+body {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: var(--background-color) !important;
+}
+
+/* Asegurar que el contenido principal siempre se vea */
+.container, .main-content {
+    opacity: 1 !important;
+    transform: none !important;
+}

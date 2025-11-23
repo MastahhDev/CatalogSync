@@ -2,9 +2,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Juego
+from .forms import JuegoAdminForm
 
 @admin.register(Juego)
 class JuegoAdmin(admin.ModelAdmin):
+    form = JuegoAdminForm
     list_display = [
         'nombre',
         'consola',
@@ -35,7 +37,7 @@ class JuegoAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Información Básica', {
-            'fields': ('nombre', 'consola', 'imagen', 'mostrar_imagen_preview', 'disponible')
+            'fields': ('nombre', 'consola', 'imagen', 'nueva_portada', 'mostrar_imagen_preview', 'disponible')
         }),
         ('Precios Primarios', {
             'fields': ('precio', 'recargo'),
