@@ -1,9 +1,9 @@
-<div class="carrito-popup-header">
-    <h5>Tu Carrito</h5>
+<div class="carrito-popup-header bg-body border-bottom">
+    <h5 class="text-body">Tu Carrito</h5>
     <button class="btn-close" onclick="cerrarCarrito()"></button>
 </div>
 
-<div id="carrito-items-container">
+<div id="carrito-items-container" class="bg-body">
     {% if items %}
         {% include 'carrito/cart_items.html' %}
     {% else %}
@@ -16,4 +16,27 @@ function cerrarCarrito() {
     document.getElementById('carrito-popup').classList.remove('show');
     document.getElementById('carrito-overlay').classList.remove('show');
 }
+
+// Actualizar carrito cuando cambia el tema
+document.addEventListener('DOMContentLoaded', function() {
+    // Observar cambios en data-theme para forzar redibujo
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'data-theme') {
+                // Forzar actualización de estilos
+                const carrito = document.getElementById('carrito-popup');
+                if (carrito) {
+                    carrito.style.display = 'none';
+                    setTimeout(() => {
+                        carrito.style.display = 'block';
+                    }, 10);
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.documentElement, {
+        attributes: true
+    });
+});
 </script>

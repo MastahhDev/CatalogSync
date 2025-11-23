@@ -24,29 +24,30 @@
 }
 
 .carrusel-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--background-color);
     border-radius: 10px;
 }
 
 .carrusel-wrapper::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--secondary-color);
     border-radius: 10px;
 }
 
 .carrusel-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--primary-color);
 }
 
 /* Card mini */
 .juego-card-mini {
     flex: 0 0 auto;
     width: 180px;
-    background: white;
+    background: var(--card-background);
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
+    border: 1px solid var(--border-color);
 }
 
 .juego-card-mini:hover {
@@ -72,7 +73,7 @@
     width: 100%;
     height: 140px;
     overflow: hidden;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--image-card), var(--image-card-dark));
 }
 
 .juego-imagen-mini {
@@ -94,7 +95,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 8px;
-    color: #333;
+    color: var(--text-color);
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -106,13 +107,82 @@
 .juego-precio-mini {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #28a745;
+    color: var(--success-color);
     margin-bottom: 8px;
 }
 
 .btn-xs {
     padding: 6px 10px;
     font-size: 0.8rem;
+}
+
+/* ============ TEMA OSCURO - CARRUSEL ============ */
+
+[data-theme="dark"] .juego-card-mini {
+    background: var(--card-background);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .juego-card-mini:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] .juego-nombre-mini {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .juego-precio-mini {
+    color: var(--success-color);
+}
+
+[data-theme="dark"] .juego-imagen-wrapper-mini {
+    background: linear-gradient(135deg, var(--image-card), var(--image-card-dark));
+}
+
+[data-theme="dark"] .carrusel-wrapper::-webkit-scrollbar-track {
+    background: var(--navbar-bg);
+}
+
+[data-theme="dark"] .carrusel-wrapper::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .carrusel-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* Botones en tema oscuro */
+[data-theme="dark"] .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-color: var(--primary-color);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    border-color: var(--secondary-color);
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+/* Badge destacado se mantiene igual en ambos temas */
+[data-theme="dark"] .badge-destacado-mini {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+/* Textos secundarios en tema oscuro */
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
 }
 
 /* Responsive */
@@ -128,4 +198,38 @@
     .carrusel-wrapper {
         gap: 10px;
     }
+    
+    .juego-nombre-mini {
+        font-size: 0.85rem;
+    }
+    
+    .juego-precio-mini {
+        font-size: 1rem;
+    }
+}
+
+/* Para Firefox en tema oscuro */
+[data-theme="dark"] .carrusel-wrapper {
+    scrollbar-color: var(--border-color) var(--navbar-bg);
+}
+
+/* Asegurar que los botones sean legibles en ambos temas */
+.btn-primary, .btn-outline-secondary {
+    transition: all 0.3s ease;
+}
+
+/* Estados hover consistentes */
+.juego-card-mini .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Mejora de accesibilidad - focus states */
+.juego-card-mini:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
 }

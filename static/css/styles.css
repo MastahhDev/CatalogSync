@@ -1638,3 +1638,142 @@ h1 {
 .navbar-toggler:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
+/* ============ CARRITO - TEMA OSCURO ============ */
+
+[data-theme="dark"] .carrito-popup {
+    background: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border-left: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .carrito-popup-header {
+    background: var(--card-background) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header h5 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .cart-items-container {
+    background: var(--card-background) !important;
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll {
+    background: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item {
+    background: var(--card-background) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item-name {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-details h6 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-subtotal,
+[data-theme="dark"] .cart-item-subtotal strong {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .quantity-display {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total {
+    background: var(--navbar-bg) !important;
+    border-top-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total h5,
+[data-theme="dark"] .cart-total h4 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .text-body,
+[data-theme="dark"] .text-body-secondary {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-dark-emphasis {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Scrollbar en tema oscuro */
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-track {
+    background: var(--navbar-bg);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* ============ CORRECCIÓN TRANSICIÓN PÁGINAS ============ */
+
+/* Remover transiciones problemáticas para navegación */
+body.page-transition {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+#page-wrapper.page-transition {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Mantener solo transiciones suaves para elementos específicos */
+.juego-card, .btn, .navbar, .footer {
+    transition: all 0.3s ease !important;
+}
+
+/* Deshabilitar animaciones de entrada/salida de página */
+.page-transition {
+    animation: none !important;
+}
+
+/* Forzar que el body siempre sea visible */
+body {
+    opacity: 1 !important;
+    visibility: visible !important;
+    background-color: var(--background-color) !important;
+}
+
+/* Asegurar que el contenido principal siempre se vea */
+.container, .main-content {
+    opacity: 1 !important;
+    transform: none !important;
+}
