@@ -1,4 +1,3 @@
-# catalog/management/commands/actualizar_ps5.py
 import csv
 import os
 import re
@@ -53,12 +52,33 @@ class Command(BaseCommand):
         
         return texto_sin_acentos
 
-    def limpiar_nombre_avanzado(self, nombre, debug=False):
-        """Limpia el nombre quitando idiomas, ediciones específicas, etc."""
-        if not nombre:
-            return ""
+    def extraer_version(self, nombre):
+        """Extrae información de versión/idioma del nombre"""
+        versiones = {
+            'subtitulado': ['subtitulado', 'subtitulada', '(subtitulado)'],
+            'español_latino': ['espanol latino', 'español latino', 'latino'],
+            'español_españa': ['espanol espana', 'español españa'],
+            'ingles': ['english', 'ingles', 'inglés']
+        }
+        
+        nombre_lower = nombre.lower()
+        
+        for tipo, keywords in versiones.items():
+            for keyword in keywords:
+                if keyword in nombre_lower:
+                    return tipo
+        
+        return None
 
-        # Primero quitar acentos y diacríticos
+    def limpiar_nombre_base(self, nombre):
+        """Limpia el nombre pero MANTIENE información de versión importante"""
+        if not nombre:
+            return "", None
+
+        # Extraer versión ANTES de limpiar
+        version = self.extraer_version(nombre)
+        
+        # Quitar acentos
         nombre = self.quitar_acentos(nombre)
             
         # Quitar emojis y caracteres especiales
@@ -74,113 +94,111 @@ class Command(BaseCommand):
         # Quitar caracteres especiales al inicio
         nombre = re.sub(r'^[\'\"\#\-\s]+', '', nombre)
         
-        # PATRONES A FILTRAR (case insensitive)
+        # PATRONES A FILTRAR (pero SIN quitar idiomas/versiones)
         patrones_a_eliminar = [
-            # Idiomas y subtítulos
-            r'\bespanol\s+espana\b', r'\bespanol\s+latino\b',
-            r'\benglish\b', r'\bsubtitulado\b', r'\bsubtitulada\b',
-            r'\bespanol\b', r'\bspanish\b',
-            
             # Ediciones
             r'\bdeluxe\s+edition\b', r'\bgold\s+edition\b', r'\bstandard\s+edition\b',
             r'\bspecial\s+edition\b', r'\bcollector\'s\s+edition\b', r'\bultimate\s+edition\b',
             r'\bpremium\s+edition\b', r'\bcomplete\s+edition\b', r'\bgame\s+of\s+the\s+year\b',
             r'\bgoty\b', r'\bedicion\s+deluxe\b', r'\bedicion\s+gold\b',
-            r'\bedicion\s+estandar\b', r'\bedicion\s+especial\b', r'\blatino\b', r'\bespaol\s+espaa\b',
+            r'\bedicion\s+estandar\b', r'\bedicion\s+especial\b',
             
-            # Palabras generales a eliminar
+            # Palabras generales
             r'\bversion\b', r'\bedicion\b', r'\bdigital\b', r'\bfisico\b',
-            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b', r'\bespaol\b', r'\bespaa\b', r'\b(ps5)\b',
+            r'\bphysical\b', r'\bdownload\b', r'\bdescarga\b', r'\b(ps5)\b', r'\b(ps4)\b',
+            r'\bsecundario\b',
         ]
         
-        # Aplicar todos los patrones
+        # Aplicar patrones
         for patron in patrones_a_eliminar:
             nombre = re.sub(patron, '', nombre, flags=re.IGNORECASE)
         
-        # Quitar paréntesis vacíos y espacios extra
+        # Limpiar espacios
         nombre = re.sub(r'\(\s*\)', '', nombre)
         nombre = re.sub(r'\[\s*\]', '', nombre)
-        
-        # Quitar múltiples espacios
         nombre = re.sub(r'\s+', ' ', nombre)
-        
-        # Quitar espacios al inicio y final
         nombre = nombre.strip()
-        
-        # Quitar comas y puntos al final
         nombre = re.sub(r'[.,;\s]+$', '', nombre)
         
-        return nombre
+        return nombre, version
 
-    def buscar_juego_similar(self, nombre_limpio):
-        """Busca juegos en la base de datos que coincidan aproximadamente"""
-        # Primero intenta búsqueda exacta sin "PS5"
-        nombre_sin_ps5 = nombre_limpio.replace(' PS5', '').strip()
+    def buscar_juego_exacto(self, nombre_csv):
+        """Busca el juego con coincidencia EXACTA incluyendo versión"""
+        nombre_base, version_csv = self.limpiar_nombre_base(nombre_csv)
         
-        # 1. Buscar coincidencias EXACTAS (case insensitive)
-        juegos_exactos = Juego.objects.filter(
-            nombre__iexact=nombre_limpio,
-            consola='ps5'
-        )
-        if juegos_exactos.exists():
-            return juegos_exactos.first()
+        self.stdout.write(f"\n🔍 Buscando: '{nombre_csv}'")
+        self.stdout.write(f"   Nombre base: '{nombre_base}'")
+        self.stdout.write(f"   Versión detectada: {version_csv}")
         
-        # 2. Buscar sin "PS5" pero EXACTO
-        juegos_sin_ps5_exacto = Juego.objects.filter(
-            nombre__iexact=nombre_sin_ps5,
-            consola='ps5'
-        )
-        if juegos_sin_ps5_exacto.exists():
-            return juegos_sin_ps5_exacto.first()
+        # Obtener todos los PS5
+        juegos_ps5 = Juego.objects.filter(consola='ps5')
         
-        # 3. Limpiar el nombre de la BD también antes de comparar
-        nombre_muy_limpio = self.limpiar_nombre_avanzado(nombre_sin_ps5)
+        candidatos = []
         
-        # 4. Obtener TODOS los juegos PS5 y compararlos uno por uno
-        todos_juegos_ps5 = Juego.objects.filter(consola='ps5')
-        
-        mejor_coincidencia = None
-        mejor_ratio = 0.0
-        
-        for juego_candidato in todos_juegos_ps5:
-            # Limpiar el nombre del candidato de la BD
-            nombre_candidato_limpio = self.limpiar_nombre_avanzado(
-                juego_candidato.nombre.replace(' PS5', '')
-            )
+        for juego in juegos_ps5:
+            nombre_bd, version_bd = self.limpiar_nombre_base(juego.nombre)
             
-            # Calcular similitud
-            ratio = SequenceMatcher(
-                None, 
-                nombre_muy_limpio.lower(), 
-                nombre_candidato_limpio.lower()
-            ).ratio()
+            # Calcular similitud del nombre base
+            ratio_nombre = SequenceMatcher(None, nombre_base.lower(), nombre_bd.lower()).ratio()
             
-            # Debug: mostrar comparación
-            if ratio > 0.7:
+            # El nombre debe ser MUY similar
+            if ratio_nombre < 0.85:
+                continue
+            
+            # Calcular score de versión
+            version_match = 0.0
+            if version_csv == version_bd:
+                version_match = 1.0  # Versión exacta
+            elif version_csv is None and version_bd is None:
+                version_match = 1.0  # Ambos sin versión específica
+            elif version_csv is None or version_bd is None:
+                version_match = 0.3  # Uno tiene versión, otro no
+            else:
+                version_match = 0.0  # Versiones diferentes
+            
+            # Score combinado (70% nombre, 30% versión)
+            score_total = (ratio_nombre * 0.7) + (version_match * 0.3)
+            
+            candidatos.append({
+                'juego': juego,
+                'score': score_total,
+                'ratio_nombre': ratio_nombre,
+                'version_bd': version_bd,
+                'nombre_bd': nombre_bd
+            })
+            
+            if ratio_nombre > 0.85:
                 self.stdout.write(
-                    f"  Comparando: '{nombre_muy_limpio}' vs '{nombre_candidato_limpio}' = {ratio:.2f}"
+                    f"   Candidato: '{juego.nombre}' | "
+                    f"Nombre: {ratio_nombre:.2f} | "
+                    f"Versión: {version_bd} | "
+                    f"Score: {score_total:.2f}"
                 )
-            
-            if ratio > mejor_ratio:
-                mejor_ratio = ratio
-                mejor_coincidencia = juego_candidato
         
-        # Solo aceptar coincidencias MUY similares
-        if mejor_ratio >= 0.90:
+        # Ordenar por score
+        candidatos.sort(key=lambda x: x['score'], reverse=True)
+        
+        if not candidatos:
+            self.stdout.write(self.style.ERROR("   ✗ No se encontraron candidatos"))
+            return None
+        
+        mejor = candidatos[0]
+        
+        # Requerir score mínimo de 0.90 para aceptar
+        if mejor['score'] >= 0.90:
             self.stdout.write(
                 self.style.SUCCESS(
-                    f"✓ MATCH encontrado: '{mejor_coincidencia.nombre}' (similitud: {mejor_ratio:.2f})"
+                    f"   ✓ MATCH: '{mejor['juego'].nombre}' (Score: {mejor['score']:.2f})"
                 )
             )
-            return mejor_coincidencia
-        elif mejor_ratio > 0.7:
+            return mejor['juego']
+        else:
             self.stdout.write(
                 self.style.WARNING(
-                    f"⚠ Match rechazado (muy bajo): '{mejor_coincidencia.nombre if mejor_coincidencia else 'N/A'}' (similitud: {mejor_ratio:.2f})"
+                    f"   ⚠ Score muy bajo: {mejor['score']:.2f} - RECHAZADO"
                 )
             )
-        
-        return None
+            return None
 
     def limpiar_precio(self, precio_str):
         """Convierte string con precio a Decimal - FORMATO ARGENTINO"""
@@ -230,26 +248,22 @@ class Command(BaseCommand):
 
     def buscar_imagen(self, nombre_juego):
         """Busca la imagen correspondiente al juego"""
-        self.stdout.write(f"\n🖼️  BUSCANDO IMAGEN PARA: {nombre_juego}")
-        
         nombre_base = self.generar_nombre_imagen_simple(nombre_juego)
         img_dir = os.path.join(settings.BASE_DIR, 'static', 'img')
+        
+        if not os.path.exists(img_dir):
+            return "img/default.jpg"
+        
         archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
         
-        self.stdout.write(f"Archivos en directorio: {len(archivos_existentes)}")
-        
         if nombre_base in archivos_existentes:
-            self.stdout.write(self.style.SUCCESS(f"✓ IMAGEN ENCONTRADA: {nombre_base}"))
             return f"img/{nombre_base}"
         
         archivos_lower = [f.lower() for f in archivos_existentes]
         if nombre_base.lower() in archivos_lower:
             archivo_real = archivos_existentes[archivos_lower.index(nombre_base.lower())]
-            self.stdout.write(self.style.SUCCESS(f"✓ IMAGEN ENCONTRADA: {archivo_real}"))
             return f"img/{archivo_real}"
         
-        self.mostrar_archivos_relacionados(nombre_juego, archivos_existentes)
-        self.stdout.write(self.style.ERROR(f"✗ NO SE ENCONTRÓ IMAGEN: {nombre_base}"))
         return "img/default.jpg"
 
     def generar_nombre_imagen_simple(self, nombre_juego):
@@ -261,35 +275,12 @@ class Command(BaseCommand):
         else:
             consola = 'ps5'
         
-        # Quitar consola del nombre (incluyendo paréntesis)
         nombre = nombre.replace(' ps4', '').replace(' ps5', '').replace('(ps5)', '').replace('(ps4)', '').strip()
-        
         nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
         nombre = nombre.replace(" ", "_")
         
-        nombre_archivo = f"{nombre}_{consola}.jpg"
-        self.stdout.write(f"Nombre generado: {nombre_archivo}")
-        return nombre_archivo
+        return f"{nombre}_{consola}.jpg"
 
-    def mostrar_archivos_relacionados(self, nombre_juego, archivos_existentes):
-        """Muestra archivos relacionados para debug"""
-        nombre_busqueda = self.quitar_acentos(nombre_juego.lower())
-        palabras_busqueda = [p for p in nombre_busqueda.split() if len(p) > 3]
-        
-        self.stdout.write("Archivos relacionados encontrados:")
-        relacionados = []
-        
-        for archivo in archivos_existentes:
-            archivo_lower = self.quitar_acentos(archivo.lower())
-            if any(palabra in archivo_lower for palabra in palabras_busqueda):
-                relacionados.append(archivo)
-        
-        for archivo in relacionados[:10]:
-            self.stdout.write(f"  - {archivo}")
-        
-        if not relacionados:
-            self.stdout.write("  (ningún archivo relacionado encontrado)")
-            
     def generar_reporte_portadas_no_encontradas(self, juegos_actualizados):
         """Genera un reporte de las portadas que no se encontraron"""
         self.stdout.write(self.style.WARNING(f'\n{"🚨 REPORTE DE PORTADAS NO ENCONTRADAS 🚨":=^60}'))
@@ -315,35 +306,6 @@ class Command(BaseCommand):
             self.stdout.write("\n📋 Lista de juegos PS5 sin portada:")
             for juego in juegos_sin_portada:
                 self.stdout.write(f"   • {juego.nombre}")
-                
-            self.stdout.write(f"\n💡 Nombres de archivo sugeridos:")
-            for juego in juegos_sin_portada[:15]:
-                nombre_sugerido = self.generar_nombre_imagen_sugerido(juego.nombre)
-                self.stdout.write(f"   • {nombre_sugerido}")
-    
-        juegos_con_portada = Juego.objects.filter(
-            consola='ps5', 
-            disponible=True
-        ).exclude(imagen="img/default.jpg").exclude(imagen="img/default.png").exclude(imagen__isnull=True)
-        
-        self.stdout.write(self.style.SUCCESS(f'\n✅ Juegos PS5 CON portada: {juegos_con_portada.count()}'))
-        
-    def generar_nombre_imagen_sugerido(self, nombre_juego):
-        """Genera el nombre de archivo sugerido para la imagen"""
-        nombre = self.quitar_acentos(nombre_juego.lower())
-        
-        if 'ps4' in nombre:
-            consola = 'ps4'
-        else:
-            consola = 'ps5'
-        
-        # Quitar consola del nombre (incluyendo paréntesis)
-        nombre = nombre.replace(' ps4', '').replace(' ps5', '').replace('(ps5)', '').replace('(ps4)', '').strip()
-        
-        nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
-        nombre = nombre.replace(" ", "_")
-        
-        return f"{nombre}_{consola}.jpg"
 
     def handle(self, *args, **options):
         csv_filename = options['file']
@@ -376,7 +338,6 @@ class Command(BaseCommand):
                 
                 if col_nombre not in csv_reader.fieldnames:
                     self.stdout.write(self.style.ERROR(f'No se encontro la columna "{col_nombre}"'))
-                    self.stdout.write(f'Columnas disponibles: {csv_reader.fieldnames}')
                     return
                 
                 if col_precio not in csv_reader.fieldnames:
@@ -384,50 +345,32 @@ class Command(BaseCommand):
                     return
                 
                 tiene_columna_disponible = col_disponible in csv_reader.fieldnames
-                if not tiene_columna_disponible:
-                    self.stdout.write(self.style.WARNING(f'No se encontró la columna "{col_disponible}". Usando disponible=True por defecto.'))
                 
                 for linea_num, row in enumerate(csv_reader, start=2):
                     try:
-                        nombre_sucio = row.get(col_nombre, '').strip()
-                        if not nombre_sucio:
+                        nombre_csv = row.get(col_nombre, '').strip()
+                        if not nombre_csv or len(nombre_csv) < 3:
                             continue
                         
                         # Determinar disponibilidad
                         if tiene_columna_disponible:
-                            disponible_str = row.get(col_disponible, '')
-                            disponible = self.determinar_disponibilidad(disponible_str)
+                            disponible = self.determinar_disponibilidad(row.get(col_disponible, ''))
                         else:
                             disponible = True
                         
-                        # Limpiar nombre avanzado
-                        nombre_limpio = self.limpiar_nombre_avanzado(nombre_sucio)
-                        
-                        if not nombre_limpio or len(nombre_limpio) < 3:
-                            continue
-                        
-                        # Agregar PS5 al nombre si no lo tiene
-                        if not nombre_limpio.upper().endswith('PS5'):
-                            nombre_busqueda = f"{nombre_limpio} PS5"
-                        else:
-                            nombre_busqueda = nombre_limpio
-                        
-                        self.stdout.write(f"TRANSFORMACIÓN: '{nombre_sucio}' -> '{nombre_busqueda}'")
-                        
-                        # Buscar juego en la base de datos
-                        juego = self.buscar_juego_similar(nombre_busqueda)
+                        # Buscar juego con coincidencia exacta
+                        juego = self.buscar_juego_exacto(nombre_csv)
                         
                         if not juego:
-                            no_encontrados.append(f"'{nombre_sucio}' -> '{nombre_busqueda}'")
-                            self.stdout.write(self.style.WARNING(f'NO ENCONTRADO: {nombre_busqueda}'))
+                            no_encontrados.append(nombre_csv)
+                            self.stdout.write(self.style.WARNING(f'NO ENCONTRADO: {nombre_csv}'))
                             continue
                         
                         # Obtener y limpiar precio
-                        precio_str = row.get(col_precio, '').strip()
-                        precio = self.limpiar_precio(precio_str)
+                        precio = self.limpiar_precio(row.get(col_precio, ''))
                         recargo = self.calcular_recargo(precio)
                         
-                        # Actualizar el juego encontrado
+                        # Actualizar
                         juego.precio = precio
                         juego.recargo = recargo
                         juego.disponible = disponible
@@ -440,9 +383,11 @@ class Command(BaseCommand):
                         
                         if not disponible:
                             desactivados_por_csv += 1
-                            self.stdout.write(self.style.WARNING(f'ACTUALIZADO (NO DISPONIBLE): {juego.nombre} - ${precio}'))
-                        else:
-                            self.stdout.write(self.style.SUCCESS(f'ACTUALIZADO: {juego.nombre} - ${precio}'))
+                        
+                        estado = "NO DISPONIBLE" if not disponible else "OK"
+                        self.stdout.write(
+                            self.style.SUCCESS(f'✓ {estado}: {juego.nombre} - ${precio}')
+                        )
                         
                     except Exception as e:
                         error_msg = f'Linea {linea_num}: {str(e)}'
@@ -454,15 +399,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Error: {str(e)}'))
             return
         
-        # Marcar como no disponibles SOLO los PS5 que NO están en el stock
+        # Desactivar juegos no en stock
         if juegos_en_stock_ids:
             juegos_a_desactivar = Juego.objects.filter(consola='ps5').exclude(id__in=juegos_en_stock_ids)
             desactivados_count = juegos_a_desactivar.update(disponible=False)
-            
-            self.stdout.write(f"\n🔍 PS5 desactivados (fuera de stock): {desactivados_count}")
-            if desactivados_count > 0:
-                for juego in juegos_a_desactivar[:5]:
-                    self.stdout.write(f"   - {juego.nombre}")
         else:
             desactivados_count = 0
         
@@ -475,7 +415,7 @@ class Command(BaseCommand):
         
         if no_encontrados:
             self.stdout.write(self.style.WARNING("\nJuegos no encontrados en BD:"))
-            for nombre in no_encontrados[:100]:
+            for nombre in no_encontrados[:20]:
                 self.stdout.write(f"  - {nombre}")
         
         self.generar_reporte_portadas_no_encontradas(actualizados)
