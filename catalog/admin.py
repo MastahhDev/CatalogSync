@@ -1,8 +1,12 @@
 # catalog/admin.py
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Juego
+from django.urls import path
+from .models import Juego, Utilidades
 from .forms import JuegoAdminForm
+from django import forms
+from django.shortcuts import render, redirect
+import csv
 
 @admin.register(Juego)
 class JuegoAdmin(admin.ModelAdmin):
@@ -124,3 +128,46 @@ class JuegoAdmin(admin.ModelAdmin):
         )
         self.message_user(request, f'Precio secundario eliminado de {updated} juego(s).')
     eliminar_precio_secundario.short_description = '🔵 Eliminar precio secundario'
+    
+class StockPS4UploadForm(forms.Form):
+    archivo_csv = forms.FileField()
+
+class UtilidadesAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request): return False
+    def has_delete_permission(self, request, obj=None): return False
+    def has_change_permission(self, request, obj=None): return True
+
+    def changelist_view(self, request, extra_context=None):
+        # Redirige directamente a tu vista personalizada
+        return redirect("subir-stock-ps4/")
+
+
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('subir-stock-ps4/', self.subir_stock_ps4)
+        ]
+        return my_urls + urls
+
+    def subir_stock_ps4(self, request):
+        if request.method == "POST":
+            form = StockPS4UploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                archivo = form.cleaned_data["archivo_csv"].read().decode('utf-8').splitlines()
+                reader = csv.DictReader(archivo)
+
+                # Acá va tu lógica actual del comando manage.py ps4
+                for fila in reader:
+                    print(fila)  # reemplazar por lógica real
+
+                self.message_user(request, "Stock PS4 actualizado correctamente.")
+                return redirect("../")
+        else:
+            form = StockPS4UploadForm()
+
+        return render(request, "admin/subir_stock_ps4.html", {"form": form})
+        
+
+# Registrar una sección "Utilidades"
+admin.site.register(Utilidades, UtilidadesAdmin)

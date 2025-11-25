@@ -9,4 +9,5 @@ urlpatterns = [
     path('questions/', views.questions, name='questions'),
     path('about/', views.about, name='about'),
     path('carrito/', include('carrito.urls')),
+    path("catalog/", include("catalog.urls")),
 ]

@@ -1,8 +1,11 @@
 # catalog/views.py
 from django.shortcuts import render, get_object_or_404
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.core.paginator import Paginator
 from .models import Juego
+
+def subir_stock_ps4(request):
+    return HttpResponse("Stock PS4 actualizado.")
 
 def catalogo_general(request):
     """Vista del catálogo general con todos los juegos"""

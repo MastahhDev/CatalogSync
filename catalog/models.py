@@ -87,3 +87,12 @@ class Juego(models.Model):
         if self.tiene_secundario and self.precio_secundario:
             return max(self.precio, self.precio_secundario)
         return self.precio
+    
+class Utilidades(models.Model):
+    class Meta:
+        managed = False
+        verbose_name = "Utilidad"
+        verbose_name_plural = "Utilidades"
+
+    def __str__(self):
+        return "Utilidades del sistema"
