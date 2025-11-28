@@ -13,6 +13,7 @@ STATICFILES_DIRS = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-is5ti8&b@!cbilz#qcfi&$y$fiej%7tfuu@!2g)xosyfg@%nbw'
+FACEBOOK_PIXEL_ID = os.environ.get('FACEBOOK_PIXEL_ID', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'CaSy.context_processors.facebook_pixel',
             ],
         },
     },
