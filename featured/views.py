@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
-from catalog.models import Juego
+from catalog.models import Juego, ResenaCliente
 
 # Create your views here.
 def home(request):
@@ -8,12 +8,15 @@ def home(request):
     juegos_destacados = Juego.objects.filter(
         destacado=True,
         disponible=True
-    ).order_by('-fecha_actualizacion')[:10]  # Máximo 10 destacados
+    ).order_by('-fecha_actualizacion')[:10]
+    
+    # Obtener reseñas activas
+    resenas = ResenaCliente.objects.filter(activo=True).order_by('-fecha')[:10]
     
     context = {
-        'juegos': juegos_destacados,  # Para el carrusel
+        'juegos': juegos_destacados,  # Para el carrusel de juegos
+        'resenas': resenas,  # Para el carrusel de reseñas
     }
-    
     return render(request, 'home.html', context)
 
 def featured(request):

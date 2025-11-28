@@ -4,11 +4,48 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/carrusel.css' %}?v={{ now|date:'U' }}">
+    <link rel="stylesheet" href="{% static 'css/resena.css' %}?v={{ now|date:'U' }}">
     <main class="container py-5">
         <section class="card card-body">
             <h1 class="display-1 text-center">ProshopGames</h1>
             <p class="text-center">Catalogo digital de juegos PS4 y PS5</p>
             <p class="text-center">Podes ver los juegos disponibles, o mandanos un mensaje en nuestras redes sociales!</p>
+
+            <!-- Carrusel de Reseñas de Clientes -->
+            <div class="reseñas-section mb-5">
+                <h2 class="display-1 text-center">Opiniones de clientes</h2>
+                <p class="text-center">Podes ver todas las reseñas tambien en nuestro Instagram</p>
+                <div class="carrusel-container">
+                    <div class="carrusel-wrapper">
+                        {% for resena in resenas %}
+                            <div class="reseña-card-mini">
+                                <!-- Imagen estilo juego destacado -->
+                                <div class="juego-imagen-wrapper-mini">
+                                    <img src="{% static resena.get_nombre_archivo_imagen %}" 
+                                        alt="@{{ resena.cliente }}" 
+                                        class="juego-imagen-mini"
+                                        onerror="this.onerror=null; this.src='/static/img/default-cliente.png'">
+                                </div>
+                                
+                                <div class="juego-info-mini">
+                                    <!-- Instagram como título -->
+                                    <h6 class="juego-nombre-mini instagram-usuario">@{{ resena.cliente }}</h6>
+                                    
+                                    <!-- Juego como subtítulo -->
+                                    <p class="juego-subtitulo-mini">{{ resena.juego }}</p>
+                                    
+                                    <!-- Reseña truncada -->
+                                    <p class="reseña-texto-mini">"{{ resena.reseña|truncatewords:12 }}"</p>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="text-center w-100">
+                                <p class="text-muted">No hay reseñas disponibles por el momento.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 
             <!-- Carrusel de Destacados -->
             <div class="destacados-section mb-5">
@@ -46,14 +83,6 @@
                                                     <p class="juego-precio-mini text-muted">Consultar</p>
                                                 {% endif %}
                                             {% endif %}
-                                            
-                                            <button class="btn btn-primary btn-xs w-100"
-                                                    hx-post="{% url 'carrito:agregar' juego.id %}"
-                                                    hx-target="body"
-                                                    hx-swap="none"
-                                                    onclick="event.stopPropagation(); event.preventDefault();">
-                                                <i class="fas fa-cart-plus"></i>
-                                            </button>
                                         </div>
                                     </div>
                                 </a>

@@ -17,12 +17,26 @@ class Command(BaseCommand):
         parser.add_argument('--columna-nombre', type=str, default='JUEGOS', help='Nombre de la columna con el nombre del juego')
         parser.add_argument('--columna-precio', type=str, default='PRECIO', help='Nombre de la columna con el precio')
         parser.add_argument('--columna-disponible', type=str, default='DISPONIBLE', help='Nombre de la columna con disponibilidad')
-        parser.add_argument('--consola', type=str, default='ps4', help='Consola (ps4 o ps5)')
         parser.add_argument('--solo-actualizar', action='store_true', help='Solo actualizar juegos existentes')
         parser.add_argument('--mostrar-portadas-faltantes', action='store_true', help='Mostrar lista de portadas faltantes')
         parser.add_argument('--debug', action='store_true', help='Mostrar información de depuración')
         parser.add_argument('--corregir-precios', action='store_true', help='Corregir juegos secundarios con precios en campos equivocados')
         parser.add_argument('--dry-run', action='store_true', help='Simular sin hacer cambios reales')
+
+    def detectar_consola(self, nombre):
+        """Detecta la consola del juego basándose en el nombre"""
+        nombre_upper = nombre.upper()
+        
+        # Si dice explícitamente PS5, es PS5
+        if 'PS5' in nombre_upper:
+            return 'ps5'
+        
+        # Si dice explícitamente PS4, es PS4
+        if 'PS4' in nombre_upper:
+            return 'ps4'
+        
+        # Por defecto, PS4 (para backwards compatibility)
+        return 'ps4'
 
     def corregir_precios_secundarios(self, dry_run=False):
         """Corrige juegos secundarios que tienen el precio en el campo equivocado"""
@@ -85,7 +99,7 @@ class Command(BaseCommand):
         return texto_sin_acentos
 
     def extraer_version(self, nombre):
-        """Extrae información de versión/idioma del nombre - IGUAL QUE PS5"""
+        """Extrae información de versión/idioma del nombre"""
         versiones = {
             'subtitulado': ['subtitulado', 'subtitulada', '(subtitulado)'],
             'español_latino': ['espanol latino', 'español latino', 'latino'],
@@ -103,7 +117,7 @@ class Command(BaseCommand):
         return None
 
     def limpiar_nombre_base(self, nombre):
-        """Limpia el nombre pero MANTIENE información de versión importante - IGUAL QUE PS5"""
+        """Limpia el nombre pero MANTIENE información de versión importante"""
         if not nombre:
             return "", None
 
@@ -155,12 +169,13 @@ class Command(BaseCommand):
         return nombre, version
 
     def buscar_juego_exacto(self, nombre_csv, consola):
-        """Busca el juego con coincidencia EXACTA incluyendo versión - IGUAL QUE PS5"""
+        """Busca el juego con coincidencia EXACTA incluyendo versión"""
         nombre_base, version_csv = self.limpiar_nombre_base(nombre_csv)
         
         self.stdout.write(f"\n🔍 Buscando: '{nombre_csv}'")
         self.stdout.write(f"   Nombre base: '{nombre_base}'")
         self.stdout.write(f"   Versión detectada: {version_csv}")
+        self.stdout.write(f"   Consola: {consola}")
         
         # Obtener todos los juegos de la consola
         juegos_consola = Juego.objects.filter(consola=consola)
@@ -277,21 +292,29 @@ class Command(BaseCommand):
     def buscar_imagen(self, nombre_juego, consola):
         """Busca la imagen correspondiente al juego"""
         try:
+            self.stdout.write(f"\n🖼️  BUSCANDO IMAGEN PARA: {nombre_juego} ({consola})")
+            
             nombre = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
             nombre = self.quitar_acentos(nombre.lower())
             
-            nombre = nombre.replace(f' {consola}', '').replace(f'{consola}', '').strip()
+            # Quitar todas las menciones de consola del nombre
+            nombre = nombre.replace(' ps5', '').replace(' ps4', '')
+            nombre = nombre.replace('ps5', '').replace('ps4', '')
+            nombre = nombre.replace('(ps5)', '').replace('(ps4)', '').strip()
             
             nombre = nombre.replace("'", "").replace(":", "").replace("&", "and")
             nombre = nombre.replace("+", "").replace("#", "").replace("!", "")
             nombre = nombre.replace("?", "").replace("*", "").replace("/", "")
             nombre = nombre.replace("\\", "").replace('"', "").replace("|", "")
             
+            # Generar nombre con la consola correcta
             nombre_archivo1 = f"{nombre.replace(' ', '_')}_{consola}.jpg"
             nombre_archivo2 = f"{nombre.replace(' ', '')}_{consola}.jpg"
             
             palabras = [p for p in nombre.split() if len(p) > 2 and p not in ['the', 'and', 'del', 'de', 'la', 'el']]
             nombre_archivo3 = f"{'_'.join(palabras[:4])}_{consola}.jpg" if palabras else None
+            
+            self.stdout.write(f"   Buscando: {nombre_archivo1}")
             
             img_dir = os.path.join(settings.BASE_DIR, 'static', 'img')
             
@@ -300,20 +323,26 @@ class Command(BaseCommand):
             
             archivos_existentes = [f for f in os.listdir(img_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
             
+            # Buscar coincidencia exacta
             for nombre_archivo in [nombre_archivo1, nombre_archivo2, nombre_archivo3]:
                 if nombre_archivo and os.path.exists(os.path.join(img_dir, nombre_archivo)):
+                    self.stdout.write(self.style.SUCCESS(f"   ✓ IMAGEN ENCONTRADA: {nombre_archivo}"))
                     return f"img/{nombre_archivo}"
             
+            # Buscar sin case sensitive
             archivos_lower = [f.lower() for f in archivos_existentes]
             
             for nombre_archivo in [nombre_archivo1, nombre_archivo2, nombre_archivo3]:
                 if nombre_archivo and nombre_archivo.lower() in archivos_lower:
                     archivo_real = archivos_existentes[archivos_lower.index(nombre_archivo.lower())]
+                    self.stdout.write(self.style.SUCCESS(f"   ✓ IMAGEN ENCONTRADA: {archivo_real}"))
                     return f"img/{archivo_real}"
             
+            self.stdout.write(self.style.ERROR(f"   ✗ NO SE ENCONTRÓ IMAGEN"))
             return "img/default.jpg"
             
         except Exception as e:
+            self.stdout.write(self.style.ERROR(f"   ❌ Error buscando imagen: {str(e)}"))
             return "img/default.jpg"
 
     def verificar_portadas_faltantes(self, juegos_procesados):
@@ -341,7 +370,8 @@ class Command(BaseCommand):
         """Genera nombres de archivo sugeridos para las portadas"""
         nombre_limpio = re.sub(r'\s*\(SECUNDARIO\)\s*', '', nombre_juego, flags=re.IGNORECASE)
         nombre_limpio = self.quitar_acentos(nombre_limpio.lower())
-        nombre_limpio = nombre_limpio.replace(f' {consola}', '').strip()
+        nombre_limpio = nombre_limpio.replace(' ps5', '').replace(' ps4', '')
+        nombre_limpio = nombre_limpio.replace('ps5', '').replace('ps4', '').strip()
         
         variaciones = []
         
@@ -375,7 +405,6 @@ class Command(BaseCommand):
         col_nombre = options['columna_nombre']
         col_precio = options['columna_precio']
         col_disponible = options['columna_disponible']
-        consola = options['consola'].lower()
         solo_actualizar = options['solo_actualizar']
         debug = options.get('debug', False)
         
@@ -422,6 +451,10 @@ class Command(BaseCommand):
                         if not nombre_sucio:
                             continue
                         
+                        # ⭐ DETECTAR CONSOLA AUTOMÁTICAMENTE DEL NOMBRE
+                        consola = self.detectar_consola(nombre_sucio)
+                        self.stdout.write(f"\n📀 Consola detectada para '{nombre_sucio}': {consola.upper()}")
+                        
                         if tiene_columna_disponible:
                             disponible_str = row.get(col_disponible, '')
                             if disponible_str is None:
@@ -440,7 +473,7 @@ class Command(BaseCommand):
                         precio_secundario = self.limpiar_precio(precio_str)
                         recargo_secundario = self.calcular_recargo(precio_secundario)
                         
-                        # Usar la nueva búsqueda inteligente que respeta versiones
+                        # Usar la búsqueda con la consola correcta
                         juego_existente = self.buscar_juego_exacto(nombre_sucio, consola)
                         
                         if juego_existente:
@@ -560,7 +593,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.WARNING(f'{"="*60}'))
                 
                 for i, portada in enumerate(portadas_faltantes, 1):
-                    self.stdout.write(self.style.WARNING(f'\n{i}. {portada["juego"]}'))
+                    self.stdout.write(self.style.WARNING(f'\n{i}. {portada["juego"]} ({portada["consola"].upper()})'))
                     self.stdout.write(f'   📝 Nombres sugeridos:')
                     for sugerencia in portada['nombres_sugeridos']:
                         self.stdout.write(f'      - {sugerencia}')

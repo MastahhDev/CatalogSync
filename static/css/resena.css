@@ -1,0 +1,104 @@
+/* Estilos para reseñas que coincidan con juegos destacados */
+.reseña-card-mini {
+    flex: 0 0 auto;
+    width: 180px;
+    background: var(--card-background);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.reseña-card-mini:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Usar los mismos estilos de imagen que los juegos */
+.juego-imagen-wrapper-mini {
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--image-card), var(--image-card-dark));
+}
+
+.juego-imagen-mini {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.reseña-card-mini:hover .juego-imagen-mini {
+    transform: scale(1.1);
+}
+
+.juego-info-mini {
+    padding: 12px;
+}
+
+.juego-nombre-mini {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.instagram-usuario {
+    color: #E1306C; /* Color Instagram */
+}
+
+.juego-subtitulo-mini {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    font-style: italic;
+}
+
+.reseña-texto-mini {
+    font-size: 0.75rem;
+    color: var(--text-color);
+    line-height: 1.3;
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    min-height: 2.8em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reseña-card-mini {
+        width: 150px;
+    }
+    
+    .juego-imagen-wrapper-mini {
+        height: 120px;
+    }
+    
+    .juego-nombre-mini {
+        font-size: 0.85rem;
+    }
+    
+    .juego-subtitulo-mini {
+        font-size: 0.75rem;
+    }
+    
+    .reseña-texto-mini {
+        font-size: 0.7rem;
+    }
+}

@@ -1432,354 +1432,6 @@ h1 {
   }
 }
 
-/* ====================================
-   🎨 SELECTOR MÉTODO DE PAGO ELEGANTE
-   ==================================== */
-
-.metodo-pago-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 25px 0;
-    padding: 0 10px;
-}
-
-.metodo-pago-container label {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 8px;
-    display: block;
-    text-align: center;
-}
-
-/* Selector personalizado */
-.select-metodo-animado {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 14px 45px 14px 20px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--text-color);
-    background-color: var(--card-background);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    /* Flecha personalizada */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 20px;
-    
-    /* Sombra suave */
-    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
-}
-
-/* Hover */
-.select-metodo-animado:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Focus */
-.select-metodo-animado:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
-    transform: translateY(-2px);
-}
-
-/* Opciones del select */
-.select-metodo-animado option {
-    padding: 12px;
-    background-color: var(--card-background);
-    color: var(--text-color);
-    font-size: 1rem;
-}
-
-/* Modo oscuro - Flecha */
-[data-theme="dark"] .select-metodo-animado {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238FB3E3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-}
-
-/* Modo oscuro - Opciones */
-[data-theme="dark"] .select-metodo-animado option {
-    background-color: #161624;
-    color: #E8F4F8;
-}
-
-/* ====================================
-   📱 RESPONSIVE
-   ==================================== */
-
-@media (max-width: 768px) {
-    .metodo-pago-container label {
-        font-size: 1rem;
-    }
-    
-    .select-metodo-animado {
-        padding: 16px 45px 16px 18px;
-        font-size: 1rem;
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .metodo-pago-container {
-        gap: 12px;
-        margin: 20px 0;
-    }
-    
-    .select-metodo-animado {
-        padding: 18px 45px 18px 16px;
-        font-size: 1.05rem;
-        border-radius: 10px;
-    }
-    
-    .metodo-pago-container label {
-        font-size: 0.95rem;
-    }
-}
-
-/* ====================================
-   ✨ ANIMACIÓN OPCIONAL AL CAMBIAR
-   ==================================== */
-
-.select-metodo-animado.changed {
-    animation: selectPulse 0.4s ease;
-}
-
-@keyframes selectPulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-}
-
-.finish-cart{
-    margin-top: 15px;
-}
-
-.void-cart{
-    margin-top: 15px;
-}
-
-/* ====================================
-   🎯 ESTILO ALTERNATIVO (OPCIONAL)
-   ==================================== */
-
-/* Si prefieres un estilo más minimalista, descomenta esto:
-
-.select-metodo-animado {
-    border-radius: 25px;
-    padding: 16px 50px 16px 24px;
-    background-color: rgba(74, 144, 226, 0.05);
-    border: 2px solid transparent;
-    background-image: 
-        linear-gradient(var(--card-background), var(--card-background)),
-        linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-}
-
-*/
-
-/* Hamburguesa blanca para temas oscuros */
-.navbar-toggler {
-    border: 2px solid white;
-    background: transparent;
-    padding: 8px 10px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.navbar-toggler:focus {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-    outline: none;
-}
-
-.navbar-toggler-icon {
-    background-image: none !important;
-    position: relative;
-    width: 20px;
-    height: 2px;
-    background-color: white;
-    transition: all 0.3s ease;
-}
-
-.navbar-toggler-icon::before,
-.navbar-toggler-icon::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 2px;
-    background-color: white;
-    left: 0;
-    transition: all 0.3s ease;
-}
-
-.navbar-toggler-icon::before {
-    top: -6px;
-}
-
-.navbar-toggler-icon::after {
-    top: 6px;
-}
-
-/* Efecto hover */
-.navbar-toggler:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* ============ CARRITO - TEMA OSCURO ============ */
-
-[data-theme="dark"] .carrito-popup {
-    background: var(--card-background) !important;
-    color: var(--text-color) !important;
-    border-left: 1px solid var(--border-color);
-}
-
-[data-theme="dark"] .carrito-popup-header {
-    background: var(--card-background) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .carrito-popup-header h5 {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .carrito-popup-header .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-[data-theme="dark"] .cart-items-container {
-    background: var(--card-background) !important;
-}
-
-[data-theme="dark"] .cart-items-container.with-scroll {
-    background: var(--card-background) !important;
-    border-color: var(--border-color) !important;
-}
-
-[data-theme="dark"] .cart-item {
-    background: var(--card-background) !important;
-    border-bottom-color: var(--border-color) !important;
-}
-
-[data-theme="dark"] .cart-item-name {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .cart-item-details h6 {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .cart-item-subtotal,
-[data-theme="dark"] .cart-item-subtotal strong {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .quantity-display {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .cart-total {
-    background: var(--navbar-bg) !important;
-    border-top-color: var(--border-color) !important;
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .cart-total h5,
-[data-theme="dark"] .cart-total h4 {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .btn-outline-secondary {
-    border-color: var(--border-color) !important;
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .btn-outline-secondary:hover {
-    background-color: var(--primary-color) !important;
-    border-color: var(--primary-color) !important;
-    color: white !important;
-}
-
-[data-theme="dark"] .text-body,
-[data-theme="dark"] .text-body-secondary {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .text-dark-emphasis {
-    color: var(--text-color) !important;
-}
-
-[data-theme="dark"] .text-muted {
-    color: var(--text-secondary) !important;
-}
-
-/* Scrollbar en tema oscuro */
-[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-track {
-    background: var(--navbar-bg);
-}
-
-[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-}
-
-[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-color);
-}
-
-
-/* ============ CORRECCIÓN TRANSICIÓN PÁGINAS ============ */
-
-/* Remover transiciones problemáticas para navegación */
-body.page-transition {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-}
-
-#page-wrapper.page-transition {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-}
-
-/* Mantener solo transiciones suaves para elementos específicos */
-.juego-card, .btn, .navbar, .footer {
-    transition: all 0.3s ease !important;
-}
-
-/* Deshabilitar animaciones de entrada/salida de página */
-.page-transition {
-    animation: none !important;
-}
-
-/* Forzar que el body siempre sea visible */
-body {
-    opacity: 1 !important;
-    visibility: visible !important;
-    background-color: var(--background-color) !important;
-}
-
-/* Asegurar que el contenido principal siempre se vea */
-.container, .main-content {
-    opacity: 1 !important;
-    transform: none !important;
-}
-
 /* ===== ESTILOS PARA PRECIOS DUALES EN DETALLE - CON TEMA OSCURO ===== */
 
 .detalle-precios-section {
@@ -2269,4 +1921,344 @@ body {
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+/* ====================================
+   🎨 SELECTOR MÉTODO DE PAGO ELEGANTE
+   ==================================== */
+
+.metodo-pago-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 25px 0;
+    padding: 0 10px;
+}
+
+.metodo-pago-container label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    display: block;
+    text-align: center;
+}
+
+/* Selector personalizado */
+.select-metodo-animado {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 14px 45px 14px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    background-color: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Flecha personalizada */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234A90E2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    
+    /* Sombra suave */
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+}
+
+/* Hover */
+.select-metodo-animado:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Focus */
+.select-metodo-animado:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Opciones del select */
+.select-metodo-animado option {
+    padding: 12px;
+    background-color: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Modo oscuro - Flecha */
+[data-theme="dark"] .select-metodo-animado {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238FB3E3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+/* Modo oscuro - Opciones */
+[data-theme="dark"] .select-metodo-animado option {
+    background-color: #161624;
+    color: #E8F4F8;
+}
+
+/* ====================================
+   📱 RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+    .metodo-pago-container label {
+        font-size: 1rem;
+    }
+    
+    .select-metodo-animado {
+        padding: 16px 45px 16px 18px;
+        font-size: 1rem;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .metodo-pago-container {
+        gap: 12px;
+        margin: 20px 0;
+    }
+    
+    .select-metodo-animado {
+        padding: 18px 45px 18px 16px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+    
+    .metodo-pago-container label {
+        font-size: 0.95rem;
+    }
+}
+
+/* ====================================
+   ✨ ANIMACIÓN OPCIONAL AL CAMBIAR
+   ==================================== */
+
+.select-metodo-animado.changed {
+    animation: selectPulse 0.4s ease;
+}
+
+@keyframes selectPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.finish-cart{
+    margin-top: 15px;
+}
+
+.void-cart{
+    margin-top: 15px;
+}
+
+/* ====================================
+   🎯 ESTILO ALTERNATIVO (OPCIONAL)
+   ==================================== */
+
+/* Si prefieres un estilo más minimalista, descomenta esto:
+
+.select-metodo-animado {
+    border-radius: 25px;
+    padding: 16px 50px 16px 24px;
+    background-color: rgba(74, 144, 226, 0.05);
+    border: 2px solid transparent;
+    background-image: 
+        linear-gradient(var(--card-background), var(--card-background)),
+        linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+
+*/
+
+/* Hamburguesa blanca para temas oscuros */
+.navbar-toggler {
+    border: 2px solid white;
+    background: transparent;
+    padding: 8px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    outline: none;
+}
+
+.navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: white;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler-icon::before {
+    top: -6px;
+}
+
+.navbar-toggler-icon::after {
+    top: 6px;
+}
+
+/* Efecto hover */
+.navbar-toggler:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ CARRITO - TEMA OSCURO ============ */
+
+[data-theme="dark"] .carrito-popup {
+    background: var(--card-background) !important;
+    color: var(--text-color) !important;
+    border-left: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .carrito-popup-header {
+    background: var(--card-background) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header h5 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .carrito-popup-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .cart-items-container {
+    background: var(--card-background) !important;
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll {
+    background: var(--card-background) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item {
+    background: var(--card-background) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .cart-item-name {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-details h6 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-item-subtotal,
+[data-theme="dark"] .cart-item-subtotal strong {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .quantity-display {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total {
+    background: var(--navbar-bg) !important;
+    border-top-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .cart-total h5,
+[data-theme="dark"] .cart-total h4 {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary {
+    border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+[data-theme="dark"] .text-body,
+[data-theme="dark"] .text-body-secondary {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-dark-emphasis {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Scrollbar en tema oscuro */
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-track {
+    background: var(--navbar-bg);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+[data-theme="dark"] .cart-items-container.with-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+/* 🛒 Popup completo adaptado al modo oscuro */
+[data-theme="dark"] #carrito-popup {
+    background: var(--navbar-bg);
+    border-radius: 14px;
+    overflow: hidden;  /* <-- Esto oculta las esquinas del contenido interno */
+}
+
+/* Contenedor interno */
+[data-theme="dark"] #carrito-popup-inner {
+    background: var(--navbar-bg);
+    border-radius: 0;  /* Quita bordes internos */
+}
+
+/* Header del carrito */
+[data-theme="dark"] .carrito-popup-header {
+    background: var(--navbar-bg);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+/* Contenedor vacío */
+[data-theme="dark"] .carrito-empty {
+    background: var(--card-background);
+    border-radius: 10px; 
+}
+
+/* Botón */
+[data-theme="dark"] .carrito-empty .btn {
+    background: var(--accent-color);
 }

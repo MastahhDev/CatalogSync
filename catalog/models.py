@@ -96,3 +96,37 @@ class Utilidades(models.Model):
 
     def __str__(self):
         return "Utilidades del sistema"
+
+from django.db import models
+from django.utils.text import slugify
+
+class ResenaCliente(models.Model):
+    cliente = models.CharField(max_length=100, help_text="Usuario de Instagram")
+    juego = models.CharField(max_length=200)
+    reseña = models.TextField()
+    imagen = models.CharField(max_length=255, blank=True, null=True, 
+                             help_text="Ruta de la imagen (se busca automáticamente)")
+    activo = models.BooleanField(default=True)
+    fecha = models.DateField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Reseña de Cliente"
+        verbose_name_plural = "Reseñas de Clientes"
+    
+    def __str__(self):
+        return f"@{self.cliente} - {self.juego}"
+    
+    def get_nombre_archivo_imagen(self):
+        """Devuelve el nombre del archivo de imagen"""
+        if self.imagen:
+            return self.imagen
+        # Fallback: buscar por nombre de usuario
+        nombre_limpio = slugify(self.cliente)
+        return f"img/{nombre_limpio}.jpg"
+    
+    def existe_imagen(self):
+        """Verifica si existe la imagen del cliente"""
+        import os
+        from django.conf import settings
+        ruta_imagen = os.path.join(settings.STATICFILES_DIRS[0], self.get_nombre_archivo_imagen())
+        return os.path.exists(ruta_imagen)
