@@ -1,20 +1,47 @@
-/* Estilos para reseñas que coincidan con juegos destacados */
 .reseña-card-mini {
     flex: 0 0 auto;
     width: 180px;
     background: var(--card-background);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
+    border-radius: 14px;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-    border: 1px solid var(--border-color);
+    height: 310px; /* ajustá este valor según tu diseño */
+
+    /* MARCO GRADIENTE */
+    padding: 3px; /* espacio para el borde */
+    background: linear-gradient(135deg,
+        #E1306C,
+        #FCAF45,
+        #833AB4
+    );
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.reseña-card-mini > * {
+    background: var(--card-background);
+    border-radius: 12px;
+    padding-bottom: 0;
 }
 
 .reseña-card-mini:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
 }
+
+.reseña-card-mini::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: linear-gradient(90deg, #E1306C, #FCAF45, #833AB4);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+
 
 /* Usar los mismos estilos de imagen que los juegos */
 .juego-imagen-wrapper-mini {
@@ -37,6 +64,7 @@
 
 .juego-info-mini {
     padding: 12px;
+    padding-bottom: 24px; /* deja espacio para la barra */
 }
 
 .juego-nombre-mini {
@@ -101,4 +129,21 @@
     .reseña-texto-mini {
         font-size: 0.7rem;
     }
+}
+
+.btn-instagram-reseñas {
+    display: inline-block;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #E1306C, #FCAF45, #833AB4);
+    color: #fff;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-instagram-reseñas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.25);
 }
