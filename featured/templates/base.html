@@ -22,36 +22,6 @@
     {% block extra_css %}{% endblock %}
 </head>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const page = document.body;
-    page.classList.add("page-transition");
-
-    // Activa la animación al cargar
-    setTimeout(() => {
-      page.classList.add("active");
-    }, 10);
-
-    // Agrega animación al cambiar de página
-    document.querySelectorAll('a').forEach(link => {
-      if (link.hostname === window.location.hostname) {
-        link.addEventListener('click', e => {
-          const target = e.currentTarget.getAttribute('href');
-          if (target && target[0] !== '#') {
-            e.preventDefault();
-            page.classList.remove("active");
-            setTimeout(() => {
-              window.location.href = target;
-            }, 300);
-          }
-        });
-      }
-    });
-  });
-
-  
-</script>
-
 <body>
   <!-- Token CSRF oculto para HTMX -->
   <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
@@ -140,7 +110,7 @@
 
   <!-- 🔹 SCRIPTS -->
 
-  <!-- base.html -->
+  <!-- Facebook Pixel -->
   {% if FACEBOOK_PIXEL_ID %}
   <script>
   !function(f,b,e,v,n,t,s)
@@ -160,33 +130,52 @@
   </noscript>
   {% endif %}
 
+  <!-- Script de Animaciones de Página -->
   <script>
-    // Animación de transición (ahora solo afecta al contenido)
-    document.addEventListener("DOMContentLoaded", () => {
+  (function() {
+    function inicializarAnimacion() {
       const page = document.getElementById("page-wrapper");
+      if (!page) return;
+      
+      page.classList.remove("active");
       page.classList.add("page-transition");
-
+      
       setTimeout(() => {
         page.classList.add("active");
       }, 10);
+    }
 
+    // Al cargar la página normalmente
+    document.addEventListener("DOMContentLoaded", inicializarAnimacion);
+    
+    // Al volver con el botón atrás (fix para bfcache)
+    window.addEventListener('pageshow', function(event) {
+      if (event.persisted) {
+        inicializarAnimacion();
+      }
+    });
+
+    // Transiciones al hacer clic en links
+    document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('a').forEach(link => {
         if (link.hostname === window.location.hostname) {
           link.addEventListener('click', e => {
             const target = e.currentTarget.getAttribute('href');
             if (target && target[0] !== '#') {
               e.preventDefault();
-              page.classList.remove("active");
+              const page = document.getElementById("page-wrapper");
+              if (page) page.classList.remove("active");
               setTimeout(() => { window.location.href = target; }, 300);
             }
           });
         }
       });
     });
+  })();
   </script>
 
+  <!-- Script de Navbar con Sombra -->
   <script>
-    // Navbar con sombra al scrollear
     document.addEventListener("scroll", function() {
       const navbar = document.querySelector(".navbar");
       if (window.scrollY > 10) {
@@ -197,10 +186,11 @@
     });
   </script>
 
+  <!-- Script de Botón Volver Arriba -->
   <script>
-    // Botón "Volver arriba"
     document.addEventListener("DOMContentLoaded", () => {
       const topBtn = document.getElementById('back-to-top');
+      if (!topBtn) return;
 
       window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
@@ -224,39 +214,44 @@
     });
   </script>
 
+  <!-- Script del Carrito -->
   <script>
-    // Carrito (abrir / cerrar)
-     const carritoPopup = document.getElementById('carrito-popup');
-  const carritoOverlay = document.getElementById('carrito-overlay');
+  (function() {
+    const carritoPopup = document.getElementById('carrito-popup');
+    const carritoOverlay = document.getElementById('carrito-overlay');
 
-  function abrirCarrito() {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    carritoPopup.style.animation = isMobile
-      ? "carritoSlideInMobile 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards"
-      : "carritoSlideInDesktop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards";
+    // Función global para abrir el carrito
+    window.abrirCarrito = function() {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      carritoPopup.style.animation = isMobile
+        ? "carritoSlideInMobile 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards"
+        : "carritoSlideInDesktop 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards";
 
-    carritoOverlay.classList.add('show');
+      carritoOverlay.classList.add('show');
+      carritoPopup.classList.add('show');
+    };
 
-    // Asegura que aparezca si estaba oculto
-    carritoPopup.classList.add('show');
-  }
+    // Función global para cerrar el carrito
+    window.cerrarCarrito = function() {
+      const isMobile = window.matchMedia("(max-width: 768px)").matches;
+      carritoPopup.style.animation = isMobile
+        ? "carritoSlideOutMobile 0.45s ease forwards"
+        : "carritoSlideOutDesktop 0.45s ease forwards";
 
-  function cerrarCarrito() {
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    carritoPopup.style.animation = isMobile
-      ? "carritoSlideOutMobile 0.45s ease forwards"
-      : "carritoSlideOutDesktop 0.45s ease forwards";
+      carritoPopup.addEventListener('animationend', function handler() {
+        if (carritoPopup.style.animation.includes("Out")) {
+          carritoPopup.classList.remove('show');
+          carritoOverlay.classList.remove('show');
+        }
+        carritoPopup.removeEventListener('animationend', handler);
+      });
+    };
 
-    // Espera a que termine la animación antes de ocultarlo
-    carritoPopup.addEventListener('animationend', () => {
-      if (carritoPopup.style.animation.includes("Out")) {
-        carritoPopup.classList.remove('show');
-        carritoOverlay.classList.remove('show');
-      }
-    }, { once: true });
-  }
+  })();
+  </script>
 
-    // CSRF para HTMX
+  <!-- Script CSRF para HTMX -->
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
         function getCookie(name) {
             let cookieValue = null;
@@ -290,14 +285,16 @@
     });
   </script>
 
+  <!-- Script de Tema -->
   <script src="{% static 'js/theme.js' %}?v={{ now|date:'U' }}"></script>
 
+  <!-- Script de WhatsApp HTMX -->
   <script>
   document.body.addEventListener('htmx:afterOnLoad', (event) => {
       try {
           const data = JSON.parse(event.detail.xhr.responseText);
           if (data.url) {
-              window.open(data.url, '_blank'); // abre WhatsApp con el mensaje
+              window.open(data.url, '_blank');
           } else if (data.error) {
               alert(data.error);
           }
@@ -308,23 +305,6 @@
   </script>
 
   {% block extra_js %}{% endblock %}
-
-  <script>
-window.addEventListener('scroll', () => {
-  document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
-});
-
-function abrirCarrito() {
-  const carritoPopup = document.getElementById('carrito-popup');
-  const carritoOverlay = document.getElementById('carrito-overlay');
-
-  carritoPopup.classList.add('show');
-  carritoOverlay.classList.add('show');
-}
-</script>
-
-
-
 
 </body>
 </html>

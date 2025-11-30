@@ -86,65 +86,46 @@
     
     <!-- PAGINACIÓN MODERNA -->
     {% if juegos.has_other_pages %}
+    {% if juegos.has_other_pages %}
     <div class="pagination-container mt-5">
-        <nav aria-label="Paginación de juegos">
-            <ul class="pagination justify-content-center">
-                <!-- Flecha Anterior -->
-                {% if juegos.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link pagination-arrow" href="?page={{ juegos.previous_page_number }}" aria-label="Anterior">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link pagination-arrow" aria-hidden="true">&laquo;</span>
-                    </li>
-                {% endif %}
+    <nav aria-label="Paginación de juegos">
+        <ul class="pagination justify-content-center">
+            
+            {% if juegos.has_previous %}
+                <li class="page-item">
+                    <a class="page-link pagination-arrow" href="?page={{ juegos.previous_page_number }}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link pagination-arrow" aria-hidden="true">&laquo;</span>
+                </li>
+            {% endif %}
 
-                <!-- Números de página -->
-                {% for i in juegos.paginator.page_range %}
-                    {% if juegos.number == i %}
-                        <li class="page-item active" aria-current="page">
-                            <span class="page-link pagination-current">{{ i }}</span>
-                        </li>
-                    {% elif i > juegos.number|add:'-3' and i < juegos.number|add:'3' %}
-                        <li class="page-item">
-                            <a class="page-link pagination-number" href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% elif i == 1 or i == juegos.paginator.num_pages %}
-                        <li class="page-item">
-                            <a class="page-link pagination-number" href="?page={{ i }}">{{ i }}</a>
-                        </li>
-                    {% elif i == juegos.number|add:'-3' or i == juegos.number|add:'3' %}
-                        <li class="page-item disabled">
-                            <span class="page-link pagination-ellipsis">...</span>
-                        </li>
-                    {% endif %}
-                {% endfor %}
+            <li class="page-item disabled" style="display: flex; align-items: center; padding: 0 10px;">
+                <span class="page-link pagination-info-compact" style="border: none; background: none; color: #000; padding: 0;">
+                    {{ juegos.number }} / {{ juegos.paginator.num_pages }}
+                </span>
+            </li>
 
-                <!-- Flecha Siguiente -->
-                {% if juegos.has_next %}
-                    <li class="page-item">
-                        <a class="page-link pagination-arrow" href="?page={{ juegos.next_page_number }}" aria-label="Siguiente">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link pagination-arrow" aria-hidden="true">&raquo;</span>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-        
-        <!-- Información de página actual -->
-        <div class="pagination-info text-center mt-3">
-            <p class="text-muted">
-                Página {{ juegos.number }} de {{ juegos.paginator.num_pages }}
-            </p>
-        </div>
+            {% if juegos.has_next %}
+                <li class="page-item">
+                    <a class="page-link pagination-arrow" href="?page={{ juegos.next_page_number }}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link pagination-arrow" aria-hidden="true">&raquo;</span>
+                </li>
+            {% endif %}
+            
+        </ul>
+    </nav>
+    
     </div>
+    {% endif %}
     {% endif %}
 </div>
 
